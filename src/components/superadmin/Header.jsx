@@ -1,10 +1,22 @@
-import { useState, useEffect, useRef } from 'react';
-import { FaBell, FaSearch, FaChevronDown } from 'react-icons/fa';
+import { useState, useEffect, useRef } from "react";
+import { FaBell, FaSearch, FaChevronDown } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { logout } from "../../redux/slice/authSlice.js"
 
 export default function Header() {
   const [notifOpen, setNotifOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [profilePic, setProfilePic] = useState("https://i.pravatar.cc/150?img=3"); // default
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  // Get user role from Redux
+  const role = useSelector((state) => state.auth.user?.role);
+
+  const [profilePic, setProfilePic] = useState(
+    "https://i.pravatar.cc/150?img=3"
+  ); // default
 
   const fileInputRef = useRef(null);
   const dropdownRef = useRef(null);
@@ -18,10 +30,7 @@ export default function Header() {
   };
 
   const handleClickOutside = (event) => {
-    if (
-      dropdownRef.current &&
-      !dropdownRef.current.contains(event.target)
-    ) {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setDropdownOpen(false);
     }
   };
@@ -40,11 +49,24 @@ export default function Header() {
     }
   };
 
+  const handleLogout = () => {
+    dispatch(logout());
+    localStorage.removeItem("auth");
+    navigate("/");
+  };
+
+  // Capitalize role  display
+  const displayRole = role
+    ? role.charAt(0).toUpperCase() + role.slice(1)
+    : "User";
+
   return (
     <header className="flex items-center justify-between bg-[#fdf3f5] p-4 rounded-lg shadow mb-6">
       {/* Welcome Section */}
       <div>
-        <h2 className="text-xl font-bold text-pink-600 mt-2">Welcome, Admin</h2>
+        <h2 className="text-xl font-bold text-pink-600 mt-2">
+          Welcome, {displayRole}
+        </h2>
         <p className="text-sm text-gray-600 ml-2 -mt-1">
           Here's what's happening in your account
         </p>
@@ -73,9 +95,15 @@ export default function Header() {
           {notifOpen && (
             <div className="absolute right-0 mt-2 w-56 bg-white border rounded shadow-lg p-2 z-20">
               <ul>
-                <li className="text-sm p-2 hover:bg-gray-100 cursor-pointer">📩 You have a new message</li>
-                <li className="text-sm p-2 hover:bg-gray-100 cursor-pointer">👤 New user registered</li>
-                <li className="text-sm p-2 hover:bg-gray-100 cursor-pointer">💰 Payment received</li>
+                <li className="text-sm p-2 hover:bg-gray-100 cursor-pointer">
+                  📩 You have a new message
+                </li>
+                <li className="text-sm p-2 hover:bg-gray-100 cursor-pointer">
+                  👤 New user registered
+                </li>
+                <li className="text-sm p-2 hover:bg-gray-100 cursor-pointer">
+                  💰 Payment received
+                </li>
               </ul>
             </div>
           )}
@@ -89,10 +117,10 @@ export default function Header() {
           >
             <img
               src={profilePic}
-              alt="Admin"
+              alt={displayRole}
               className="w-8 h-8 rounded-full object-cover"
             />
-            <span className="text-gray-700 font-medium">Admin</span>
+            <span className="text-gray-700 font-medium">{displayRole}</span>
             <FaChevronDown className="text-gray-600 text-xs" />
           </button>
 
@@ -127,7 +155,7 @@ export default function Header() {
                 <li>
                   <button
                     className="w-full text-left px-4 py-2 hover:bg-gray-100 text-red-500"
-                    onClick={() => alert("Logging out...")}
+                    onClick={handleLogout}
                   >
                     🚪 Logout
                   </button>

@@ -16,7 +16,7 @@ export const authApi = createApi({
     // 🔹 LOGIN API
     login: builder.mutation({
       query: (credentials) => ({
-        url: "/admin/login/admin",   // ✅ Fixed endpoint
+        url: "/auth/login", // ✅ Fixed endpoint
         method: "POST",
         body: credentials,
       }),
@@ -25,7 +25,7 @@ export const authApi = createApi({
     // 🔹 FORGOT PASSWORD API
     forgotPassword: builder.mutation({
       query: (email) => ({
-        url: "/admin/forgot-password",  // ✅ Fixed endpoint
+        url: "/admin/forgot-password", // ✅ Fixed endpoint
         method: "POST",
         body: { email },
       }),
@@ -34,7 +34,7 @@ export const authApi = createApi({
     // 🔹 OTP VERIFY API
     verifyOtp: builder.mutation({
       query: ({ otp, email }) => ({
-        url: "/admin/otp/verify",  // ✅ New endpoint
+        url: "/admin/otp/verify", // ✅ New endpoint
         method: "POST",
         body: { otp, email },
       }),
@@ -43,7 +43,7 @@ export const authApi = createApi({
     // 🔹 RESET PASSWORD API
     resetPassword: builder.mutation({
       query: ({ newPassword }) => ({
-        url: "/reset-password",  // ✅ Fixed endpoint
+        url: "/reset-password", // ✅ Fixed endpoint
         method: "POST",
         body: { password: newPassword },
       }),
