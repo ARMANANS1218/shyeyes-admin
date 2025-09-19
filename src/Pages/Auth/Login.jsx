@@ -7,11 +7,14 @@ import { setCredentials } from "../../redux/slice/authSlice";
 
 import bgImage from "../../assets/image.png";
 import logo from "../../assets/logo/Logo.png";
+import { FaRegEye } from "react-icons/fa";
+import { FaRegEyeSlash } from "react-icons/fa";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -26,14 +29,20 @@ const Login = () => {
       // Save user + token in redux
       dispatch(setCredentials(response));
 
+      // Saving user + token in localstorage for persistence
+      localStorage.setItem("auth", JSON.stringify(response));
+
       // Normalize role
-      const role = response?.user?.role?.toLowerCase();
+      const responseRole = response?.user?.role?.toLowerCase();
+      console.log("resonserole: ", responseRole);
 
       // Redirect based on role
-      if (role === "superadmin") {
+      if (responseRole === "superadmin") {
         navigate("/superadmin/dashboard");
-      } else if (role === "admin" || role === "agent") {
+      } else if (responseRole === "admin") {
         navigate("/admin/dashboard");
+      } else if (responseRole === "agent") {
+        navigate("/agent/dashboard");
       } else {
         setError("Unauthorized role");
       }
@@ -52,14 +61,12 @@ const Login = () => {
         <div className="flex justify-center mb-4">
           <img src={logo} alt="Logo" className="w-40" />
         </div>
-
         <h2 className="text-2xl font-bold text-gray-800 mb-2 text-center">
           Welcome back.
         </h2>
         <p className="text-gray-600 text-sm mb-6 text-center">
           Log in to access your Admin Panel. Let's get things done.
         </p>
-
         <form className="space-y-4" onSubmit={handleLogin}>
           <input
             type="email"
@@ -69,14 +76,25 @@ const Login = () => {
             required
             className="w-full px-4 py-2 border rounded-md outline-none focus:ring-2 focus:ring-pink-400"
           />
-          <input
-            type="password"
-            placeholder="Enter your password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="w-full px-4 py-2 border rounded-md outline-none focus:ring-2 focus:ring-pink-400"
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="w-full px-4 py-2 border rounded-md outline-none focus:ring-2 focus:ring-pink-400 pr-10"
+            />
+            <span
+              className="absolute inset-y-0 right-3 flex items-center cursor-pointer text-gray-500"
+              onClick={() => setShowPassword((prev) => !prev)}
+              tabIndex={0}
+              role="button"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? <FaRegEyeSlash /> : <FaRegEye />}
+            </span>
+          </div>
           <button
             type="submit"
             disabled={isLoading}
@@ -85,9 +103,7 @@ const Login = () => {
             {isLoading ? "Logging in..." : "Login"}
           </button>
         </form>
-
         {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
-
         <Link
           to="/changepassword"
           className="block text-center text-red-600 font-semibold text-sm mt-4 hover:underline"
