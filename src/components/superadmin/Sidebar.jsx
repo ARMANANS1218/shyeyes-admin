@@ -35,7 +35,7 @@ export default function Sidebar() {
           {/* Dashboard */}
           <li>
             <NavLink
-              to="/dashboard"
+              to="/superadmin/dashboard"
               className={({ isActive }) =>
                 isActive ? "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl font-semibold hover:bg-pink-600 transition-colors"
                   : "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl hover:bg-pink-400 transition-colors"
@@ -50,7 +50,7 @@ export default function Sidebar() {
           {/* User Management */}
           <li>
             <NavLink
-              to="/usermanagement"
+              to="/superadmin/usermanagement"
               className={({ isActive }) =>
                 isActive ? "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl font-semibold hover:bg-pink-600 transition-colors"
                   : "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl hover:bg-pink-400 transition-colors"
@@ -65,7 +65,7 @@ export default function Sidebar() {
           {/* Chats Monitoring */}
           <li>
             <NavLink
-              to="/chatmonitor"
+              to="/superadmin/chatmonitor"
               className={({ isActive }) =>
                 isActive ? "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl font-semibold hover:bg-pink-600 transition-colors"
                   : "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl hover:bg-pink-400 transition-colors"
@@ -80,7 +80,7 @@ export default function Sidebar() {
           {/* Reports */}
           <li>
             <NavLink
-              to="/report"
+              to="/superadmin/report"
               className={({ isActive }) =>
                 isActive ? "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl font-semibold hover:bg-pink-600 transition-colors"
                   : "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl hover:bg-pink-400 transition-colors"
@@ -95,7 +95,7 @@ export default function Sidebar() {
           {/* Payments */}
           <li>
             <NavLink
-              to="/payment"
+              to="/superadmin/payment"
               className={({ isActive }) =>
                 isActive ? "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl font-semibold hover:bg-pink-600 transition-colors"
                   : "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl hover:bg-pink-400 transition-colors"
@@ -110,7 +110,7 @@ export default function Sidebar() {
           {/* Pricing Plan */}
           <li>
             <Link
-              to="/pricingplan"
+              to="/superadmin/pricingplan"
               className="flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl font-semibold hover:bg-pink-600 transition-colors"
               onClick={() => setIsOpen(false)}
             >
