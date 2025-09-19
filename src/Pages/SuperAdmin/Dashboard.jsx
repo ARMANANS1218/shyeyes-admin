@@ -11,7 +11,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import Header from "../../components/admin/Header";
+import Header from "../../components/superadmin/Header.jsx";
 
 // ✅ Register everything including PointElement
 ChartJS.register(
