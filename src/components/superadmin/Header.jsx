@@ -55,7 +55,7 @@ export default function Header() {
     navigate("/");
   };
 
-  // Capitalize role for display
+  // Capitalize role  display
   const displayRole = role
     ? role.charAt(0).toUpperCase() + role.slice(1)
     : "User";
