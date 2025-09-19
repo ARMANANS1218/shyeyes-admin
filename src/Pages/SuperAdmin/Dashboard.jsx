@@ -6,17 +6,20 @@ import {
   LinearScale,
   BarElement,
   LineElement,
+  PointElement, // ✅ Add this
   Title,
   Tooltip,
   Legend,
 } from "chart.js";
 import Header from "../../components/admin/Header";
 
+// ✅ Register everything including PointElement
 ChartJS.register(
   CategoryScale,
   LinearScale,
   BarElement,
   LineElement,
+  PointElement, // ✅ Fix: Register point
   Title,
   Tooltip,
   Legend
@@ -76,6 +79,7 @@ function Dashboard() {
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false, // ✅ prevents canvas resize bugs
     scales: {
       y: { beginAtZero: true },
     },
@@ -90,7 +94,7 @@ function Dashboard() {
           {showNotif && (
             <div
               id="notifPopup"
-              className="bg-gray-700 p-4 rounded mb-6 shadow-lg"
+              className="bg-gray-700 p-4 rounded mb-6 shadow-lg text-white"
             >
               <p>New notifications will appear here!</p>
             </div>
@@ -98,19 +102,23 @@ function Dashboard() {
 
           <div className="grid md:grid-cols-2 gap-6">
             {/* Login Activity */}
-            <div className="p-4 rounded shadow-lg max-w-full overflow-hidden">
+            <div className="p-4 rounded shadow-lg bg-white">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-lg font-semibold">Login Activity</h3>
               </div>
-              <Bar data={barData} options={options} />
+              <div className="h-80"> {/* ✅ keeps chart height stable */}
+                <Bar data={barData} options={options} />
+              </div>
             </div>
 
             {/* Payments Trend */}
-            <div className="p-4 rounded shadow-lg max-w-full overflow-hidden">
+            <div className="p-4 rounded shadow-lg bg-white">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-lg font-semibold">Payments Trend</h3>
               </div>
-              <Line data={lineData} options={options} />
+              <div className="h-80">
+                <Line data={lineData} options={options} />
+              </div>
             </div>
           </div>
         </div>

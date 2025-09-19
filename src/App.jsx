@@ -13,22 +13,30 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={<Login />} />
-        
-        {/* Protected Routes */}
+        <Route path="/" element={<Login />} />
+
+        {/* Admin Protected Routes */}
         <Route
           path="/admin/*"
-          element={user?.role === "admin" ? <AdminRoutes /> : <Navigate to="/login" />}
+          element={
+            ["admin", "agent"].includes(user?.role?.toLowerCase())
+              ? <AdminRoutes />
+              : <Navigate to="/" replace />
+          }
         />
+
         <Route
           path="/superadmin/*"
-          element={user?.role === "superadmin" ? <SuperAdminRoutes /> : <Navigate to="/login" />}
+          element={
+            user?.role?.toLowerCase() === "superadmin"
+              ? <SuperAdminRoutes />
+              : <Navigate to="/" replace />
+          }
         />
-        {/* <Route
-          path="/agent/*"
-          element={user?.role === "agent" ? <AgentRoutes /> : <Navigate to="/login" />}
-        /> */}
+
+
       </Routes>
+
     </Router>
   );
 }
