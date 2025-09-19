@@ -6,8 +6,10 @@ import {
   LinearScale,
   BarElement,
   LineElement,
+  PointElement,
   Title,
   Tooltip,
+  Filler,
   Legend,
 } from "chart.js";
 import Header from "../../components/admin/Header";
@@ -17,9 +19,11 @@ ChartJS.register(
   LinearScale,
   BarElement,
   LineElement,
+  PointElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 );
 
 function Dashboard() {
