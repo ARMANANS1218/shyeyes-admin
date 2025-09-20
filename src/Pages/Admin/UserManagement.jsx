@@ -1,189 +1,219 @@
 import React, { useState } from "react";
 import Swal from "sweetalert2";
 import { FaEye, FaEdit, FaBan, FaTrash, FaUnlock } from "react-icons/fa";
-
-const initialUsers = [
-  {
-    id: 1,
-    name: "Jombie",
-    email: "jombie@example.com",
-    gender: "Female",
-    location: "USA",
-    status: "Active",
-    profile: "https://i.pravatar.cc/40?img=1",
-  },
-  {
-    id: 2,
-    name: "Gaurav",
-    email: "gaurav1234@gmail.com",
-    gender: "Male",
-    location: "Russia",
-    status: "Inactive",
-    profile: "https://i.pravatar.cc/40?img=2",
-  },
-  {
-    id: 3,
-    name: "Ronaldo",
-    email: "ronaldo1234@gmail.com",
-    gender: "Female",
-    location: "France",
-    status: "Inactive",
-    profile: "https://i.pravatar.cc/40?img=3",
-  },
-  {
-    id: 4,
-    name: "Vold",
-    email: "vold1234@gmail.com",
-    gender: "Male",
-    location: "Russia",
-    status: "Active",
-    profile: "https://i.pravatar.cc/40?img=4",
-  },
-  {
-    id: 5,
-    name: "Ram",
-    email: "ram776234@gmail.com",
-    gender: "Male",
-    location: "France",
-    status: "Inactive",
-    profile: "https://i.pravatar.cc/40?img=3",
-  },
-];
+import { useGetAllUsersQuery } from "../../redux/services/userApi";
+const IMAGEURL = "https://shyeyes-b.onrender.com/uploads";
 
 const UserManagement = () => {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
-  const [users] = useState(initialUsers);
+
+  // Fetch users from API
+  const { data: allUsers, isLoading, error, refetch } = useGetAllUsersQuery();
+
+  // Extract user list from API response
+  const userList = allUsers?.users || [];
+
+  console.log("Fetched Users from API:", userList);
+  console.log("API Response:", allUsers);
+  console.log("First user location structure:", userList[0]?.location);
+
+  // Helper function to format location
+  const formatLocation = (location) => {
+    if (typeof location === "string") {
+      return location;
+    }
+    if (typeof location === "object" && location !== null) {
+      const { city, country } = location;
+      if (city && country) {
+        return `${city}, ${country}`;
+      }
+      if (city) return city;
+      if (country) return country;
+    }
+    return "N/A";
+  };
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-pink-200 p-6 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600 mx-auto mb-4"></div>
+          <p className="text-pink-600 font-semibold">Loading users...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="min-h-screen bg-pink-200 p-6 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 font-semibold mb-4">
+            Failed to load users
+          </p>
+          <button
+            onClick={() => refetch()}
+            className="bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   // SweetAlert Trigger
- 
- 
 
-const handleAction = async (action, user) => {
-  if (action === "View") {
-    Swal.fire({
-      title: `${user.name}'s Details`,
-      html: `
+  const handleAction = async (action, user) => {
+    if (action === "View") {
+      const profileImage =
+        user.profile ||
+        user.profileImage ||
+        user.avatar ||
+        `https://ui-avatars.com/api/?name=${encodeURIComponent(
+          user.name || user.username || "User"
+        )}&background=ec4899&color=fff`;
+
+      const userName = user.name || user.username || "User";
+      const userEmail = user.email || "N/A";
+      const userGender = user.gender || "N/A";
+      const userLocation = formatLocation(user.location || user.address);
+      const userStatus =
+        user.status || (user.isActive ? "Active" : "Inactive") || "Unknown";
+
+      Swal.fire({
+        title: `${userName}'s Details`,
+        html: `
         <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
-          <img src="${user.profile}" alt="${user.name}" style="width:80px;height:80px;border-radius:50%;margin-bottom:10px;" />
-          <p><b>Email:</b> ${user.email}</p>
-          <p><b>Gender:</b> ${user.gender}</p>
-          <p><b>Location:</b> ${user.location}</p>
-          <p><b>Status:</b> <span style="color:${user.status === "Active" ? "green" : "red"}">${user.status}</span></p>
+          <img src="${profileImage}" alt="${userName}" style="width:80px;height:80px;border-radius:50%;margin-bottom:10px;object-fit:cover;" />
+          <p><b>Email:</b> ${userEmail}</p>
+          <p><b>Gender:</b> ${userGender}</p>
+          <p><b>Location:</b> ${userLocation}</p>
+          <p><b>Status:</b> <span style="color:${
+            userStatus === "Active" ? "green" : "red"
+          }">${userStatus}</span></p>
         </div>
       `,
-      confirmButtonText: "Close",
-      width: 400,
-    });
-  }
+        confirmButtonText: "Close",
+        width: 400,
+      });
+    } else if (action === "Edit") {
+      const userName = user.name || user.username || "";
+      const userEmail = user.email || "";
+      const userGender = user.gender || "";
+      const userLocation = formatLocation(user.location || user.address);
 
-  else if (action === "Edit") {
-    const { value: formValues } = await Swal.fire({
-      title: `Edit ${user.name}`,
-      html: `
-        <input id="swal-name" class="swal2-input" placeholder="Name" value="${user.name}" />
-        <input id="swal-email" class="swal2-input" placeholder="Email" value="${user.email}" />
-        <input id="swal-gender" class="swal2-input" placeholder="Gender" value="${user.gender}" />
-        <input id="swal-location" class="swal2-input" placeholder="Location" value="${user.location}" />
+      const { value: formValues } = await Swal.fire({
+        title: `Edit ${userName || "User"}`,
+        html: `
+        <input id="swal-name" class="swal2-input" placeholder="Name" value="${userName}" />
+        <input id="swal-email" class="swal2-input" placeholder="Email" value="${userEmail}" />
+        <input id="swal-gender" class="swal2-input" placeholder="Gender" value="${userGender}" />
+        <input id="swal-location" class="swal2-input" placeholder="Location" value="${userLocation}" />
       `,
-      focusConfirm: false,
-      preConfirm: () => {
-        return {
-          name: document.getElementById("swal-name").value,
-          email: document.getElementById("swal-email").value,
-          gender: document.getElementById("swal-gender").value,
-          location: document.getElementById("swal-location").value,
-        };
-      },
-      confirmButtonText: "Save",
-      showCancelButton: true,
-    });
+        focusConfirm: false,
+        preConfirm: () => {
+          return {
+            name: document.getElementById("swal-name").value,
+            email: document.getElementById("swal-email").value,
+            gender: document.getElementById("swal-gender").value,
+            location: document.getElementById("swal-location").value,
+          };
+        },
+        confirmButtonText: "Save",
+        showCancelButton: true,
+      });
 
-    if (formValues) {
-      const updatedUsers = users.map((u) =>
-        u.id === user.id ? { ...u, ...formValues } : u
-      );
-      setUsers(updatedUsers);
+      if (formValues) {
+        // Note: In a real application, you would make an API call to update the user
+        // After successful update, call refetch() to refresh the data
+        Swal.fire({
+          icon: "success",
+          title: "User Updated!",
+          text: `${formValues.name}'s info would be updated via API.`,
+          timer: 2000,
+        }).then(() => {
+          refetch(); // Refresh data from API
+        });
+      }
+    } else if (action === "Delete") {
+      const confirmDelete = await Swal.fire({
+        title: "Are you sure?",
+        text: `Do you really want to delete ${user.name}?`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "Cancel",
+      });
 
+      if (confirmDelete.isConfirmed) {
+        // Note: In a real application, you would make an API call to delete the user
+        // After successful deletion, call refetch() to refresh the data
+        Swal.fire({
+          icon: "success",
+          title: "Deleted!",
+          text: `${user.name} would be deleted via API.`,
+          timer: 2000,
+        }).then(() => {
+          refetch(); // Refresh data from API
+        });
+      }
+    } else if (action === "Block") {
+      const confirmBlock = await Swal.fire({
+        title: "Block User?",
+        text: `Do you want to block ${user.name}?`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Block",
+        cancelButtonText: "Cancel",
+      });
+
+      if (confirmBlock.isConfirmed) {
+        // Note: In a real application, you would make an API call to block the user
+        // After successful blocking, call refetch() to refresh the data
+        Swal.fire({
+          icon: "success",
+          title: "Blocked!",
+          text: `${user.name} would be blocked via API.`,
+          timer: 2000,
+        }).then(() => {
+          refetch(); // Refresh data from API
+        });
+      }
+    } else if (action === "Unblock") {
+      // Note: In a real application, you would make an API call to unblock the user
+      // After successful unblocking, call refetch() to refresh the data
       Swal.fire({
         icon: "success",
-        title: "User Updated!",
-        text: `${formValues.name}'s info has been updated.`,
+        title: "Unblocked!",
+        text: `${user.name} would be unblocked via API.`,
+        timer: 2000,
+      }).then(() => {
+        refetch(); // Refresh data from API
       });
     }
-  }
+  };
 
-  else if (action === "Delete") {
-    const confirmDelete = await Swal.fire({
-      title: "Are you sure?",
-      text: `Do you really want to delete ${user.name}?`,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Yes, delete it!",
-      cancelButtonText: "Cancel",
-    });
+  // Filtered users from API data
+  const filteredUsers = userList.filter((user) => {
+    const userName = (user.name || user.username || "").toLowerCase();
+    const userEmail = (user.email || "").toLowerCase();
+    const userLocation = formatLocation(
+      user.location || user.address
+    ).toLowerCase();
+    const searchTerm = search.toLowerCase();
 
-    if (confirmDelete.isConfirmed) {
-      const updatedUsers = users.filter((u) => u.id !== user.id);
-      setUsers(updatedUsers);
-
-      Swal.fire({
-        icon: "success",
-        title: "Deleted!",
-        text: `${user.name} has been removed.`,
-      });
-    }
-  }
-
-  else if (action === "Block") {
-    const confirmBlock = await Swal.fire({
-      title: "Block User?",
-      text: `Do you want to block ${user.name}?`,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Yes, Block",
-      cancelButtonText: "Cancel",
-    });
-
-    if (confirmBlock.isConfirmed) {
-      const updatedUsers = users.map((u) =>
-        u.id === user.id ? { ...u, status: "Inactive" } : u
-      );
-      setUsers(updatedUsers);
-
-      Swal.fire({
-        icon: "success",
-        title: "Blocked!",
-        text: `${user.name} has been blocked.`,
-      });
-    }
-  }
-
-  else if (action === "Unblock") {
-    const updatedUsers = users.map((u) =>
-      u.id === user.id ? { ...u, status: "Active" } : u
-    );
-    setUsers(updatedUsers);
-
-    Swal.fire({
-      icon: "success",
-      title: "Unblocked!",
-      text: `${user.name} is now Active.`,
-    });
-  }
-};
-
-
-
-
-  // Filtered users
-  const filteredUsers = users.filter((user) => {
     const matchesSearch =
-      user.name.toLowerCase().includes(search.toLowerCase()) ||
-      user.email.toLowerCase().includes(search.toLowerCase());
+      userName.includes(searchTerm) ||
+      userEmail.includes(searchTerm) ||
+      userLocation.includes(searchTerm);
 
+    const userStatus = user.status || (user.isActive ? "Active" : "Inactive");
     const matchesStatus =
-      statusFilter === "All" ? true : user.status === statusFilter;
+      statusFilter === "All" ? true : userStatus === statusFilter;
 
     return matchesSearch && matchesStatus;
   });
@@ -192,24 +222,35 @@ const handleAction = async (action, user) => {
     <div className="min-h-screen bg-pink-200 p-6">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-3xl font-bold text-pink-600 flex items-center gap-2">
+        <h2 className="text-3xl font-bold text-pink-600 flex items-end justify-center gap-2">
           👥 Manage Users
+          <span className="text-lg  font-bold   text-gray-600">
+            ({userList.length} total users)
+          </span>
         </h2>
         <div className="flex gap-4">
+          {/* Refresh Button */}
+          <button
+            onClick={() => refetch()}
+            className="bg-pink-600 text-white px-4 py-2 rounded-lg hover:bg-pink-700 transition-colors"
+          >
+            🔄 Refresh
+          </button>
+
           {/* Search */}
           <input
             type="text"
             placeholder="Search users..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="p-2 rounded-lg border border-gray-300 focus:outline-none"
+            className="p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
           />
 
           {/* Filter */}
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="p-2 rounded-lg border border-gray-300"
+            className="p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
           >
             <option value="All">All Status</option>
             <option value="Active">Active</option>
@@ -217,6 +258,8 @@ const handleAction = async (action, user) => {
           </select>
         </div>
       </div>
+
+
 
       {/* User Table */}
       <div className="overflow-x-auto">
@@ -233,77 +276,101 @@ const handleAction = async (action, user) => {
             </tr>
           </thead>
           <tbody>
-            {filteredUsers.map((user) => (
-              <tr
-                key={user.id}
-                className="border-b border-pink-300 hover:bg-pink-50"
-              >
-                <td className="p-3">
-                  <img
-                    src={user.profile}
-                    alt={user.name}
-                    className="w-10 h-10 rounded-full"
-                  />
-                </td>
-                <td className="p-3">{user.name}</td>
-                <td className="p-3">{user.email}</td>
-                <td className="p-3">{user.gender}</td>
-                <td className="p-3">{user.location}</td>
-                <td
-                  className={`p-3 font-bold ${
-                    user.status === "Active" ? "text-green-600" : "text-red-600"
-                  }`}
+            {filteredUsers.length > 0 ? (
+              filteredUsers.map((user, index) => (
+                <tr
+                  key={user.id || user._id || index}
+                  className="border-b border-pink-300 hover:bg-pink-50"
                 >
-                  {user.status}
-                </td>
-                <td className="p-3 flex gap-2">
-                  {/* View */}
-                  <button
-  onClick={() => handleAction("View", user)}
-  className="bg-blue-600 text-white p-2 rounded-full"
->
-  <FaEye />
-</button>
-
-
-                  {/* Edit */}
-                 <button
-  onClick={() => handleAction("Edit", user)}
-  className="bg-green-500 text-white p-2 rounded-full"
->
-  <FaEdit />
-</button>
-
-
-                  {/* Block / Unblock */}
-                  {user.status === "Active" ? (
-                    <button
-                      onClick={() => handleAction("Block", user)}
-                      className="bg-red-500 text-white p-2 rounded-full"
-                    >
-                      <FaBan />
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => handleAction("Unblock", user)}
-                      className="bg-green-600 text-white p-2 rounded-full"
-                    >
-                      <FaUnlock />
-                    </button>
-                  )}
-
-                  {/* Delete */}
-                  <button
-                    onClick={() => handleAction("Delete", user)}
-                    className="bg-pink-400 text-white p-2 rounded-full"
+                  <td className="p-3">
+                    <img
+                      src={
+                        user.profile ||
+                        user.profileImage ||
+                        user.avatar ||
+                        (user.profilePic
+                          ? `${IMAGEURL}/${user.profilePic}`
+                          : `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                              user.firstName + " " + user.lastName
+                            )}&background=ec4899&color=fff`)
+                      }
+                      alt={
+                        user.firstName + " " + user.lastName ||
+                        user.username ||
+                        "User"
+                      }
+                      className="w-10 h-10 rounded-full object-cover"
+                      onError={(e) => {
+                        e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                          user.firstName + " " + user.lastName
+                        )}&background=ec4899&color=fff`;
+                      }}
+                    />
+                  </td>
+                  <td className="p-3">
+                    {user.Name.firstName || "N/A"} {user.Name.lastName || "N/A"}
+                  </td>
+                  <td className="p-3">{user.email || "N/A"}</td>
+                  <td className="p-3">{user.gender || "N/A"}</td>
+                  <td className="p-3">
+                    {formatLocation(user.location || user.address)}
+                  </td>
+                  <td
+                    className={`p-3 font-bold ${
+                      user.status === "Active" || user.isActive
+                        ? "text-green-600"
+                        : "text-red-600"
+                    }`}
                   >
-                    <FaTrash />
-                  </button>
-                </td>
-              </tr>
-            ))}
+                    {user.status ||
+                      (user.isActive ? "Active" : "Inactive") ||
+                      "Unknown"}
+                  </td>
+                  <td className="p-3 flex gap-2">
+                    {/* View */}
+                    <button
+                      onClick={() => handleAction("View", user)}
+                      className="bg-blue-600 text-white p-2 rounded-full"
+                    >
+                      <FaEye />
+                    </button>
 
-            {filteredUsers.length === 0 && (
+                    {/* Edit */}
+                    <button
+                      onClick={() => handleAction("Edit", user)}
+                      className="bg-green-500 text-white p-2 rounded-full"
+                    >
+                      <FaEdit />
+                    </button>
+
+                    {/* Block / Unblock */}
+                    {user.status === "Active" || user.isActive ? (
+                      <button
+                        onClick={() => handleAction("Block", user)}
+                        className="bg-red-500 text-white p-2 rounded-full"
+                      >
+                        <FaBan />
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => handleAction("Unblock", user)}
+                        className="bg-green-600 text-white p-2 rounded-full"
+                      >
+                        <FaUnlock />
+                      </button>
+                    )}
+
+                    {/* Delete */}
+                    <button
+                      onClick={() => handleAction("Delete", user)}
+                      className="bg-pink-400 text-white p-2 rounded-full"
+                    >
+                      <FaTrash />
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
               <tr>
                 <td colSpan="7" className="text-center p-4 text-gray-600">
                   No users found.

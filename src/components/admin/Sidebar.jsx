@@ -22,7 +22,7 @@ export default function Sidebar() {
       <div className={`fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300 ${isOpen ? "block" : "hidden"} lg:hidden`} onClick={toggleSidebar}></div>
 
       {/* Sidebar Container */}
-      <div className={`fixed top-0 left-0 h-full bg-gradient-to-br from-pink-400 to-pink-600 text-white w-64 p-5 shadow-lg transform transition-transform duration-300 z-50
+      <div className={`fixed top-0 left-0 min-h-screen bg-gradient-to-br from-pink-400 to-pink-600 text-white w-64 p-5 shadow-lg transform transition-transform duration-300 z-50
         ${isOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0 lg:static lg:block rounded-tr-2xl rounded-br-2xl`}>
 
         {/* Logo */}
