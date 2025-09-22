@@ -4,10 +4,12 @@ import Sidebar from "../components/superadmin/Sidebar";
 // SuperAdmin Pages
 import Dashboard from "../Pages/SuperAdmin/Dashboard";
 import AdminManagement from "../Pages/SuperAdmin/AdminManagement";
+import AgentManagement from "../Pages/SuperAdmin/AgentManagement";
 import ChatMonitor from "../Pages/SuperAdmin/ChatMonitor";
 import PricingPlan from "../Pages/SuperAdmin/PricingPlan";
 import Reports from "../Pages/SuperAdmin/Reports";
 import Transection from "../Pages/SuperAdmin/Transection";
+import UserManagement from "../Pages/SuperAdmin/AgentManagement";
 
 export default function SuperAdminRoutes() {
   return (
@@ -16,6 +18,8 @@ export default function SuperAdminRoutes() {
       <div className="flex-1 p-4">
         <Routes>
           <Route path="dashboard" element={<Dashboard />} />
+          <Route path="usermanagement" element={<UserManagement />} />
+          <Route path="agentmanagement" element={<AgentManagement />} />
           <Route path="adminmanagement" element={<AdminManagement />} />
           <Route path="chatmonitor" element={<ChatMonitor />} />
           <Route path="pricingplan" element={<PricingPlan />} />

@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const userApi = createApi({
   reducerPath: "userApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://shyeyes-b.onrender.com/api/user",
+    baseUrl: "https://shyeyes-b.onrender.com/api/admin",
     prepareHeaders: (headers, { getState }) => {
       const token = getState()?.auth?.token;
       if (token) {
@@ -16,7 +16,7 @@ export const userApi = createApi({
     //     all users
     getAllUsers: builder.query({
       query: () => ({
-        url: "/active-users",
+        url: "/users",
         method: "GET",
       }),
       providesTags: ["Users"],

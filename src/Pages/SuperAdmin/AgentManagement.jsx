@@ -70,25 +70,13 @@ const UserManagement = () => {
 
   const handleAction = async (action, user) => {
     if (action === "View") {
-      const imgUrl =
+      const profileImage =
         user.profile ||
         user.profileImage ||
         user.avatar ||
-        (user.profilePic ? `${IMAGEURL}/${user.profilePic}` : "");
-
-      const getInitials = () => {
-        const first =
-          user.Name?.firstName?.[0] ||
-          user.firstName?.[0] ||
-          user.name?.split(" ")[0]?.[0] ||
-          "U";
-        const last =
-          user.Name?.lastName?.[0] ||
-          user.lastName?.[0] ||
-          user.name?.split(" ")[1]?.[0] ||
-          "";
-        return `${first.toUpperCase()}${last.toUpperCase()}`;
-      };
+        `https://ui-avatars.com/api/?name=${encodeURIComponent(
+          user.name || user.username || "User"
+        )}&background=ec4899&color=fff`;
 
       const userName = user.name || user.username || "User";
       const userEmail = user.email || "N/A";
@@ -97,30 +85,19 @@ const UserManagement = () => {
       const userStatus =
         user.status || (user.isActive ? "Active" : "Inactive") || "Unknown";
 
-      // avatar with error fallback
-      const avatarHtml = imgUrl
-        ? `<img src="${imgUrl}" alt="${userName}" 
-         style="width:80px;height:80px;border-radius:50%;
-         margin-bottom:10px;object-fit:cover;" 
-         onerror="this.outerHTML='<div style=&quot;width:80px;height:80px;border-radius:50%;background:#ccc;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:24px;margin-bottom:10px;&quot;>${getInitials()}</div>'" />`
-        : `<div style="width:80px;height:80px;border-radius:50%;
-         background:#ccc;display:flex;align-items:center;
-         justify-content:center;font-weight:bold;font-size:24px;
-         margin-bottom:10px;">${getInitials()}</div>`;
-
       Swal.fire({
         title: `${userName}'s Details`,
         html: `
-      <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
-        ${avatarHtml}
-        <p><b>Email:</b> ${userEmail}</p>
-        <p><b>Gender:</b> ${userGender}</p>
-        <p><b>Location:</b> ${userLocation}</p>
-        <p><b>Status:</b> <span style="color:${
-          userStatus === "Active" ? "green" : "red"
-        }">${userStatus}</span></p>
-      </div>
-    `,
+        <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+          <img src="${profileImage}" alt="${userName}" style="width:80px;height:80px;border-radius:50%;margin-bottom:10px;object-fit:cover;" />
+          <p><b>Email:</b> ${userEmail}</p>
+          <p><b>Gender:</b> ${userGender}</p>
+          <p><b>Location:</b> ${userLocation}</p>
+          <p><b>Status:</b> <span style="color:${
+            userStatus === "Active" ? "green" : "red"
+          }">${userStatus}</span></p>
+        </div>
+      `,
         confirmButtonText: "Close",
         width: 400,
       });
@@ -247,9 +224,9 @@ const UserManagement = () => {
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-3xl font-bold text-pink-600 flex items-end justify-center gap-2">
-          👥 Manage Users
+          👥 Manage Agents
           <span className="text-lg  font-bold   text-gray-600">
-            ({userList.length} total users)
+            ({userList.length} total agents)
           </span>
         </h2>
         <div className="flex gap-4">
