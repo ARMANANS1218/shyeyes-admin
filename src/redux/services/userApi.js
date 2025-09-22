@@ -13,18 +13,23 @@ export const userApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-//     all users
+    //     all users
     getAllUsers: builder.query({
       query: () => ({
         url: "/active-users",
         method: "GET",
       }),
       providesTags: ["Users"],
+    }),
+    updateUser: builder.mutation({
+      query: ({ id, userData }) => ({
+        url: `/update/${id}`,
+        method: "PUT",
+        body: userData,
       }),
-
+      invalidatesTags: ["Users"],
+    }),
   }),
 });
 
-export const {
-  useGetAllUsersQuery
-} = userApi;
+export const { useGetAllUsersQuery } = userApi;

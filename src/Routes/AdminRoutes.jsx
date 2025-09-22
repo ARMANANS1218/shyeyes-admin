@@ -8,6 +8,7 @@ import PricingPlan from "../Pages/Admin/PricingPlan";
 import Report from "../Pages/Admin/Report";
 import Payments from "../Pages/Admin/Transections";
 import UserManagement from "../Pages/Admin/UserManagement";
+import AgentManagement from "../Pages/Admin/AgentManagement";
 
 export default function AdminRoutes() {
   return (
@@ -21,6 +22,7 @@ export default function AdminRoutes() {
           <Route path="report" element={<Report />} />
           <Route path="payment" element={<Payments />} />
           <Route path="usermanagement" element={<UserManagement />} />
+          <Route path="agentmanagement" element={<AgentManagement />} />
           {/* Agar sirf /admin aaya to Dashboard dikhana */}
           <Route path="" element={<Dashboard />} />
         </Routes>

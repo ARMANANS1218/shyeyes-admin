@@ -1,7 +1,22 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { FaHome, FaUsers, FaComments, FaChartLine, FaCreditCard, FaSignOutAlt, FaBars, FaTimes } from "react-icons/fa";
-import { MdPeople, MdForum, MdOutlinePriceChange } from "react-icons/md";
+import {
+  FaHome,
+  FaUsers,
+  FaComments,
+  FaChartLine,
+  FaCreditCard,
+  FaSignOutAlt,
+  FaBars,
+  FaTimes,
+} from "react-icons/fa";
+import {
+  MdPeople,
+  MdForum,
+  MdOutlinePriceChange,
+  MdSupportAgent,
+  MdRealEstateAgent,
+} from "react-icons/md";
 import { Link } from "react-router-dom";
 
 export default function Sidebar() {
@@ -13,21 +28,36 @@ export default function Sidebar() {
     <>
       {/* Hamburger Button for small screens */}
       <div className="fixed top-4 left-4 z-50 lg:hidden">
-        <button onClick={toggleSidebar} className="text-white text-2xl bg-pink-500 p-2 rounded-md shadow-lg hover:bg-pink-600 transition-colors">
+        <button
+          onClick={toggleSidebar}
+          className="text-white text-2xl bg-pink-500 p-2 rounded-md shadow-lg hover:bg-pink-600 transition-colors"
+        >
           {isOpen ? <FaTimes /> : <FaBars />}
         </button>
       </div>
 
       {/* Sidebar Overlay on small screens */}
-      <div className={`fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300 ${isOpen ? "block" : "hidden"} lg:hidden`} onClick={toggleSidebar}></div>
+      <div
+        className={`fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300 ${
+          isOpen ? "block" : "hidden"
+        } lg:hidden`}
+        onClick={toggleSidebar}
+      ></div>
 
       {/* Sidebar Container */}
-      <div className={`fixed top-0 left-0 min-h-screen bg-gradient-to-br from-pink-400 to-pink-600 text-white w-64 p-5 shadow-lg transform transition-transform duration-300 z-50
-        ${isOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0 lg:static lg:block rounded-tr-2xl rounded-br-2xl`}>
-
+      <div
+        className={`fixed top-0 left-0 min-h-screen bg-gradient-to-br from-pink-400 to-pink-600 text-white w-64 p-5 shadow-lg transform transition-transform duration-300 z-50
+        ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:translate-x-0 lg:static lg:block rounded-tr-2xl rounded-br-2xl`}
+      >
         {/* Logo */}
         <div className="bg-white rounded-lg p-4 mb-8 mx-4">
-          <img src="/src/assets/logo/logo.png" alt="ShyEyes Logo" className="w-full" />
+          <img
+            src="/src/assets/logo/logo.png"
+            alt="ShyEyes Logo"
+            className="w-full"
+          />
         </div>
 
         {/* Menu */}
@@ -37,7 +67,8 @@ export default function Sidebar() {
             <NavLink
               to="/admin/dashboard"
               className={({ isActive }) =>
-                isActive ? "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl font-semibold hover:bg-pink-600 transition-colors"
+                isActive
+                  ? "flex items-center gap-3 bg-[#e60082] px-4 py-3 rounded-2xl font-semibold hover:bg-pink-600 transition-colors"
                   : "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl hover:bg-pink-400 transition-colors"
               }
               onClick={() => setIsOpen(false)}
@@ -52,7 +83,8 @@ export default function Sidebar() {
             <NavLink
               to="/admin/usermanagement"
               className={({ isActive }) =>
-                isActive ? "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl font-semibold hover:bg-pink-600 transition-colors"
+                isActive
+                  ? "flex items-center gap-3 bg-[#e60082] px-4 py-3 rounded-2xl font-semibold hover:bg-pink-600 transition-colors"
                   : "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl hover:bg-pink-400 transition-colors"
               }
               onClick={() => setIsOpen(false)}
@@ -62,12 +94,29 @@ export default function Sidebar() {
             </NavLink>
           </li>
 
+          {/* User Management */}
+          <li>
+            <NavLink
+              to="/admin/agentmanagement"
+              className={({ isActive }) =>
+                isActive
+                  ? "flex items-center gap-3 bg-[#e60082] px-4 py-3 rounded-2xl font-semibold hover:bg-pink-600 transition-colors"
+                  : "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl hover:bg-pink-400 transition-colors"
+              }
+              onClick={() => setIsOpen(false)}
+            >
+              <MdRealEstateAgent className="text-cyan-400" />
+              Agent Management
+            </NavLink>
+          </li>
+
           {/* Chats Monitoring */}
           <li>
             <NavLink
               to="/admin/chatmonitor"
               className={({ isActive }) =>
-                isActive ? "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl font-semibold hover:bg-pink-600 transition-colors"
+                isActive
+                  ? "flex items-center gap-3 bg-[#e60082] px-4 py-3 rounded-2xl font-semibold hover:bg-pink-600 transition-colors"
                   : "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl hover:bg-pink-400 transition-colors"
               }
               onClick={() => setIsOpen(false)}
@@ -82,7 +131,8 @@ export default function Sidebar() {
             <NavLink
               to="/admin/report"
               className={({ isActive }) =>
-                isActive ? "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl font-semibold hover:bg-pink-600 transition-colors"
+                isActive
+                  ? "flex items-center gap-3 bg-[#e60082] px-4 py-3 rounded-2xl font-semibold hover:bg-pink-600 transition-colors"
                   : "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl hover:bg-pink-400 transition-colors"
               }
               onClick={() => setIsOpen(false)}
@@ -97,7 +147,8 @@ export default function Sidebar() {
             <NavLink
               to="/admin/payment"
               className={({ isActive }) =>
-                isActive ? "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl font-semibold hover:bg-pink-600 transition-colors"
+                isActive
+                  ? "flex items-center gap-3 bg-[#e60082] px-4 py-3 rounded-2xl font-semibold hover:bg-pink-600 transition-colors"
                   : "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl hover:bg-pink-400 transition-colors"
               }
               onClick={() => setIsOpen(false)}
@@ -109,14 +160,18 @@ export default function Sidebar() {
 
           {/* Pricing Plan */}
           <li>
-            <Link
+            <NavLink
               to="/admin/pricingplan"
-              className="flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl font-semibold hover:bg-pink-600 transition-colors"
+              className={({ isActive }) =>
+                isActive
+                  ? "flex items-center gap-3 bg-[#e60082] px-4 py-3 rounded-2xl font-semibold hover:bg-pink-600 transition-colors"
+                  : "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl hover:bg-pink-400 transition-colors"
+              }
               onClick={() => setIsOpen(false)}
             >
               <MdOutlinePriceChange className="text-blue-400 text-xl" />
               Pricing Plan
-            </Link>
+            </NavLink>
           </li>
 
           {/* Logout */}
@@ -124,7 +179,8 @@ export default function Sidebar() {
             <NavLink
               to="/admin/logout"
               className={({ isActive }) =>
-                isActive ? "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl font-semibold hover:bg-pink-600 transition-colors"
+                isActive
+                  ? "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl font-semibold hover:bg-pink-600 transition-colors"
                   : "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl hover:bg-pink-400 transition-colors"
               }
               onClick={() => setIsOpen(false)}
