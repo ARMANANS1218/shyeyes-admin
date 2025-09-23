@@ -13,7 +13,7 @@ const UserManagement = () => {
   const { data: allUsers, isLoading, error, refetch } = useGetAllUsersQuery();
 
   // Extract user list from API response
-  const userList = allUsers?.users || [];
+  const userList = allUsers?.data || [];
 
   console.log("Fetched Users from API:", userList);
   console.log("API Response:", allUsers);

@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import { useLoginMutation } from "../../redux/services/authApi";
 import { setCredentials } from "../../redux/slice/authSlice";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 import bgImage from "../../assets/image.png";
 import logo from "../../assets/logo/Logo.png";
@@ -11,6 +12,8 @@ import { FaRegEye } from "react-icons/fa";
 import { FaRegEyeSlash } from "react-icons/fa";
 
 const Login = () => {
+  useDocumentTitle("Login"); // This will set the title as "Login | ShyEyes"
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");

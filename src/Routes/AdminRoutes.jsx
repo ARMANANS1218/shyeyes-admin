@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import Sidebar from "../components/admin/Sidebar";
+import useDocumentTitle from "../hooks/useDocumentTitle";
 
 // Admin Pages
 import Dashboard from "../Pages/Admin/Dashboard";
@@ -11,6 +12,8 @@ import UserManagement from "../Pages/Admin/UserManagement";
 import AgentManagement from "../Pages/Admin/AgentManagement";
 
 export default function AdminRoutes() {
+  useDocumentTitle(); // This will set the title as "Admin Dashboard | ShyEyes"
+
   return (
     <div className="flex">
       <Sidebar />

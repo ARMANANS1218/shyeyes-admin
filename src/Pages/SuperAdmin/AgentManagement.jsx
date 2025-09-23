@@ -1,38 +1,56 @@
 import React, { useState } from "react";
 import Swal from "sweetalert2";
-import { FaEye, FaEdit, FaBan, FaTrash, FaUnlock } from "react-icons/fa";
-import { useGetAllUsersQuery } from "../../redux/services/userApi";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
+import { FaEye, FaEdit, FaBan, FaTrash, FaUnlock, FaPlus } from "react-icons/fa";
+import { 
+  useGetAllAgentsQuery, 
+  useBanAgentMutation, 
+  useUnbanAgentMutation, 
+  useDeleteAgentMutation,
+  useUpdateAgentMutation,
+  useCreateAgentMutation
+} from "../../redux/services/agentApi";
+
 const IMAGEURL = "https://shyeyes-b.onrender.com/uploads";
 
-const UserManagement = () => {
+const AgentManagement = () => {
+  useDocumentTitle("Agent Management"); // This will set the title as "Agent Management - SuperAdmin Dashboard | ShyEyes"
+  const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
+  const [departmentFilter, setDepartmentFilter] = useState("All");
   const [imageError, setImageError] = useState({});
 
-  // Fetch users from API
-  const { data: allUsers, isLoading, error, refetch } = useGetAllUsersQuery();
+  // Pagination parameters
+  const limit = 10;
 
-  // Extract user list from API response
-  const userList = allUsers?.users || [];
+  // API hooks
+  const { data: agentsData, isLoading, error, refetch } = useGetAllAgentsQuery({
+    page: currentPage,
+    limit,
+    search: search || undefined,
+    status: statusFilter !== "All" ? statusFilter : undefined,
+    department: departmentFilter !== "All" ? departmentFilter : undefined,
+  });
 
-  console.log("Fetched Users from API:", userList);
-  console.log("API Response:", allUsers);
-  console.log("First user location structure:", userList[0]?.location);
+  const [banAgent] = useBanAgentMutation();
+  const [unbanAgent] = useUnbanAgentMutation();
+  const [deleteAgent] = useDeleteAgentMutation();
+  const [updateAgent] = useUpdateAgentMutation();
+  const [createAgent] = useCreateAgentMutation();
 
-  // Helper function to format location
-  const formatLocation = (location) => {
-    if (typeof location === "string") {
-      return location;
-    }
-    if (typeof location === "object" && location !== null) {
-      const { city, country } = location;
-      if (city && country) {
-        return `${city}, ${country}`;
-      }
-      if (city) return city;
-      if (country) return country;
-    }
-    return "N/A";
+  // Extract agent list from API response
+  const agentList = agentsData?.data?.agents || agentsData?.agents || [];
+  const totalPages = agentsData?.data?.pagination?.totalPages || agentsData?.totalPages || agentsData?.pagination?.totalPages || 1;
+  const totalAgents = agentsData?.data?.pagination?.totalAgents || agentsData?.totalAgents || agentsData?.total || agentsData?.pagination?.total || 0;
+
+  console.log("Fetched Agents from API:", agentList);
+  console.log("Full API Response:", agentsData);
+  console.log("API Error:", error);
+
+  // Helper function to handle image errors
+  const handleImageError = (agentKey) => {
+    setImageError((prev) => ({ ...prev, [agentKey]: true }));
   };
 
   // Loading state
@@ -41,7 +59,7 @@ const UserManagement = () => {
       <div className="min-h-screen bg-pink-200 p-6 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600 mx-auto mb-4"></div>
-          <p className="text-pink-600 font-semibold">Loading users...</p>
+          <p className="text-pink-600 font-semibold">Loading agents...</p>
         </div>
       </div>
     );
@@ -53,7 +71,7 @@ const UserManagement = () => {
       <div className="min-h-screen bg-pink-200 p-6 flex items-center justify-center">
         <div className="text-center">
           <p className="text-red-600 font-semibold mb-4">
-            Failed to load users
+            Failed to load agents: {error?.data?.message || error?.message || 'Unknown error'}
           </p>
           <button
             onClick={() => refetch()}
@@ -66,158 +84,210 @@ const UserManagement = () => {
     );
   }
 
-  // SweetAlert Trigger
+  // Handle view agent
+  const handleViewAgent = (agent) => {
+    const profileImage = agent.profilePic 
+      ? `${IMAGEURL}/${agent.profilePic}` 
+      : `https://ui-avatars.com/api/?name=${encodeURIComponent(agent.name)}&background=ec4899&color=fff`;
 
-  const handleAction = async (action, user) => {
-    if (action === "View") {
-      const profileImage =
-        user.profile ||
-        user.profileImage ||
-        user.avatar ||
-        `https://ui-avatars.com/api/?name=${encodeURIComponent(
-          user.name || user.username || "User"
-        )}&background=ec4899&color=fff`;
-
-      const userName = user.name || user.username || "User";
-      const userEmail = user.email || "N/A";
-      const userGender = user.gender || "N/A";
-      const userLocation = formatLocation(user.location || user.address);
-      const userStatus =
-        user.status || (user.isActive ? "Active" : "Inactive") || "Unknown";
-
-      Swal.fire({
-        title: `${userName}'s Details`,
-        html: `
+    Swal.fire({
+      title: `${agent.name}'s Details`,
+      html: `
         <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
-          <img src="${profileImage}" alt="${userName}" style="width:80px;height:80px;border-radius:50%;margin-bottom:10px;object-fit:cover;" />
-          <p><b>Email:</b> ${userEmail}</p>
-          <p><b>Gender:</b> ${userGender}</p>
-          <p><b>Location:</b> ${userLocation}</p>
-          <p><b>Status:</b> <span style="color:${
-            userStatus === "Active" ? "green" : "red"
-          }">${userStatus}</span></p>
+          <img src="${profileImage}" alt="${agent.name}" style="width:80px;height:80px;border-radius:50%;margin-bottom:10px;object-fit:cover;" />
+          <p><b>Name:</b> ${agent.name}</p>
+          <p><b>Email:</b> ${agent.email}</p>
+          <p><b>Role:</b> ${agent.role}</p>
+          <p><b>Department:</b> ${agent.department || 'N/A'}</p>
+          <p><b>Status:</b> <span style="color:${agent.status === 'Active' ? 'green' : 'red'}">${agent.status}</span></p>
+          <p><b>Created:</b> ${new Date(agent.createdAt).toLocaleDateString()}</p>
+          <p><b>Updated:</b> ${new Date(agent.updatedAt).toLocaleDateString()}</p>
         </div>
       `,
-        confirmButtonText: "Close",
-        width: 400,
-      });
-    } else if (action === "Edit") {
-      const userName = user.name || user.username || "";
-      const userEmail = user.email || "";
-      const userGender = user.gender || "";
-      const userLocation = formatLocation(user.location || user.address);
+      confirmButtonText: "Close",
+      width: 400,
+    });
+  };
 
-      const { value: formValues } = await Swal.fire({
-        title: `Edit ${userName || "User"}`,
-        html: `
-        <input id="swal-name" class="swal2-input" placeholder="Name" value="${userName}" />
-        <input id="swal-email" class="swal2-input" placeholder="Email" value="${userEmail}" />
-        <input id="swal-gender" class="swal2-input" placeholder="Gender" value="${userGender}" />
-        <input id="swal-location" class="swal2-input" placeholder="Location" value="${userLocation}" />
+  // Handle edit agent
+  const handleEditAgent = async (agent) => {
+    const { value: formValues } = await Swal.fire({
+      title: `Edit ${agent.name}`,
+      html: `
+        <input id="swal-name" class="swal2-input" placeholder="Name" value="${agent.name}" />
+        <input id="swal-email" class="swal2-input" placeholder="Email" value="${agent.email}" />
+        <select id="swal-role" class="swal2-input" style="display: flex;">
+          <option value="Admin" ${agent.role === 'Admin' ? 'selected' : ''}>Admin</option>
+          <option value="Agent" ${agent.role === 'Agent' ? 'selected' : ''}>Agent</option>
+        </select>
+        <input id="swal-department" class="swal2-input" placeholder="Department" value="${agent.department || ''}" />
       `,
-        focusConfirm: false,
-        preConfirm: () => {
-          return {
-            name: document.getElementById("swal-name").value,
-            email: document.getElementById("swal-email").value,
-            gender: document.getElementById("swal-gender").value,
-            location: document.getElementById("swal-location").value,
-          };
-        },
-        confirmButtonText: "Save",
-        showCancelButton: true,
-      });
+      focusConfirm: false,
+      preConfirm: () => {
+        return {
+          name: document.getElementById("swal-name").value,
+          email: document.getElementById("swal-email").value,
+          role: document.getElementById("swal-role").value,
+          department: document.getElementById("swal-department").value,
+        };
+      },
+      confirmButtonText: "Save",
+      showCancelButton: true,
+    });
 
-      if (formValues) {
-        // Note: In a real application, you would make an API call to update the user
-        // After successful update, call refetch() to refresh the data
+    if (formValues) {
+      try {
+        await updateAgent({ 
+          agentId: agent._id, 
+          agentData: formValues 
+        }).unwrap();
+        
         Swal.fire({
           icon: "success",
-          title: "User Updated!",
-          text: `${formValues.name}'s info would be updated via API.`,
+          title: "Agent Updated!",
+          text: `${formValues.name}'s information has been updated.`,
           timer: 2000,
-        }).then(() => {
-          refetch(); // Refresh data from API
         });
-      }
-    } else if (action === "Delete") {
-      const confirmDelete = await Swal.fire({
-        title: "Are you sure?",
-        text: `Do you really want to delete ${user.name}?`,
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Yes, delete it!",
-        cancelButtonText: "Cancel",
-      });
-
-      if (confirmDelete.isConfirmed) {
-        // Note: In a real application, you would make an API call to delete the user
-        // After successful deletion, call refetch() to refresh the data
+        refetch();
+      } catch (error) {
         Swal.fire({
-          icon: "success",
-          title: "Deleted!",
-          text: `${user.name} would be deleted via API.`,
-          timer: 2000,
-        }).then(() => {
-          refetch(); // Refresh data from API
+          icon: "error",
+          title: "Error!",
+          text: error?.data?.message || "Failed to update agent",
         });
       }
-    } else if (action === "Block") {
-      const confirmBlock = await Swal.fire({
-        title: "Block User?",
-        text: `Do you want to block ${user.name}?`,
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Yes, Block",
-        cancelButtonText: "Cancel",
-      });
-
-      if (confirmBlock.isConfirmed) {
-        // Note: In a real application, you would make an API call to block the user
-        // After successful blocking, call refetch() to refresh the data
-        Swal.fire({
-          icon: "success",
-          title: "Blocked!",
-          text: `${user.name} would be blocked via API.`,
-          timer: 2000,
-        }).then(() => {
-          refetch(); // Refresh data from API
-        });
-      }
-    } else if (action === "Unblock") {
-      // Note: In a real application, you would make an API call to unblock the user
-      // After successful unblocking, call refetch() to refresh the data
-      Swal.fire({
-        icon: "success",
-        title: "Unblocked!",
-        text: `${user.name} would be unblocked via API.`,
-        timer: 2000,
-      }).then(() => {
-        refetch(); // Refresh data from API
-      });
     }
   };
 
-  // Filtered users from API data
-  const filteredUsers = userList.filter((user) => {
-    const userName = (user.name || user.username || "").toLowerCase();
-    const userEmail = (user.email || "").toLowerCase();
-    const userLocation = formatLocation(
-      user.location || user.address
-    ).toLowerCase();
-    const searchTerm = search.toLowerCase();
+  // Handle toggle ban/unban
+  const handleToggleBan = async (agent) => {
+    const isBanned = agent.status === 'Banned';
+    const action = isBanned ? 'unban' : 'ban';
+    
+    const confirmAction = await Swal.fire({
+      title: `${isBanned ? 'Unban' : 'Ban'} Agent?`,
+      text: `Do you want to ${action} ${agent.name}?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: `Yes, ${action}`,
+      cancelButtonText: "Cancel",
+    });
 
-    const matchesSearch =
-      userName.includes(searchTerm) ||
-      userEmail.includes(searchTerm) ||
-      userLocation.includes(searchTerm);
+    if (confirmAction.isConfirmed) {
+      try {
+        if (isBanned) {
+          await unbanAgent(agent._id).unwrap();
+        } else {
+          await banAgent({ 
+            agentId: agent._id, 
+            reason: "Policy violation - banned by admin" 
+          }).unwrap();
+        }
+        
+        Swal.fire({
+          icon: "success",
+          title: `${isBanned ? 'Unbanned' : 'Banned'}!`,
+          text: `${agent.name} has been ${isBanned ? 'unbanned' : 'banned'}.`,
+          timer: 2000,
+        });
+        refetch();
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Error!",
+          text: error?.data?.message || `Failed to ${action} agent`,
+        });
+      }
+    }
+  };
 
-    const userStatus = user.status || (user.isActive ? "Active" : "Inactive");
-    const matchesStatus =
-      statusFilter === "All" ? true : userStatus === statusFilter;
+  // Handle delete agent
+  const handleDeleteAgent = async (agent) => {
+    const confirmDelete = await Swal.fire({
+      title: "Are you sure?",
+      text: `Do you really want to delete ${agent.name}? This action cannot be undone.`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+      confirmButtonColor: "#d33",
+    });
 
-    return matchesSearch && matchesStatus;
-  });
+    if (confirmDelete.isConfirmed) {
+      try {
+        await deleteAgent(agent._id).unwrap();
+        
+        Swal.fire({
+          icon: "success",
+          title: "Deleted!",
+          text: `${agent.name} has been deleted.`,
+          timer: 2000,
+        });
+        refetch();
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Error!",
+          text: error?.data?.message || "Failed to delete agent",
+        });
+      }
+    }
+  };
+
+  // Handle create agent
+  const handleCreateAgent = async () => {
+    const { value: formValues } = await Swal.fire({
+      title: 'Create New Agent',
+      html: `
+        <input id="swal-name" class="swal2-input" placeholder="Full Name" />
+        <input id="swal-email" class="swal2-input" placeholder="Email" type="email" />
+        <input id="swal-password" class="swal2-input" placeholder="Password" type="password" />
+        <select id="swal-role" class="swal2-input" style="display: flex;">
+          <option value="">Select Role</option>
+          <option value="Admin">Admin</option>
+          <option value="Agent">Agent</option>
+        </select>
+        <input id="swal-department" class="swal2-input" placeholder="Department (optional)" />
+      `,
+      focusConfirm: false,
+      preConfirm: () => {
+        const name = document.getElementById("swal-name").value;
+        const email = document.getElementById("swal-email").value;
+        const password = document.getElementById("swal-password").value;
+        const role = document.getElementById("swal-role").value;
+        const department = document.getElementById("swal-department").value;
+
+        if (!name || !email || !password || !role) {
+          Swal.showValidationMessage('Please fill all required fields');
+          return false;
+        }
+
+        return { name, email, password, role, department };
+      },
+      confirmButtonText: "Create",
+      showCancelButton: true,
+    });
+
+    if (formValues) {
+      try {
+        await createAgent(formValues).unwrap();
+        
+        Swal.fire({
+          icon: "success",
+          title: "Agent Created!",
+          text: `${formValues.name} has been created successfully.`,
+          timer: 2000,
+        });
+        refetch();
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Error!",
+          text: error?.data?.message || "Failed to create agent",
+        });
+      }
+    }
+  };
 
   return (
     <div className="min-h-screen bg-pink-200 p-6">
@@ -225,11 +295,19 @@ const UserManagement = () => {
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-3xl font-bold text-pink-600 flex items-end justify-center gap-2">
           👥 Manage Agents
-          <span className="text-lg  font-bold   text-gray-600">
-            ({userList.length} total agents)
+          <span className="text-lg font-bold text-gray-600">
+            ({totalAgents} total agents)
           </span>
         </h2>
         <div className="flex gap-4">
+          {/* Create Agent Button */}
+          <button
+            onClick={handleCreateAgent}
+            className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
+          >
+            <FaPlus /> Create Agent
+          </button>
+
           {/* Refresh Button */}
           <button
             onClick={() => refetch()}
@@ -237,80 +315,80 @@ const UserManagement = () => {
           >
             🔄 Refresh
           </button>
-
-          {/* Search */}
-          <input
-            type="text"
-            placeholder="Search users..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
-          />
-
-          {/* Filter */}
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
-          >
-            <option value="All">All Status</option>
-            <option value="Active">Active</option>
-            <option value="Inactive">Inactive</option>
-          </select>
         </div>
       </div>
 
-      {/* User Table */}
+      {/* Filters */}
+      <div className="flex gap-4 mb-6">
+        {/* Search */}
+        <input
+          type="text"
+          placeholder="Search agents..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500 flex-1"
+        />
+
+        {/* Status Filter */}
+        <select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+          className="p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
+        >
+          <option value="All">All Status</option>
+          <option value="Active">Active</option>
+          <option value="Banned">Banned</option>
+          <option value="Inactive">Inactive</option>
+        </select>
+
+        {/* Department Filter */}
+        <select
+          value={departmentFilter}
+          onChange={(e) => setDepartmentFilter(e.target.value)}
+          className="p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
+        >
+          <option value="All">All Departments</option>
+          <option value="Support">Support</option>
+          <option value="Sales">Sales</option>
+          <option value="Technical">Technical</option>
+          <option value="Marketing">Marketing</option>
+        </select>
+      </div>
+
+      {/* Agent Table */}
       <div className="overflow-x-auto">
-        <table className="w-full bg-pink-100 rounded-xl shadow-md mt-5">
+        <table className="w-full bg-pink-100 rounded-xl shadow-md">
           <thead>
             <tr className="text-left bg-pink-300 text-black">
               <th className="p-3">Profile</th>
               <th className="p-3">Name</th>
               <th className="p-3">Email</th>
-              <th className="p-3">Gender</th>
-              <th className="p-3">Location</th>
+              <th className="p-3">Role</th>
+              <th className="p-3">Department</th>
               <th className="p-3">Status</th>
               <th className="p-3">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {filteredUsers.length > 0 ? (
-              filteredUsers.map((user, index) => (
+            {agentList.length > 0 ? (
+              agentList.map((agent, index) => (
                 <tr
-                  key={user.id || user._id || index}
+                  key={agent._id || index}
                   className="border-b border-pink-300 hover:bg-pink-50"
                 >
                   <td className="p-3">
                     {(() => {
-                      const userKey = user.id || user._id || index;
-                      const imgUrl =
-                        user.profile ||
-                        user.profileImage ||
-                        user.avatar ||
-                        (user.profilePic
-                          ? `${IMAGEURL}/${user.profilePic}`
-                          : "");
+                      const agentKey = agent._id || index;
+                      const imgUrl = agent.profilePic ? `${IMAGEURL}/${agent.profilePic}` : "";
 
                       const getInitials = () => {
-                        const first =
-                          user.Name?.firstName?.[0] ||
-                          user.firstName?.[0] ||
-                          user.name?.split(" ")[0]?.[0] ||
-                          "U";
-                        const last =
-                          user.Name?.lastName?.[0] ||
-                          user.lastName?.[0] ||
-                          user.name?.split(" ")[1]?.[0] ||
-                          "";
+                        const nameParts = agent.name?.split(" ") || ["Agent"];
+                        const first = nameParts[0]?.[0] || "A";
+                        const last = nameParts[1]?.[0] || "";
                         return `${first.toUpperCase()}${last.toUpperCase()}`;
                       };
 
-                      if (
-                        !imgUrl ||
-                        imgUrl.trim() === "" ||
-                        imageError[userKey]
-                      ) {
+                      if (!imgUrl || imgUrl.trim() === "" || imageError[agentKey]) {
                         return (
                           <div
                             className="w-10 h-10 rounded-full bg-pink-600 flex items-center justify-center text-white font-semibold text-lg"
@@ -323,81 +401,72 @@ const UserManagement = () => {
                       return (
                         <img
                           src={imgUrl}
-                          alt={
-                            user.Name?.firstName ||
-                            user.firstName ||
-                            user.username ||
-                            "User"
-                          }
+                          alt={agent.name}
                           className="w-10 h-10 rounded-full object-cover"
-                          onError={() =>
-                            setImageError((prev) => ({
-                              ...prev,
-                              [userKey]: true,
-                            }))
-                          }
+                          onError={() => handleImageError(agentKey)}
                         />
                       );
                     })()}
                   </td>
 
-                  <td className="p-3">
-                    {user.Name.firstName || "N/A"} {user.Name.lastName || "N/A"}
-                  </td>
-                  <td className="p-3">{user.email || "N/A"}</td>
-                  <td className="p-3">{user.gender || "N/A"}</td>
-                  <td className="p-3">
-                    {formatLocation(user.location || user.address)}
-                  </td>
+                  <td className="p-3">{agent.name || "N/A"}</td>
+                  <td className="p-3">{agent.email || "N/A"}</td>
+                  <td className="p-3">{agent.role || "N/A"}</td>
+                  <td className="p-3">{agent.department || "N/A"}</td>
                   <td
                     className={`p-3 font-bold ${
-                      user.status === "Active" || user.isActive
+                      agent.status === "Active"
                         ? "text-green-600"
-                        : "text-red-600"
+                        : agent.status === "Banned" 
+                        ? "text-red-600"
+                        : "text-gray-600"
                     }`}
                   >
-                    {user.status ||
-                      (user.isActive ? "Active" : "Inactive") ||
-                      "Unknown"}
+                    {agent.status || "Unknown"}
                   </td>
                   <td className="p-3 flex gap-2">
                     {/* View */}
                     <button
-                      onClick={() => handleAction("View", user)}
-                      className="bg-blue-600 text-white p-2 rounded-full"
+                      onClick={() => handleViewAgent(agent)}
+                      className="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 transition-colors"
+                      title="View Details"
                     >
                       <FaEye />
                     </button>
 
                     {/* Edit */}
                     <button
-                      onClick={() => handleAction("Edit", user)}
-                      className="bg-green-500 text-white p-2 rounded-full"
+                      onClick={() => handleEditAgent(agent)}
+                      className="bg-green-500 text-white p-2 rounded-full hover:bg-green-600 transition-colors"
+                      title="Edit Agent"
                     >
                       <FaEdit />
                     </button>
 
-                    {/* Block / Unblock */}
-                    {user.status === "Active" || user.isActive ? (
+                    {/* Ban / Unban */}
+                    {agent.status === "Banned" ? (
                       <button
-                        onClick={() => handleAction("Block", user)}
-                        className="bg-red-500 text-white p-2 rounded-full"
+                        onClick={() => handleToggleBan(agent)}
+                        className="bg-green-600 text-white p-2 rounded-full hover:bg-green-700 transition-colors"
+                        title="Unban Agent"
                       >
-                        <FaBan />
+                        <FaUnlock />
                       </button>
                     ) : (
                       <button
-                        onClick={() => handleAction("Unblock", user)}
-                        className="bg-green-600 text-white p-2 rounded-full"
+                        onClick={() => handleToggleBan(agent)}
+                        className="bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors"
+                        title="Ban Agent"
                       >
-                        <FaUnlock />
+                        <FaBan />
                       </button>
                     )}
 
                     {/* Delete */}
                     <button
-                      onClick={() => handleAction("Delete", user)}
-                      className="bg-pink-400 text-white p-2 rounded-full"
+                      onClick={() => handleDeleteAgent(agent)}
+                      className="bg-pink-400 text-white p-2 rounded-full hover:bg-pink-500 transition-colors"
+                      title="Delete Agent"
                     >
                       <FaTrash />
                     </button>
@@ -407,15 +476,40 @@ const UserManagement = () => {
             ) : (
               <tr>
                 <td colSpan="7" className="text-center p-4 text-gray-600">
-                  No users found.
+                  No agents found.
                 </td>
               </tr>
             )}
           </tbody>
         </table>
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center mt-6 gap-2">
+          <button
+            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+            className="px-3 py-1 bg-pink-600 text-white rounded disabled:bg-gray-400 disabled:cursor-not-allowed hover:bg-pink-700 transition-colors"
+          >
+            Previous
+          </button>
+          
+          <span className="px-4 py-2 text-pink-600 font-semibold">
+            Page {currentPage} of {totalPages}
+          </span>
+          
+          <button
+            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+            className="px-3 py-1 bg-pink-600 text-white rounded disabled:bg-gray-400 disabled:cursor-not-allowed hover:bg-pink-700 transition-colors"
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 };
 
-export default UserManagement;
+export default AgentManagement;

@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import Sidebar from "../components/superadmin/Sidebar";
+import useDocumentTitle from "../hooks/useDocumentTitle";
 
 // SuperAdmin Pages
 import Dashboard from "../Pages/SuperAdmin/Dashboard";
@@ -9,9 +10,11 @@ import ChatMonitor from "../Pages/SuperAdmin/ChatMonitor";
 import PricingPlan from "../Pages/SuperAdmin/PricingPlan";
 import Reports from "../Pages/SuperAdmin/Reports";
 import Transection from "../Pages/SuperAdmin/Transection";
-import UserManagement from "../Pages/SuperAdmin/AgentManagement";
+import UserManagement from "../Pages/SuperAdmin/Usermanagement";
 
 export default function SuperAdminRoutes() {
+  useDocumentTitle(); // This will set the title as "SuperAdmin Dashboard | ShyEyes"
+
   return (
     <div className="flex">
       <Sidebar />

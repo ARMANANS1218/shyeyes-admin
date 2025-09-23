@@ -11,6 +11,7 @@ import {
   Legend,
 } from "chart.js";
 import Header from "../../components/superadmin/Header.jsx";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 ChartJS.register(
   CategoryScale,
@@ -21,8 +22,11 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+import AdminCards from "../../components/superadmin/AdminCards.jsx";
 
 function Dashboard() {
+  useDocumentTitle("Dashboard"); // This will set the title as "Dashboard - SuperAdmin Dashboard | ShyEyes"
+  
   const [sidebarContent, setSidebarContent] = useState("");
   const [showNotif, setShowNotif] = useState(false);
 
@@ -84,6 +88,7 @@ function Dashboard() {
   return (
     <div className="min-h-screen bg-gray-50 overflow-x-hidden">
       <Header />
+      <AdminCards />
 
       <div className="flex flex-col text-black">
         <div className="flex-1 p-6">

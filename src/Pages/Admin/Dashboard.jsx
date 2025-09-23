@@ -13,6 +13,7 @@ import {
   Legend,
 } from "chart.js";
 import Header from "../../components/admin/Header";
+import StatCards from "../../components/admin/StatsCards";
 
 ChartJS.register(
   CategoryScale,
@@ -88,6 +89,7 @@ function Dashboard() {
   return (
     <div className="min-h-screen bg-gray-50 overflow-x-hidden">
       <Header />
+      <StatCards />
 
       <div className="flex flex-col text-black">
         <div className="flex-1 p-6">

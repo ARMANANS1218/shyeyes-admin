@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import Swal from "sweetalert2";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 import { FaEye, FaEdit, FaBan, FaTrash, FaUnlock } from "react-icons/fa";
 import { useGetAllUsersQuery } from "../../redux/services/userApi";
 const IMAGEURL = "https://shyeyes-b.onrender.com/uploads";
 
 const UserManagement = () => {
+  useDocumentTitle("User Management"); // Set page title
+  
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [imageError, setImageError] = useState({});
@@ -12,12 +15,12 @@ const UserManagement = () => {
   // Fetch users from API
   const { data: allUsers, isLoading, error, refetch } = useGetAllUsersQuery();
 
-  // Extract user list from API response
-  const userList = allUsers?.users || [];
+  // Extract user list from API response - try both common response structures
+  const userList = allUsers?.users || allUsers?.data || [];
 
   console.log("Fetched Users from API:", userList);
-  console.log("API Response:", allUsers);
-  console.log("First user location structure:", userList[0]?.location);
+  console.log("Full API Response:", allUsers);
+  console.log("API Error:", error);
 
   // Helper function to format location
   const formatLocation = (location) => {

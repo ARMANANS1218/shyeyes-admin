@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logout } from "../../redux/slice/authSlice.js";
 import {
   FaHome,
   FaUsers,
@@ -22,8 +24,16 @@ import { RiAdminFill } from "react-icons/ri";
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const toggleSidebar = () => setIsOpen(!isOpen);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    localStorage.removeItem("auth");
+    navigate("/");
+  };
 
   return (
     <>
@@ -193,18 +203,16 @@ export default function Sidebar() {
 
           {/* Logout */}
           <li>
-            <NavLink
-              to="/superadmin/logout"
-              className={({ isActive }) =>
-                isActive
-                  ? "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl font-semibold hover:bg-pink-600 transition-colors"
-                  : "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl hover:bg-pink-400 transition-colors"
-              }
-              onClick={() => setIsOpen(false)}
+            <button
+              onClick={() => {
+                handleLogout();
+                setIsOpen(false);
+              }}
+              className="flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl hover:bg-pink-400 transition-colors w-full text-left"
             >
               <FaSignOutAlt />
               Logout
-            </NavLink>
+            </button>
           </li>
         </ul>
       </div>
