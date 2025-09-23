@@ -103,7 +103,7 @@ export const agentApi = createApi({
       ],
     }),
 
-    // Create agent
+    // Create agent by admin
     createAgent: builder.mutation({
       query: (agentData) => ({
         url: "auth/create-agent",
@@ -111,6 +111,53 @@ export const agentApi = createApi({
         body: agentData,
       }),
       invalidatesTags: ["Agents"],
+    }),
+
+    // Get agent dashboard statistics
+    getAgentDashboardStats: builder.query({
+      query: () => ({
+        url: "agent/dashboard-stats",
+        method: "GET",
+      }),
+    }),
+
+    // Get agent's assigned users
+    getAgentUsers: builder.query({
+      query: ({ page = 1, limit = 10, status, search } = {}) => {
+        const params = new URLSearchParams();
+        params.append('page', page.toString());
+        params.append('limit', limit.toString());
+        
+        if (status && status !== 'All') {
+          params.append('status', status);
+        }
+        if (search) {
+          params.append('search', search);
+        }
+
+        return {
+          url: `agent/users?${params.toString()}`,
+          method: "GET",
+        };
+      },
+    }),
+
+    // Get agent chat sessions
+    getAgentChatSessions: builder.query({
+      query: ({ page = 1, limit = 10, status } = {}) => {
+        const params = new URLSearchParams();
+        params.append('page', page.toString());
+        params.append('limit', limit.toString());
+        
+        if (status && status !== 'All') {
+          params.append('status', status);
+        }
+
+        return {
+          url: `agent/chat-sessions?${params.toString()}`,
+          method: "GET",
+        };
+      },
     }),
   }),
 });
@@ -123,4 +170,7 @@ export const {
   useUnbanAgentMutation,
   useDeleteAgentMutation,
   useCreateAgentMutation,
+  useGetAgentDashboardStatsQuery,
+  useGetAgentUsersQuery,
+  useGetAgentChatSessionsQuery,
 } = agentApi;

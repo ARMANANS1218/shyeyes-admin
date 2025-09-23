@@ -2,13 +2,14 @@ import { Routes, Route } from "react-router-dom";
 import Sidebar from "../components/agent/Sidebar";
 import useDocumentTitle from "../hooks/useDocumentTitle";
 
-// Agent Pages ---> Here all routes or agent will come
-import Dashboard from "../Pages/Admin/Dashboard";
-import ChatMonitor from "../Pages/Admin/ChatMonitor";
+// Agent Pages ---> Here all routes for agent will come
+import Dashboard from "../Pages/Agent/Dashboard";
+import ChatMonitor from "../Pages/Agent/ChatMonitor";
+import UserManagement from "../Pages/Agent/UserManagement";
+// Import Admin pages for missing agent functionality
 import PricingPlan from "../Pages/Admin/PricingPlan";
 import Report from "../Pages/Admin/Report";
 import Payments from "../Pages/Admin/Transections";
-import UserManagement from "../Pages/Admin/UserManagement";
 
 export default function AgentRoutes() {
   useDocumentTitle(); // This will set the title as "Agent Dashboard | ShyEyes"

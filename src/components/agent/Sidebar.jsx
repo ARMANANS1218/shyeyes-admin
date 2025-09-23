@@ -22,7 +22,7 @@ export default function Sidebar() {
   return (
     <>
       {/* Hamburger Button for small screens */}
-      <div className="fixed top-4 left-4 z-50 lg:hidden">
+      <div className=" fixed top-4 left-4 z-50 lg:hidden">
         <button onClick={toggleSidebar} className="text-white text-2xl bg-pink-500 p-2 rounded-md shadow-lg hover:bg-pink-600 transition-colors">
           {isOpen ? <FaTimes /> : <FaBars />}
         </button>
@@ -32,7 +32,7 @@ export default function Sidebar() {
       <div className={`fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300 ${isOpen ? "block" : "hidden"} lg:hidden`} onClick={toggleSidebar}></div>
 
       {/* Sidebar Container */}
-      <div className={`fixed top-0 left-0 h-full bg-gradient-to-br from-pink-400 to-pink-600 text-white w-64 p-5 shadow-lg transform transition-transform duration-300 z-50
+      <div className={`fixed min-h-screen top-0 left-0 h-full bg-gradient-to-br from-pink-400 to-pink-600 text-white w-64 p-5 shadow-lg transform transition-transform duration-300 z-50
         ${isOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0 lg:static lg:block rounded-tr-2xl rounded-br-2xl`}>
 
         {/* Logo */}
@@ -45,9 +45,9 @@ export default function Sidebar() {
           {/* Dashboard */}
           <li>
             <NavLink
-              to="/dashboard"
+              to="/agent/dashboard"
               className={({ isActive }) =>
-                isActive ? "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl font-semibold hover:bg-pink-600 transition-colors"
+                isActive ? "flex items-center  gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl font-semibold hover:bg-pink-600 transition-colors"
                   : "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl hover:bg-pink-400 transition-colors"
               }
               onClick={() => setIsOpen(false)}
@@ -60,7 +60,7 @@ export default function Sidebar() {
           {/* User Management */}
           <li>
             <NavLink
-              to="/usermanagement"
+              to="/agent/usermanagement"
               className={({ isActive }) =>
                 isActive ? "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl font-semibold hover:bg-pink-600 transition-colors"
                   : "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl hover:bg-pink-400 transition-colors"
@@ -75,7 +75,7 @@ export default function Sidebar() {
           {/* Chats Monitoring */}
           <li>
             <NavLink
-              to="/chatmonitor"
+              to="/agent/chatmonitor"
               className={({ isActive }) =>
                 isActive ? "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl font-semibold hover:bg-pink-600 transition-colors"
                   : "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl hover:bg-pink-400 transition-colors"
@@ -90,7 +90,7 @@ export default function Sidebar() {
           {/* Reports */}
           <li>
             <NavLink
-              to="/report"
+              to="/agent/report"
               className={({ isActive }) =>
                 isActive ? "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl font-semibold hover:bg-pink-600 transition-colors"
                   : "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl hover:bg-pink-400 transition-colors"
@@ -105,7 +105,7 @@ export default function Sidebar() {
           {/* Payments */}
           <li>
             <NavLink
-              to="/payment"
+              to="/agent/payment"
               className={({ isActive }) =>
                 isActive ? "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl font-semibold hover:bg-pink-600 transition-colors"
                   : "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl hover:bg-pink-400 transition-colors"
@@ -119,14 +119,17 @@ export default function Sidebar() {
 
           {/* Pricing Plan */}
           <li>
-            <Link
-              to="/pricingplan"
-              className="flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl font-semibold hover:bg-pink-600 transition-colors"
+            <NavLink
+              to="/agent/pricingplan"
+              className={({ isActive }) =>
+                isActive ? "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl font-semibold hover:bg-pink-600 transition-colors"
+                  : "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl hover:bg-pink-400 transition-colors"
+              }
               onClick={() => setIsOpen(false)}
             >
               <MdOutlinePriceChange className="text-blue-400 text-xl" />
               Pricing Plan
-            </Link>
+            </NavLink>
           </li>
 
           {/* Logout */}

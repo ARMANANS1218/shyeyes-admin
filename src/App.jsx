@@ -9,9 +9,10 @@ import useDocumentTitle from "./hooks/useDocumentTitle";
 
 // Pages
 import Login from "./Pages/Auth/Login";
-import AdminRoutes from "./Routes/AdminRoutes";
+import AgentRoutes from "./routes/AgentRoutes";
+import AdminRoutes from "./routes/AdminRoutes";
 import SuperAdminRoutes from "./Routes/SuperAdminRoutes";
-import AgentRoutes from "./Routes/AgentRoutes";
+
 
 function App() {
   const { user } = useSelector((state) => state.auth);
