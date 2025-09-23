@@ -7,7 +7,7 @@ import { setCredentials } from "../../redux/slice/authSlice";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 import bgImage from "../../assets/image.png";
-import logo from "../../assets/logo/Logo.png";
+import logo from "../../assets/logo/logo.png";
 import { FaRegEye } from "react-icons/fa";
 import { FaRegEyeSlash } from "react-icons/fa";
 

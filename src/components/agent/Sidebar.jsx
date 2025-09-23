@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { logout } from "../../redux/slice/authSlice.js";
 import { FaHome, FaUsers, FaComments, FaChartLine, FaCreditCard, FaSignOutAlt, FaBars, FaTimes } from "react-icons/fa";
 import { MdPeople, MdForum, MdOutlinePriceChange } from "react-icons/md";
-import { Link } from "react-router-dom";
+import logo from "../../assets/logo/logo.png";
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -37,7 +37,7 @@ export default function Sidebar() {
 
         {/* Logo */}
         <div className="bg-white rounded-lg p-4 mb-8 mx-4">
-          <img src="src/assets/logo.png" alt="ShyEyes Logo" className="w-full" />
+          <img src={logo} alt="ShyEyes Logo" className="w-full" />
         </div>
 
         {/* Menu */}
