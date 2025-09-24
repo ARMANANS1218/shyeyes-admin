@@ -151,104 +151,46 @@ export default function StatsCards() {
     );
   }
 
-  // User Stats Cards
+  // User Stats Cards (neutral, black/white friendly)
   const userCards = [
-    {
-      title: "Total Users",
-      value: totalUsers.toString(),
-      gradient: "bg-gradient-to-r from-pink-500 via-pink-600 to-pink-800",
-    },
-    {
-      title: "Active Users",
-      value: activeUsers.toString(),
-      gradient: "bg-gradient-to-r from-pink-500 via-pink-400 to-pink-600",
-    },
-    {
-      title: "Banned Users",
-      value: bannedUsers.toString(),
-      gradient: "bg-gradient-to-r from-pink-500 via-pink-600 to-pink-800",
-    },
-    {
-      title: "Gender Ratio",
-      value: calculateGenderRatio(),
-      gradient: "bg-gradient-to-r from-pink-500 via-pink-400 to-pink-600",
-    },
-    {
-      title: "Total Payments",
-      value: calculateTotalPayments(),
-      gradient: "bg-gradient-to-r from-pink-500 via-pink-600 to-pink-800",
-    },
-    {
-      title: "Today Login",
-      value: calculateTodayLogins(),
-      gradient: "bg-gradient-to-r from-pink-500 via-pink-400 to-pink-600",
-    },
+    { title: "Total Users", value: totalUsers.toString() },
+    { title: "Active Users", value: activeUsers.toString() },
+    { title: "Banned Users", value: bannedUsers.toString() },
+    { title: "Gender Ratio", value: calculateGenderRatio() },
+    { title: "Total Payments", value: calculateTotalPayments() },
+    { title: "Today Login", value: calculateTodayLogins() },
   ];
 
-  // Agent Stats Cards
+  // Agent Stats Cards (neutral)
   const agentCards = [
-    {
-      title: "Total Agents",
-      value: totalAgents.toString(),
-      gradient: "bg-gradient-to-r from-pink-500 via-pink-600 to-pink-800",
-    },
-    {
-      title: "Active Agents",
-      value: activeAgents.toString(),
-      gradient: "bg-gradient-to-r from-pink-500 via-pink-400 to-pink-600",
-    },
-    {
-      title: "Banned Agents",
-      value: bannedAgents.toString(),
-      gradient: "bg-gradient-to-r from-pink-500 via-pink-600 to-pink-800",
-    },
-    // {
-    //   title: "Agent Growth",
-    //   value: "0", // Placeholder - no growth tracking API
-    //   gradient: "bg-gradient-to-r from-slate-600 via-slate-700 to-slate-800",
-    // },
+    { title: "Total Agents", value: totalAgents.toString() },
+    { title: "Active Agents", value: activeAgents.toString() },
+    { title: "Banned Agents", value: bannedAgents.toString() },
   ];
 
-  // Admin Stats Cards  
+  // Admin Stats Cards (neutral)
   const adminCards = [
-    {
-      title: "Total Admins",
-      value: totalAdmins.toString(),
-      gradient: "bg-gradient-to-r from-pink-500 via-pink-400 to-pink-600",
-    },
-    {
-      title: "Active Admins",
-      value: activeAdmins.toString(),
-      gradient: "bg-gradient-to-r from-pink-500 via-pink-600 to-pink-800",
-    },
-    {
-      title: "Banned Admins",
-      value: bannedAdmins.toString(),
-      gradient: "bg-gradient-to-r from-pink-500 via-pink-400 to-pink-600",
-    },
-    // {
-    //   title: "System Health",
-    //   value: "OK", // Static placeholder
-    //   gradient: "bg-gradient-to-r from-emerald-400 via-emerald-300 to-emerald-200",
-    // },
+    { title: "Total Admins", value: totalAdmins.toString() },
+    { title: "Active Admins", value: activeAdmins.toString() },
+    { title: "Banned Admins", value: bannedAdmins.toString() },
   ];
 
   return (
-    <div className="p-4 space-y-8">
+    <div className="p-4 space-y-8 bg-transparent text-gray-900 dark:text-gray-100">
       {/* User Stats Section */}
       <div>
-        <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+  <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4 flex items-center">
           <span className="w-1 h-8 bg-blue-500 mr-3 rounded"></span>
           User Stats
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
           {userCards.map((card, index) => (
             <div
               key={index}
-              className={`card p-4 rounded-lg text-white shadow-md hover:shadow-lg transition-shadow ${card.gradient}`}
+              className="card p-4 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow"
             >
-              <h4 className="text-lg font-semibold">{card.title}</h4>
-              <p className="text-2xl font-bold mt-2">{card.value}</p>
+              <h4 className="text-sm font-medium text-gray-600 dark:text-gray-300">{card.title}</h4>
+              <p className="text-2xl font-bold mt-2 text-gray-900 dark:text-gray-100">{card.value}</p>
             </div>
           ))}
         </div>
@@ -256,7 +198,7 @@ export default function StatsCards() {
 
       {/* Agent Stats Section */}
       <div>
-        <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4 flex items-center">
           <span className="w-1 h-8 bg-orange-500 mr-3 rounded"></span>
           Agent Stats
         </h2>
@@ -264,10 +206,10 @@ export default function StatsCards() {
           {agentCards.map((card, index) => (
             <div
               key={index}
-              className={`card p-4 rounded-lg text-white shadow-md hover:shadow-lg transition-shadow ${card.gradient}`}
+              className="card p-4 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow"
             >
-              <h4 className="text-lg font-semibold">{card.title}</h4>
-              <p className="text-2xl font-bold mt-2">{card.value}</p>
+              <h4 className="text-sm font-medium text-gray-600 dark:text-gray-300">{card.title}</h4>
+              <p className="text-2xl font-bold mt-2 text-gray-900 dark:text-gray-100">{card.value}</p>
             </div>
           ))}
         </div>
@@ -275,7 +217,7 @@ export default function StatsCards() {
 
       {/* Admin Stats Section */}
       <div>
-        <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4 flex items-center">
           <span className="w-1 h-8 bg-gray-500 mr-3 rounded"></span>
           Admin Stats
         </h2>
@@ -283,10 +225,10 @@ export default function StatsCards() {
           {adminCards.map((card, index) => (
             <div
               key={index}
-              className={`card p-4 rounded-lg text-white shadow-md hover:shadow-lg transition-shadow ${card.gradient}`}
+              className="card p-4 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow"
             >
-              <h4 className="text-lg font-semibold">{card.title}</h4>
-              <p className="text-2xl font-bold mt-2">{card.value}</p>
+              <h4 className="text-sm font-medium text-gray-600 dark:text-gray-300">{card.title}</h4>
+              <p className="text-2xl font-bold mt-2 text-gray-900 dark:text-gray-100">{card.value}</p>
             </div>
           ))}
         </div>

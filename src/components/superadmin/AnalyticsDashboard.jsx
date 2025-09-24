@@ -311,15 +311,15 @@ const AnalyticsDashboard = () => {
   };
 
   return (
-    <div className="p-6 space-y-8 bg-gray-50 min-h-screen">
-      <div className="bg-white rounded-lg shadow-lg p-6">
-        <div className="flex justify-between items-center">
+    <div className="p-6 space-y-8 bg-gray-50 dark:bg-gray-900 min-h-screen text-gray-900 dark:text-gray-100">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+  <div className="flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold text-gray-800 mb-2 flex items-center">
               <span className="w-2 h-10 bg-gradient-to-b from-purple-600 to-pink-600 mr-4 rounded"></span>
               Analytics Dashboard
             </h1>
-            <p className="text-gray-600">Comprehensive insights and data visualization</p>
+            <p className="text-gray-600 dark:text-gray-300">Comprehensive insights and data visualization</p>
           </div>
           <div className="flex flex-col items-end gap-2">
             <button
@@ -339,8 +339,8 @@ const AnalyticsDashboard = () => {
       {/* Platform Overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* User Status Distribution */}
-        <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+  <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4 flex items-center">
             <span className="w-3 h-3 bg-green-500 rounded-full mr-2"></span>
             User Status Distribution
           </h3>
@@ -353,8 +353,8 @@ const AnalyticsDashboard = () => {
         </div>
 
         {/* Gender Distribution */}
-        <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4 flex items-center">
             <span className="w-3 h-3 bg-pink-500 rounded-full mr-2"></span>
             Gender Distribution
           </h3>
@@ -367,8 +367,8 @@ const AnalyticsDashboard = () => {
         </div>
 
         {/* Platform Overview */}
-        <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4 flex items-center">
             <span className="w-3 h-3 bg-blue-500 rounded-full mr-2"></span>
             Platform Overview
           </h3>
@@ -381,8 +381,8 @@ const AnalyticsDashboard = () => {
         </div>
 
         {/* Agent Status */}
-        <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4 flex items-center">
             <span className="w-3 h-3 bg-purple-500 rounded-full mr-2"></span>
             Agent Status
           </h3>
@@ -397,8 +397,8 @@ const AnalyticsDashboard = () => {
         </div>
 
         {/* Admin Status */}
-        <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4 flex items-center">
             <span className="w-3 h-3 bg-cyan-500 rounded-full mr-2"></span>
             Admin Status
           </h3>
@@ -406,7 +406,7 @@ const AnalyticsDashboard = () => {
             <Doughnut data={adminStatusData} options={chartOptions} />
           </div>
           <div className="mt-4 text-center">
-            <p className="text-sm text-gray-600">Active Rate: <span className="font-semibold text-cyan-600">
+            <p className="text-sm text-gray-600 dark:text-gray-300">Active Rate: <span className="font-semibold text-cyan-600">
               {adminList.length > 0 ? Math.round((adminList.filter(a => 
                 a.status === 'Active' || a.isActive === true || !a.isBanned
               ).length / adminList.length) * 100) : 0}%
@@ -418,8 +418,8 @@ const AnalyticsDashboard = () => {
       {/* Registration Trends - Half Width */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Registration Trends */}
-        <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4 flex items-center">
             <span className="w-3 h-3 bg-indigo-500 rounded-full mr-2"></span>
             Registration Trends (7 Days)
           </h3>
@@ -452,8 +452,8 @@ const AnalyticsDashboard = () => {
         </div>
         
         {/* Placeholder for future chart or empty space */}
-        <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4 flex items-center">
             <span className="w-3 h-3 bg-orange-500 rounded-full mr-2"></span>
             Payment Trends (Coming Soon)
           </h3>
@@ -467,31 +467,31 @@ const AnalyticsDashboard = () => {
       </div>
 
       {/* Additional Insights */}
-      <div className="bg-white rounded-xl shadow-lg p-6">
-        <h3 className="text-xl font-semibold text-gray-800 mb-6 flex items-center">
-          <span className="w-4 h-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded mr-3"></span>
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+        <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-6 flex items-center">
+            <span className="w-4 h-4 bg-transparent rounded mr-3"></span>
           Key Insights
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-lg border-l-4 border-blue-500">
+            <div className="p-4 rounded-lg bg-white dark:bg-gray-900/40 border border-gray-200 dark:border-gray-700">
             <h4 className="font-semibold text-blue-800">User Engagement</h4>
             <p className="text-blue-600 text-sm mt-1">
               {userList.length > 0 ? Math.round((userList.filter(u => u.status === 'Active' || u.isActive === true).length / userList.length) * 100) : 0}% active users
             </p>
           </div>
-          <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-4 rounded-lg border-l-4 border-purple-500">
+            <div className="p-4 rounded-lg bg-white dark:bg-gray-900/40 border border-gray-200 dark:border-gray-700">
             <h4 className="font-semibold text-purple-800">Agent Performance</h4>
             <p className="text-purple-600 text-sm mt-1">
               {agentList.length > 0 ? Math.round((agentList.filter(a => a.status === 'Active').length / agentList.length) * 100) : 0}% agents active
             </p>
           </div>
-          <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-lg border-l-4 border-green-500">
+            <div className="p-4 rounded-lg bg-white dark:bg-gray-900/40 border border-gray-200 dark:border-gray-700">
             <h4 className="font-semibold text-green-800">Platform Growth</h4>
             <p className="text-green-600 text-sm mt-1">
               {trendData.data.reduce((a, b) => a + b, 0)} new users this week
             </p>
           </div>
-          <div className="bg-gradient-to-br from-cyan-50 to-cyan-100 p-4 rounded-lg border-l-4 border-cyan-500">
+            <div className="p-4 rounded-lg bg-white dark:bg-gray-900/40 border border-gray-200 dark:border-gray-700">
             <h4 className="font-semibold text-cyan-800">System Health</h4>
             <p className="text-cyan-600 text-sm mt-1">
               {Math.round(((userList.length + agentList.length + adminList.length) / 3) * 10) / 10} avg per role

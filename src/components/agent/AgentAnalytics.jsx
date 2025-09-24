@@ -147,19 +147,19 @@ const AgentAnalytics = () => {
   };
 
   return (
-    <div className="p-6 space-y-6 bg-gray-50">
-      <div className="bg-white rounded-lg shadow-lg p-6">
-        <h2 className="text-2xl font-bold text-gray-800 mb-2 flex items-center">
+    <div className="p-6 space-y-6 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2 flex items-center">
           <span className="w-2 h-8 bg-gradient-to-b from-green-600 to-blue-600 mr-3 rounded"></span>
           Agent Performance Analytics
         </h2>
-        <p className="text-gray-600">Your performance metrics and user interaction insights</p>
+        <p className="text-gray-600 dark:text-gray-300">Your performance metrics and user interaction insights</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* User Interaction Status */}
-        <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4 flex items-center">
             <span className="w-3 h-3 bg-blue-500 rounded-full mr-2"></span>
             Current User Interactions
           </h3>
@@ -167,13 +167,13 @@ const AgentAnalytics = () => {
             <Pie data={userInteractionData} options={chartOptions} />
           </div>
           <div className="mt-4 text-center">
-            <p className="text-sm text-gray-600">Total Users: <span className="font-semibold text-blue-600">{userList.length}</span></p>
+            <p className="text-sm text-gray-600 dark:text-gray-300">Total Users: <span className="font-semibold text-blue-600">{userList.length}</span></p>
           </div>
         </div>
 
         {/* User Satisfaction */}
-        <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4 flex items-center">
             <span className="w-3 h-3 bg-green-500 rounded-full mr-2"></span>
             User Satisfaction Ratings
           </h3>
@@ -186,8 +186,8 @@ const AgentAnalytics = () => {
         </div>
 
         {/* Response Time Trends */}
-        <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4 flex items-center">
             <span className="w-3 h-3 bg-purple-500 rounded-full mr-2"></span>
             Response Time Trends
           </h3>
@@ -212,8 +212,8 @@ const AgentAnalytics = () => {
         </div>
 
         {/* Daily Interactions */}
-        <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4 flex items-center">
             <span className="w-3 h-3 bg-indigo-500 rounded-full mr-2"></span>
             Daily Interaction Volume
           </h3>
@@ -239,8 +239,8 @@ const AgentAnalytics = () => {
       </div>
 
       {/* Performance Insights */}
-      <div className="bg-white rounded-xl shadow-lg p-6">
-        <h3 className="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+        <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-6 flex items-center">
           <span className="w-4 h-4 bg-gradient-to-r from-green-600 to-blue-600 rounded mr-3"></span>
           Performance Insights
         </h3>
@@ -276,7 +276,7 @@ const AgentAnalytics = () => {
 
       {/* Weekly Goals */}
       <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl shadow-lg p-6 border border-blue-200">
-        <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+        <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-4 flex items-center">
           <span className="w-4 h-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded mr-3"></span>
           This Week's Goals
         </h3>

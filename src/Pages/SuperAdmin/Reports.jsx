@@ -1,50 +1,18 @@
+// src/Pages/SuperAdmin/Reports.jsx
 import React, { useState } from "react";
 import Swal from "sweetalert2";
 
 const UserReports = () => {
   const [reports, setReports] = useState([
-    {
-      id: 1,
-      reportedUser: "Mark Thompson",
-      reportedBy: "Alicia",
-      reason: "Harassment in chat",
-      date: "2025-08-03 16:45",
-      status: "Pending",
-      profile: "https://randomuser.me/api/portraits/women/65.jpg",
-    },
-    {
-      id: 2,
-      reportedUser: "John Carter",
-      reportedBy: "Sophia",
-      reason: "Spamming in group",
-      date: "2025-08-04 14:20",
-      status: "Pending",
-      profile: "https://randomuser.me/api/portraits/men/70.jpg",
-    },
-    {
-      id: 3,
-      reportedUser: "Emily Rose",
-      reportedBy: "David",
-      reason: "Offensive language",
-      date: "2025-08-05 12:10",
-      status: "Pending",
-      profile: "https://randomuser.me/api/portraits/women/50.jpg",
-    },
-    {
-      id: 4,
-      reportedUser: "Mark Thompson",
-      reportedBy: "Alicia",
-      reason: "Harassment in chat",
-      date: "2025-08-03 16:45",
-      status: "Pending",
-      profile: "https://randomuser.me/api/portraits/women/65.jpg",
-    },
+    { id: 1, reportedUser: "Mark Thompson", reportedBy: "Alicia", reason: "Harassment in chat", date: "2025-08-03 16:45", status: "Pending", profile: "https://randomuser.me/api/portraits/women/65.jpg" },
+    { id: 2, reportedUser: "John Carter", reportedBy: "Sophia", reason: "Spamming in group", date: "2025-08-04 14:20", status: "Pending", profile: "https://randomuser.me/api/portraits/men/70.jpg" },
+    { id: 3, reportedUser: "Emily Rose", reportedBy: "David", reason: "Offensive language", date: "2025-08-05 12:10", status: "Pending", profile: "https://randomuser.me/api/portraits/women/50.jpg" },
+    { id: 4, reportedUser: "Mark Thompson", reportedBy: "Alicia", reason: "Harassment in chat", date: "2025-08-03 16:45", status: "Pending", profile: "https://randomuser.me/api/portraits/women/65.jpg" },
   ]);
 
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("date-desc");
 
-  // Handle actions
   const handleAction = (action, report) => {
     if (action === "View") {
       Swal.fire({
@@ -125,187 +93,62 @@ const UserReports = () => {
     }
   };
 
-  // Filtered + searched reports
   const filteredReports = reports
     .filter((r) => r.reportedUser.toLowerCase().includes(search.toLowerCase()))
     .sort((a, b) =>
-      filter === "date-desc"
-        ? new Date(b.date) - new Date(a.date)
-        : new Date(a.date) - new Date(b.date)
+      filter === "date-desc" ? new Date(b.date) - new Date(a.date) : new Date(a.date) - new Date(b.date)
     );
 
   return (
-    <div
-      style={{ padding: "20px", backgroundColor: "#ffe6f0", minHeight: "100vh" }}
-    >
-      <h2
-        style={{
-          color: "#ff3366",
-          fontWeight: "bold",
-          display: "flex",
-          alignItems: "center",
-          gap: "8px",
-          fontSize: "30px", // 👈 size increased
-        }}
-      >
-        🚨 User Reports
-      </h2>
+    <div className="p-6 bg-pink-50 dark:bg-gray-900 min-h-screen transition-colors">
+      <h2 className="text-2xl font-bold text-pink-600 dark:text-pink-300 mb-4">🚨 User Reports</h2>
 
-      {/* Search and Filter */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          margin: "15px 0",
-        }}
-      >
+      <div className="flex justify-between mb-4 gap-4">
         <input
           type="text"
           placeholder="Search by name..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          style={{
-            padding: "8px 12px",
-            borderRadius: "6px",
-            border: "1px solid #ccc",
-            width: "250px",
-          }}
+          className="px-3 py-2 rounded border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100"
         />
-
         <select
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
-          style={{
-            padding: "8px",
-            borderRadius: "6px",
-            border: "1px solid #ccc",
-          }}
+          className="px-3 py-2 rounded border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100"
         >
           <option value="date-desc">Filter by Date (Newest)</option>
           <option value="date-asc">Filter by Date (Oldest)</option>
         </select>
       </div>
 
-      {/* Reports List */}
-      <div
-        style={{
-          background: "#fff",
-          borderRadius: "10px",
-          padding: "15px",
-          boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
-        }}
-      >
+      <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow">
         {filteredReports.map((report) => (
-          <div
-            key={report.id}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              borderBottom: "1px solid #eee",
-              padding: "12px 0",
-              backgroundColor: "#fafafa",
-            }}
-          >
-            <img
-              src={report.profile}
-              alt={report.reportedUser}
-              style={{
-                width: "50px",
-                height: "50px",
-                borderRadius: "50%",
-                marginRight: "15px",
-              }}
-            />
-
-            <div style={{ flex: 1 }}>
-              <p style={{ margin: 0, fontWeight: "bold" }}>
-                Reported: {report.reportedUser} by {report.reportedBy}
-              </p>
-              <p style={{ margin: 0, color: "#666" }}>Reason: {report.reason}</p>
-              <small style={{ color: "#888" }}>{report.date}</small>
+          <div key={report.id} className="flex items-center gap-4 border-b last:border-b-0 py-3">
+            <img src={report.profile} alt={report.reportedUser} className="w-12 h-12 rounded-full object-cover" />
+            <div className="flex-1">
+              <div className="font-semibold text-gray-900 dark:text-gray-100">
+                Reported: {report.reportedUser} <span className="text-sm text-gray-500">by {report.reportedBy}</span>
+              </div>
+              <div className="text-sm text-gray-600 dark:text-gray-300">Reason: {report.reason}</div>
+              <div className="text-xs text-gray-400 dark:text-gray-400">{report.date}</div>
             </div>
 
-            {/* Status */}
-            <span
-              style={{
-                background:
-                  report.status === "Pending"
-                    ? "#ffe0b2"
-                    : report.status === "Blocked"
-                    ? "#ffcdd2"
-                    : "#c8e6c9",
-                color:
-                  report.status === "Pending"
-                    ? "#e65100"
-                    : report.status === "Blocked"
-                    ? "#c62828"
-                    : "#2e7d32",
-                padding: "5px 12px",
-                borderRadius: "20px",
-                fontSize: "12px",
-                marginRight: "10px",
-              }}
-            >
-              {report.status}
-            </span>
+            <div>
+              <span className={`px-3 py-1 rounded-full text-sm ${
+                report.status === "Pending" ? "bg-yellow-100 text-yellow-800" :
+                report.status === "Blocked" ? "bg-red-100 text-red-800" :
+                "bg-green-100 text-green-800"
+              }`}>
+                {report.status}
+              </span>
+            </div>
 
-            {/* Buttons */}
-            <button
-              onClick={() => handleAction("View", report)}
-              style={{
-                background: "#42a5f5",
-                color: "#fff",
-                border: "none",
-                padding: "6px 12px",
-                borderRadius: "5px",
-                marginRight: "8px",
-                cursor: "pointer",
-              }}
-            >
-              View
-            </button>
-            <button
-              onClick={() => handleAction("Edit", report)}
-              style={{
-                background: "#1976d2",
-                color: "#fff",
-                border: "none",
-                padding: "6px 12px",
-                borderRadius: "5px",
-                marginRight: "8px",
-                cursor: "pointer",
-              }}
-              title="Edit Report"
-            >
-              Edit
-            </button>
-            <button
-              onClick={() => handleAction("Block", report)}
-              style={{
-                background: "#ff9800",
-                color: "#fff",
-                border: "none",
-                padding: "6px 12px",
-                borderRadius: "5px",
-                marginRight: "8px",
-                cursor: "pointer",
-              }}
-            >
-              Block
-            </button>
-            <button
-              onClick={() => handleAction("Delete", report)}
-              style={{
-                background: "#e53935",
-                color: "#fff",
-                border: "none",
-                padding: "6px 12px",
-                borderRadius: "5px",
-                cursor: "pointer",
-              }}
-            >
-              Delete
-            </button>
+            <div className="flex gap-2">
+              <button onClick={() => handleAction("View", report)} className="px-3 py-1 bg-blue-600 text-white rounded">View</button>
+              <button onClick={() => handleAction("Edit", report)} className="px-3 py-1 bg-indigo-600 text-white rounded">Edit</button>
+              <button onClick={() => handleAction("Block", report)} className="px-3 py-1 bg-orange-500 text-white rounded">Block</button>
+              <button onClick={() => handleAction("Delete", report)} className="px-3 py-1 bg-red-600 text-white rounded">Delete</button>
+            </div>
           </div>
         ))}
       </div>

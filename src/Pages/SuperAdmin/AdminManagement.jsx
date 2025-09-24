@@ -86,6 +86,7 @@ const AdminManagement = () => {
 
   // Handle page change
   const handlePageChange = (page) => {
+    if (page < 1) return;
     setCurrentPage(page);
   };
 
@@ -110,10 +111,10 @@ const AdminManagement = () => {
   // Loading state
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-pink-100 p-6 flex items-center justify-center">
+      <div className="min-h-screen bg-pink-50 dark:bg-gray-900 p-6 flex items-center justify-center transition-colors">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600 mx-auto mb-4"></div>
-          <p className="text-pink-600 font-semibold">Loading admins...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600 dark:border-pink-300 mx-auto mb-4"></div>
+          <p className="text-pink-600 dark:text-pink-300 font-semibold">Loading admins...</p>
         </div>
       </div>
     );
@@ -122,14 +123,14 @@ const AdminManagement = () => {
   // Error state
   if (error) {
     return (
-      <div className="min-h-screen bg-pink-100 p-6 flex items-center justify-center">
+      <div className="min-h-screen bg-pink-50 dark:bg-gray-900 p-6 flex items-center justify-center transition-colors">
         <div className="text-center">
-          <p className="text-red-600 font-semibold mb-4">
+          <p className="text-red-600 dark:text-red-400 font-semibold mb-4">
             Failed to load admins: {error?.data?.message || error?.message || 'Unknown error'}
           </p>
           <button
             onClick={() => refetch()}
-            className="bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700"
+            className="bg-pink-600 dark:bg-pink-500 text-white px-4 py-2 rounded hover:bg-pink-700 dark:hover:bg-pink-400"
           >
             Retry
           </button>
@@ -139,7 +140,6 @@ const AdminManagement = () => {
   }
 
   // For server-side pagination, we use all admins returned by the API
-  // Client-side filtering will be replaced with API-side filtering in the future
   const filteredAdmins = adminList;
 
   const handleAddAdmin = async () => {
@@ -158,16 +158,17 @@ const AdminManagement = () => {
       }),
       confirmButtonText: "Add Admin",
       showCancelButton: true,
+      customClass: {
+        popup: "rounded-lg"
+      }
     });
-
-    console.log("formValues: ", formValues);
 
     if (formValues) {
       try {
         Swal.fire({
           title: "Adding admin...",
           didOpen: () => {
-            Swal.showLoading(); // Show loading spinner
+            Swal.showLoading();
           },
           allowOutsideClick: false,
           allowEscapeKey: false,
@@ -175,7 +176,7 @@ const AdminManagement = () => {
 
         const response = await createAdmin(formValues).unwrap();
 
-        Swal.close(); // Close the loading
+        Swal.close();
 
         Swal.fire({
           icon: "success",
@@ -183,12 +184,12 @@ const AdminManagement = () => {
           text:
             response?.message ||
             `${formValues.name} has been added successfully.`,
-          timer: 2000,
+          timer: 1800,
         }).then(() => {
           refetch();
         });
       } catch (err) {
-        Swal.close(); // Close the loading
+        Swal.close();
         Swal.fire({
           icon: "error",
           title: "Failed!",
@@ -275,21 +276,13 @@ const AdminManagement = () => {
       preConfirm: () => {
         const name = document.getElementById('edit-name').value;
         const email = document.getElementById('edit-email').value;
-        // Note: privileges and tasks are shown for reference but not sent to backend yet
-        
         if (!name || !email) {
           Swal.showValidationMessage('Name and Email are required');
           return false;
         }
-
-        // Currently only name and email are supported by the backend
-        // TODO: Add support for privileges and assignedTasks in backend
-        
         return {
           name: name.trim(),
           email: email.trim()
-          // Note: privileges and assignedTasks are not sent to backend as it doesn't support them yet
-          // role is always "admin" and handled by backend
         };
       },
       confirmButtonText: isUpdating ? "Updating..." : "Update Admin",
@@ -312,7 +305,7 @@ const AdminManagement = () => {
           icon: "success",
           title: "Success!",
           text: response?.message || `${formValues.name} has been updated successfully.`,
-          timer: 2000,
+          timer: 1800,
           confirmButtonColor: "#ec4899"
         });
 
@@ -346,7 +339,6 @@ const AdminManagement = () => {
       confirmColor = "#10b981";
       successTitle = "Admin Unbanned!";
     } else {
-      // For inactive users, we'll activate them
       action = "unban";
       actionText = "activate";
       confirmColor = "#10b981";
@@ -417,11 +409,10 @@ const AdminManagement = () => {
               '<p style="color: #ef4444; font-weight: bold; margin-top: 15px;">⚠️ You have banned yourself! You will be logged out shortly.</p>' : 
               ''}
           `,
-          timer: action === "ban" && admin._id === currentUser?._id ? 2000 : 3000,
+          timer: action === "ban" && admin._id === currentUser?._id ? 2000 : 2500,
           confirmButtonColor: "#ec4899"
         });
 
-        // If the current user banned themselves, log them out
         if (action === "ban" && admin._id === currentUser?._id) {
           setTimeout(() => {
             dispatch(logout());
@@ -497,20 +488,18 @@ const AdminManagement = () => {
             <p>${response?.message || `${admin.name} has been permanently deleted.`}</p>
             <p style="color: #6b7280; font-size: 14px; margin-top: 10px;">The admin list will be refreshed automatically.</p>
           `,
-          timer: 3000,
+          timer: 2000,
           confirmButtonColor: "#ec4899"
         });
 
         refetch(); // Refresh the admin list
         
-        // Reset to first page if current page becomes empty
         if (adminList.length === 1 && currentPage > 1) {
           setCurrentPage(1);
         }
       } catch (err) {
         const errorMessage = err?.data?.message || err?.error || "Something went wrong while trying to delete the admin.";
         
-        // Handle specific "already deleted" case
         if (errorMessage.includes("already deleted")) {
           Swal.fire({
             icon: "info",
@@ -534,24 +523,20 @@ const AdminManagement = () => {
     }
   };
 
-
-
-
-
   return (
-    <div className="min-h-screen bg-pink-100 p-6">
+    <div className="min-h-screen bg-pink-50 dark:bg-gray-900 p-6 transition-colors">
       {/* Header */}
       <div className="flex flex-col gap-4 mb-6">
         <div className="flex justify-between items-center">
           <div>
-            <h2 className="text-3xl font-bold text-pink-600 flex items-end justify-center gap-2">
+            <h2 className="text-3xl font-bold text-pink-600 dark:text-pink-300 flex items-end gap-2">
               🛠 Manage Admins
-              <span className="text-lg font-bold text-gray-600">
+              <span className="text-lg font-bold text-gray-600 dark:text-gray-300">
                 ({pagination.totalAdmins || adminList.length} total admins)
               </span>
             </h2>
             {debouncedSearch && (
-              <p className="text-sm text-gray-600 mt-1">
+              <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
                 Search results for: "<span className="font-medium">{debouncedSearch}</span>"
                 {statusFilter !== "All" && (
                   <span> • Status: <span className="font-medium">{statusFilter}</span></span>
@@ -562,79 +547,73 @@ const AdminManagement = () => {
         </div>
         
         <div className="flex justify-end">
-          <div className="flex gap-4">
-          {/* Add Admin */}
-          <button
-            onClick={handleAddAdmin}
-            disabled={isCreating}
-            className={`bg-green-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-green-700 ${
-              isCreating ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-          >
-            {isCreating ? (
-              "Adding..."
-            ) : (
-              <>
-                <FaUserPlus /> Add Admin
-              </>
-            )}
-          </button>
+          <div className="flex gap-4 items-center">
+            {/* Add Admin */}
+            <button
+              onClick={handleAddAdmin}
+              disabled={isCreating}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-white ${
+                isCreating ? "opacity-50 cursor-not-allowed bg-green-600" : "bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600"
+              }`}
+            >
+              {isCreating ? "Adding..." : (<><FaUserPlus /> Add Admin</>)}
+            </button>
 
-          {/* Refresh */}
-          <button
-            onClick={() => refetch()}
-            className="bg-pink-600 text-white px-4 py-2 rounded-lg hover:bg-pink-700"
-          >
-            🔄 Refresh
-          </button>
+            {/* Refresh */}
+            <button
+              onClick={() => refetch()}
+              className="bg-pink-600 dark:bg-pink-500 text-white px-4 py-2 rounded-lg hover:bg-pink-700 dark:hover:bg-pink-400"
+            >
+              🔄 Refresh
+            </button>
 
-          {/* Enhanced Search */}
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <FaSearch className="h-4 w-4 text-gray-400" />
-            </div>
-            <input
-              type="text"
-              placeholder="Search by name, email... (Ctrl+K)"
-              value={search}
-              onChange={handleSearchChange}
-              className="pl-10 pr-10 py-2 w-64 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
-            />
-            {search && (
-              <button
-                onClick={handleClearSearch}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center"
-              >
-                <FaTimes className="h-4 w-4 text-gray-400 hover:text-gray-600" />
-              </button>
-            )}
-            {debouncedSearch !== search && (
-              <div className="absolute right-2 top-1/2 transform -translate-y-1/2">
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-pink-600"></div>
+            {/* Enhanced Search */}
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <FaSearch className="h-4 w-4 text-gray-400 dark:text-gray-300" />
               </div>
-            )}
-          </div>
+              <input
+                type="text"
+                placeholder="Search by name, email... (Ctrl+K)"
+                value={search}
+                onChange={handleSearchChange}
+                className="pl-10 pr-10 py-2 w-64 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-pink-500"
+              />
+              {search && (
+                <button
+                  onClick={handleClearSearch}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                >
+                  <FaTimes className="h-4 w-4 text-gray-400 dark:text-gray-300 hover:text-gray-600 dark:hover:text-gray-100" />
+                </button>
+              )}
+              {debouncedSearch !== search && (
+                <div className="absolute right-2 top-1/2 transform -translate-y-1/2">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-pink-600 dark:border-pink-300"></div>
+                </div>
+              )}
+            </div>
 
-          {/* Filter */}
-          <select
-            value={statusFilter}
-            onChange={handleFilterChange}
-            className="p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
-          >
-            <option value="All">All Status</option>
-            <option value="Active">Active</option>
-            <option value="Banned">Banned</option>
-            <option value="Inactive">Inactive</option>
-          </select>
-        </div>
+            {/* Filter */}
+            <select
+              value={statusFilter}
+              onChange={handleFilterChange}
+              className="p-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-pink-500"
+            >
+              <option value="All">All Status</option>
+              <option value="Active">Active</option>
+              <option value="Banned">Banned</option>
+              <option value="Inactive">Inactive</option>
+            </select>
+          </div>
         </div>
       </div>
 
       {/* Admin Table */}
       <div className="overflow-x-auto">
-        <table className="w-full bg-pink-50 rounded-xl shadow-md mt-5 min-h-[500px]">
+        <table className="w-full rounded-xl shadow-md mt-5 min-h-[500px]">
           <thead>
-            <tr className="text-left bg-pink-300 text-black">
+            <tr className="text-left bg-pink-300 dark:bg-pink-700 text-black dark:text-white">
               <th className="p-3">Profile</th>
               <th className="p-3">Name</th>
               <th className="p-3">Email</th>
@@ -644,10 +623,10 @@ const AdminManagement = () => {
               <th className="p-3">Actions</th>
             </tr>
           </thead>
-          <tbody className="min-h-[400px]">
+          <tbody className="min-h-[400px] bg-white dark:bg-gray-800">
             {filteredAdmins.length === 0 ? (
               <tr>
-                <td colSpan="7" className="text-center p-8 text-gray-500">
+                <td colSpan="7" className="text-center p-8 text-gray-500 dark:text-gray-300">
                   {debouncedSearch ? (
                     <div>
                       <p className="text-lg mb-2">No admins found for "{debouncedSearch}"</p>
@@ -671,7 +650,7 @@ const AdminManagement = () => {
               </tr>
             ) : (
               filteredAdmins.map((admin) => (
-                <tr key={admin._id || admin.id} className="border-b border-pink-200 hover:bg-pink-100 h-16">
+                <tr key={admin._id || admin.id} className="border-b border-pink-200 dark:border-gray-700 hover:bg-pink-50 dark:hover:bg-gray-700 h-16">
                   <td className="p-3 align-middle">
                     <img
                       src={admin.profilePicture ? `${IMAGEURL}/${admin.profilePicture}` : "https://via.placeholder.com/40x40/ec4899/ffffff?text=A"}
@@ -679,25 +658,25 @@ const AdminManagement = () => {
                       className="w-10 h-10 rounded-full object-cover"
                     />
                   </td>
-                  <td className="p-3 font-medium align-middle">{admin.name || "N/A"}</td>
-                  <td className="p-3 align-middle">{admin.email || "N/A"}</td>
+                  <td className="p-3 font-medium align-middle text-gray-800 dark:text-gray-100">{admin.name || "N/A"}</td>
+                  <td className="p-3 align-middle text-gray-700 dark:text-gray-200">{admin.email || "N/A"}</td>
                   <td className="p-3 align-middle">
-                    <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-sm">
+                    <span className="bg-purple-100 text-purple-800 dark:bg-purple-800 dark:text-purple-100 px-2 py-1 rounded-full text-sm">
                       {admin.role || "Admin"}
                     </span>
                   </td>
                   <td className="p-3 align-middle">
                     <span className={`px-2 py-1 rounded-full text-sm ${
                       admin.status === "Active"
-                        ? "bg-green-100 text-green-800" 
+                        ? "bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100" 
                         : admin.status === "Banned"
-                        ? "bg-red-100 text-red-800"
-                        : "bg-gray-100 text-gray-800"
+                        ? "bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100"
+                        : "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200"
                     }`}>
                       {admin.status || "Inactive"}
                     </span>
                   </td>
-                  <td className="p-3 align-middle">
+                  <td className="p-3 align-middle text-gray-600 dark:text-gray-300">
                     {admin.createdAt ? new Date(admin.createdAt).toLocaleDateString() : "N/A"}
                   </td>
                   <td className="p-3 align-middle">
@@ -705,7 +684,7 @@ const AdminManagement = () => {
                       {/* View */}
                       <button
                         onClick={() => handleViewAdmin(admin)}
-                        className="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 transition-colors"
+                        className="bg-blue-600 dark:bg-blue-500 text-white p-2 rounded-full hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
                         title="View Details"
                       >
                         <FaEye />
@@ -714,7 +693,7 @@ const AdminManagement = () => {
                       {/* Edit */}
                       <button
                         onClick={() => handleEditAdmin(admin)}
-                        className="bg-green-500 text-white p-2 rounded-full hover:bg-green-600 transition-colors"
+                        className="bg-green-500 dark:bg-green-500 text-white p-2 rounded-full hover:bg-green-600 dark:hover:bg-green-600 transition-colors"
                         title="Edit Admin"
                       >
                         <FaEdit />
@@ -724,7 +703,7 @@ const AdminManagement = () => {
                       {admin.status === "Active" ? (
                         <button
                           onClick={() => handleToggleBan(admin)}
-                          className="bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors"
+                          className="bg-red-500 dark:bg-red-600 text-white p-2 rounded-full hover:bg-red-600 dark:hover:bg-red-500 transition-colors"
                           title="Ban Admin"
                         >
                           <FaBan />
@@ -732,7 +711,7 @@ const AdminManagement = () => {
                       ) : (
                         <button
                           onClick={() => handleToggleBan(admin)}
-                          className="bg-green-600 text-white p-2 rounded-full hover:bg-green-700 transition-colors"
+                          className="bg-green-600 dark:bg-green-500 text-white p-2 rounded-full hover:bg-green-700 dark:hover:bg-green-600 transition-colors"
                           title="Unban Admin"
                         >
                           <FaUnlock />
@@ -742,7 +721,7 @@ const AdminManagement = () => {
                       {/* Delete */}
                       <button
                         onClick={() => handleDeleteAdmin(admin)}
-                        className="bg-pink-400 text-white p-2 rounded-full hover:bg-pink-500 transition-colors"
+                        className="bg-pink-400 dark:bg-pink-500 text-white p-2 rounded-full hover:bg-pink-500 dark:hover:bg-pink-400 transition-colors"
                         title="Delete Admin"
                       >
                         <FaTrash />
@@ -753,7 +732,7 @@ const AdminManagement = () => {
               )).concat(
                 // Add empty rows to maintain consistent table height
                 Array.from({ length: Math.max(0, itemsPerPage - filteredAdmins.length) }, (_, index) => (
-                  <tr key={`empty-${index}`} className="border-b border-pink-200 h-16">
+                  <tr key={`empty-${index}`} className="border-b border-pink-200 dark:border-gray-700 h-16">
                     <td className="p-3 align-middle">&nbsp;</td>
                     <td className="p-3 align-middle">&nbsp;</td>
                     <td className="p-3 align-middle">&nbsp;</td>
@@ -773,86 +752,81 @@ const AdminManagement = () => {
       <div className="mt-6 min-h-[60px] flex items-center">
         {pagination.totalPages > 1 ? (
           <div className="w-full flex justify-between items-center">
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-gray-600 dark:text-gray-300">
               Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
               {Math.min(currentPage * itemsPerPage, pagination.totalAdmins)} of{" "}
               {pagination.totalAdmins} admins
             </div>
             
             <div className="flex items-center gap-2">
-            {/* Previous Button */}
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={!pagination.hasPrev}
-              className={`px-3 py-2 rounded-lg ${
-                pagination.hasPrev
-                  ? "bg-pink-600 text-white hover:bg-pink-700"
-                  : "bg-gray-200 text-gray-400 cursor-not-allowed"
-              }`}
-            >
-              Previous
-            </button>
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={!pagination.hasPrev}
+                className={`px-3 py-2 rounded-lg ${
+                  pagination.hasPrev
+                    ? "bg-pink-600 text-white hover:bg-pink-700 dark:bg-pink-500 dark:hover:bg-pink-400"
+                    : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                }`}
+              >
+                Previous
+              </button>
 
-            {/* Page Numbers */}
-            <div className="flex gap-1">
-              {[...Array(pagination.totalPages)].map((_, index) => {
-                const pageNumber = index + 1;
-                const isCurrentPage = pageNumber === currentPage;
-                
-               
-                const showPage = 
-                  pageNumber === 1 ||
-                  pageNumber === pagination.totalPages ||
-                  Math.abs(pageNumber - currentPage) <= 1;
+              <div className="flex gap-1">
+                {[...Array(pagination.totalPages)].map((_, index) => {
+                  const pageNumber = index + 1;
+                  const isCurrentPage = pageNumber === currentPage;
+                  
+                  const showPage = 
+                    pageNumber === 1 ||
+                    pageNumber === pagination.totalPages ||
+                    Math.abs(pageNumber - currentPage) <= 1;
 
-                if (!showPage) {
-                 
-                  if (pageNumber === 2 && currentPage > 4) {
-                    return <span key={pageNumber} className="px-2 py-2 text-gray-400">...</span>;
+                  if (!showPage) {
+                    if (pageNumber === 2 && currentPage > 4) {
+                      return <span key={pageNumber} className="px-2 py-2 text-gray-400 dark:text-gray-500">...</span>;
+                    }
+                    if (pageNumber === pagination.totalPages - 1 && currentPage < pagination.totalPages - 3) {
+                      return <span key={pageNumber} className="px-2 py-2 text-gray-400 dark:text-gray-500">...</span>;
+                    }
+                    return null;
                   }
-                  if (pageNumber === pagination.totalPages - 1 && currentPage < pagination.totalPages - 3) {
-                    return <span key={pageNumber} className="px-2 py-2 text-gray-400">...</span>;
-                  }
-                  return null;
-                }
 
-                return (
-                  <button
-                    key={pageNumber}
-                    onClick={() => handlePageChange(pageNumber)}
-                    className={`px-3 py-2 rounded-lg ${
-                      isCurrentPage
-                        ? "bg-pink-600 text-white"
-                        : "bg-white text-pink-600 border border-pink-300 hover:bg-pink-50"
-                    }`}
-                  >
-                    {pageNumber}
-                  </button>
-                );
-              })}
+                  return (
+                    <button
+                      key={pageNumber}
+                      onClick={() => handlePageChange(pageNumber)}
+                      className={`px-3 py-2 rounded-lg ${
+                        isCurrentPage
+                          ? "bg-pink-600 text-white"
+                          : "bg-white dark:bg-gray-800 text-pink-600 dark:text-pink-400 border border-pink-300 dark:border-gray-700 hover:bg-pink-50 dark:hover:bg-gray-700"
+                      }`}
+                    >
+                      {pageNumber}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={!pagination.hasNext}
+                className={`px-3 py-2 rounded-lg ${
+                  pagination.hasNext
+                    ? "bg-pink-600 text-white hover:bg-pink-700 dark:bg-pink-500 dark:hover:bg-pink-400"
+                    : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                }`}
+              >
+                Next
+              </button>
             </div>
-
-            {/* Next Button */}
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={!pagination.hasNext}
-              className={`px-3 py-2 rounded-lg ${
-                pagination.hasNext
-                  ? "bg-pink-600 text-white hover:bg-pink-700"
-                  : "bg-gray-200 text-gray-400 cursor-not-allowed"
-              }`}
-            >
-              Next
-            </button>
           </div>
-        </div>
         ) : (
           <div className="w-full flex justify-center">
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-gray-600 dark:text-gray-300">
               Showing all {pagination.totalAdmins || adminList.length} admins
             </div>
           </div>
-        )}
+        )}``
       </div>
     </div>
   );

@@ -1,3 +1,4 @@
+import ThemeToggle from "../ThemeToggle";
 import { useState, useEffect, useRef } from "react";
 import { FaBell, FaSearch, FaChevronDown } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
@@ -61,13 +62,13 @@ export default function Header() {
     : "User";
 
   return (
-    <header className="flex items-center justify-between bg-[#fdf3f5] p-4 rounded-lg shadow mb-6">
+    <header className="flex items-center justify-between bg-[#fdf3f5] dark:bg-gray-800 p-4 rounded-lg shadow mb-6">
       {/* Welcome Section */}
       <div>
-        <h2 className="text-xl font-bold text-pink-600 mt-2">
+  <h2 className="text-xl font-bold text-pink-600 dark:text-indigo-300 mt-2">
           Welcome, {displayRole}
         </h2>
-        <p className="text-sm text-gray-600 ml-2 -mt-1">
+  <p className="text-sm text-gray-600 dark:text-gray-300 ml-2 -mt-1">
           Here's what's happening in your account
         </p>
       </div>
@@ -84,6 +85,7 @@ export default function Header() {
 
       {/* Notification + Profile Section */}
       <div className="flex items-center space-x-4 relative" ref={dropdownRef}>
+        <ThemeToggle />
         {/* 🔔 Notification */}
         <div
           onClick={toggleNotification}

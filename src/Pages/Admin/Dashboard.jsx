@@ -29,8 +29,8 @@ ChartJS.register(
 );
 
 function Dashboard() {
-  const [sidebarContent, setSidebarContent] = useState("");
-  const [showNotif, setShowNotif] = useState(false);
+  const [_sidebarContent, setSidebarContent] = useState("");
+  const [showNotif, _setShowNotif] = useState(false);
 
   useEffect(() => {
     fetch("/sidebar.html")
@@ -88,14 +88,14 @@ function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 overflow-x-hidden">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 overflow-x-hidden">
       <Header />
       <StatsCards />
       
       {/* Admin Analytics Dashboard */}
       <AdminAnalytics />
 
-      <div className="flex flex-col text-black">
+      <div className="flex flex-col text-gray-900 dark:text-gray-100">
         <div className="flex-1 p-6">
           {showNotif && (
             <div
@@ -108,7 +108,7 @@ function Dashboard() {
 
           <div className="grid md:grid-cols-2 gap-6">
             {/* Login Activity */}
-            <div className="bg-white p-4 rounded-lg shadow-lg max-w-full overflow-hidden">
+            <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg max-w-full overflow-hidden">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-lg font-semibold flex items-center">
                   <span className="w-3 h-3 bg-blue-500 rounded-full mr-2"></span>
@@ -119,7 +119,7 @@ function Dashboard() {
             </div>
 
             {/* Payments Trend */}
-            <div className="bg-white p-4 rounded-lg shadow-lg max-w-full overflow-hidden">
+            <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg max-w-full overflow-hidden">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-lg font-semibold flex items-center">
                   <span className="w-3 h-3 bg-purple-500 rounded-full mr-2"></span>

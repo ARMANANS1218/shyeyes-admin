@@ -3,8 +3,8 @@ import { useGetAllAgentsQuery } from "../../redux/services/agentApi";
 
 // src/components/admin/StatsCards.jsx
 export default function StatsCards() {
-  const { data: allUsers, isLoading: usersLoading, error: usersError } = useGetAllUsersQuery();
-  const { data: agentsData, isLoading: agentsLoading, error: agentsError } = useGetAllAgentsQuery();
+  const { data: allUsers, isLoading: usersLoading, error: _usersError } = useGetAllUsersQuery();
+  const { data: agentsData, isLoading: agentsLoading, error: _agentsError } = useGetAllAgentsQuery();
 
   // Extract data from API responses
   const userList = allUsers?.users || allUsers?.data || [];
@@ -97,6 +97,11 @@ export default function StatsCards() {
       gradient: "bg-gradient-to-r from-pink-500 via-pink-400 to-pink-600",
     },
     {
+      title: "Banned Users",
+      value: bannedUsers.toString(),
+      gradient: "bg-gradient-to-r from-pink-500 via-pink-600 to-pink-800",
+    },
+    {
       title: "Total Payments",
       value: calculateTotalPayments(),
       gradient: "bg-gradient-to-r from-pink-500 via-pink-600 to-pink-800",
@@ -133,10 +138,10 @@ export default function StatsCards() {
   ];
 
   return (
-    <div className="p-4 space-y-8">
+    <div className="p-4 space-y-8 bg-transparent text-gray-900 dark:text-gray-100">
       {/* User Stats Section */}
       <div>
-        <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+  <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4 flex items-center">
           <span className="w-1 h-8 bg-pink-500 mr-3 rounded"></span>
           User Stats
         </h2>
@@ -155,7 +160,7 @@ export default function StatsCards() {
 
       {/* Agent Stats Section */}
       <div>
-        <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+  <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4 flex items-center">
           <span className="w-1 h-8 bg-blue-500 mr-3 rounded"></span>
           Agent Stats
         </h2>

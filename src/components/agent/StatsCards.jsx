@@ -3,8 +3,8 @@ import { useGetAllUsersQuery } from "../../redux/services/userApi";
 
 
 export default function StatsCards() {
-  const { data: statsData, isLoading: agentStatsLoading, error: agentStatsError } = useGetAgentDashboardStatsQuery();
-  const { data: allUsers, isLoading: usersLoading, error: usersError } = useGetAllUsersQuery();
+  const { data: _statsData, isLoading: agentStatsLoading, error: _agentStatsError } = useGetAgentDashboardStatsQuery();
+  const { data: allUsers, isLoading: usersLoading, error: _usersError } = useGetAllUsersQuery();
   
   // Extract user data from API response
   const userList = allUsers?.users || allUsers?.data || [];
@@ -132,7 +132,7 @@ export default function StatsCards() {
   ];
 
   return (
-    <div className="p-4 space-y-8">
+    <div className="p-4 space-y-8 bg-transparent text-gray-900 dark:text-gray-100">
       {/* Agent Performance Section */}
       {/* <div>
         <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center">
@@ -154,7 +154,7 @@ export default function StatsCards() {
 
       {/* User Stats Section */}
       <div>
-        <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4 flex items-center">
           <span className="w-1 h-8 bg-blue-500 mr-3 rounded"></span>
           User Stats
         </h2>

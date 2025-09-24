@@ -123,10 +123,10 @@ const AgentManagement = () => {
   // Loading state
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-pink-200 p-6 flex items-center justify-center">
+      <div className="min-h-screen bg-pink-50 dark:bg-gray-900 p-6 flex items-center justify-center transition-colors">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600 mx-auto mb-4"></div>
-          <p className="text-pink-600 font-semibold">Loading agents...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600 dark:border-pink-300 mx-auto mb-4"></div>
+          <p className="text-pink-600 dark:text-pink-300 font-semibold">Loading agents...</p>
         </div>
       </div>
     );
@@ -135,14 +135,14 @@ const AgentManagement = () => {
   // Error state
   if (error) {
     return (
-      <div className="min-h-screen bg-pink-200 p-6 flex items-center justify-center">
+      <div className="min-h-screen bg-pink-50 dark:bg-gray-900 p-6 flex items-center justify-center transition-colors">
         <div className="text-center">
-          <p className="text-red-600 font-semibold mb-4">
+          <p className="text-red-600 dark:text-red-400 font-semibold mb-4">
             Failed to load agents: {error?.data?.message || error?.message || 'Unknown error'}
           </p>
           <button
             onClick={() => refetch()}
-            className="bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700"
+            className="bg-pink-600 dark:bg-pink-500 text-white px-4 py-2 rounded hover:bg-pink-700 dark:hover:bg-pink-400"
           >
             Retry
           </button>
@@ -226,12 +226,13 @@ const AgentManagement = () => {
       },
       confirmButtonText: "Save",
       showCancelButton: true,
+      customClass: { popup: "rounded-lg" }
     });
 
     if (formValues) {
       try {
         await updateAgent({ 
-          agentId: agent._id, 
+          agentId: agent._1d || agent._id, 
           agentData: formValues 
         }).unwrap();
         
@@ -359,6 +360,7 @@ const AgentManagement = () => {
       },
       confirmButtonText: "Create",
       showCancelButton: true,
+      customClass: { popup: "rounded-lg" }
     });
 
     if (formValues) {
@@ -383,19 +385,19 @@ const AgentManagement = () => {
   };
 
   return (
-    <div className="min-h-screen bg-pink-100 p-6">
+    <div className="min-h-screen bg-pink-50 dark:bg-gray-900 p-6 transition-colors">
       {/* Header */}
       <div className="flex flex-col gap-4 mb-6">
         <div className="flex justify-between items-center">
           <div>
-            <h2 className="text-3xl font-bold text-pink-600 flex items-end justify-center gap-2">
+            <h2 className="text-3xl font-bold text-pink-600 dark:text-pink-300 flex items-end justify-center gap-2">
               👥 Manage Agents
-              <span className="text-lg font-bold text-gray-600">
+              <span className="text-lg font-bold text-gray-600 dark:text-gray-300">
                 ({totalAgents} total agents)
               </span>
             </h2>
             {debouncedSearch && (
-              <p className="text-sm text-gray-600 mt-1">
+              <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
                 Search results for: "<span className="font-medium">{debouncedSearch}</span>"
                 {statusFilter !== "All" && (
                   <span> • Status: <span className="font-medium">{statusFilter}</span></span>
@@ -413,7 +415,7 @@ const AgentManagement = () => {
             {/* Add Agent */}
             <button
               onClick={handleCreateAgent}
-              className="bg-green-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-green-700"
+              className="bg-green-600 dark:bg-green-500 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-green-700 dark:hover:bg-green-600 transition-colors"
             >
               <FaUserPlus /> Add Agent
             </button>
@@ -421,7 +423,7 @@ const AgentManagement = () => {
             {/* Refresh */}
             <button
               onClick={() => refetch()}
-              className="bg-pink-600 text-white px-4 py-2 rounded-lg hover:bg-pink-700"
+              className="bg-pink-600 dark:bg-pink-500 text-white px-4 py-2 rounded-lg hover:bg-pink-700 dark:hover:bg-pink-400 transition-colors"
             >
               🔄 Refresh
             </button>
@@ -429,26 +431,26 @@ const AgentManagement = () => {
             {/* Enhanced Search */}
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FaSearch className="h-4 w-4 text-gray-400" />
+                <FaSearch className="h-4 w-4 text-gray-400 dark:text-gray-300" />
               </div>
               <input
                 type="text"
                 placeholder="Search by name, email... (Ctrl+K)"
                 value={search}
                 onChange={handleSearchChange}
-                className="pl-10 pr-10 py-2 w-64 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                className="pl-10 pr-10 py-2 w-64 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-pink-500"
               />
               {search && (
                 <button
                   onClick={handleClearSearch}
                   className="absolute inset-y-0 right-0 pr-3 flex items-center"
                 >
-                  <FaTimes className="h-4 w-4 text-gray-400 hover:text-gray-600" />
+                  <FaTimes className="h-4 w-4 text-gray-400 dark:text-gray-300 hover:text-gray-600 dark:hover:text-gray-100" />
                 </button>
               )}
               {debouncedSearch !== search && (
                 <div className="absolute right-2 top-1/2 transform -translate-y-1/2">
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-pink-600"></div>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-pink-600 dark:border-pink-300"></div>
                 </div>
               )}
             </div>
@@ -457,7 +459,7 @@ const AgentManagement = () => {
             <select
               value={statusFilter}
               onChange={handleFilterChange}
-              className="p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
+              className="p-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-pink-500"
             >
               <option value="All">All Status</option>
               <option value="Active">Active</option>
@@ -468,7 +470,7 @@ const AgentManagement = () => {
             <select
               value={departmentFilter}
               onChange={handleDepartmentFilterChange}
-              className="p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
+              className="p-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-pink-500"
             >
               <option value="All">All Departments</option>
               <option value="Support">Support</option>
@@ -482,9 +484,9 @@ const AgentManagement = () => {
 
       {/* Agent Table */}
       <div className="overflow-x-auto">
-        <table className="w-full bg-pink-50 rounded-xl shadow-md mt-5 min-h-[500px]">
+        <table className="w-full rounded-xl shadow-md mt-5 min-h-[500px]">
           <thead>
-            <tr className="text-left bg-pink-300 text-black">
+            <tr className="text-left bg-pink-300 dark:bg-pink-700 text-black dark:text-white">
               <th className="p-3">Profile</th>
               <th className="p-3">Name</th>
               <th className="p-3">Email</th>
@@ -495,17 +497,17 @@ const AgentManagement = () => {
               <th className="p-3">Actions</th>
             </tr>
           </thead>
-          <tbody className="min-h-[400px]">
+          <tbody className="min-h-[400px] bg-white dark:bg-gray-800">
             {agentList.length === 0 ? (
               <tr>
-                <td colSpan="8" className="text-center p-8 text-gray-500">
+                <td colSpan="8" className="text-center p-8 text-gray-500 dark:text-gray-300">
                   {debouncedSearch ? (
                     <div>
                       <p className="text-lg mb-2">No agents found for "{debouncedSearch}"</p>
                       <p className="text-sm">Try adjusting your search terms or clear the search to see all agents.</p>
                       <button
                         onClick={handleClearSearch}
-                        className="mt-3 px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700"
+                        className="mt-3 px-4 py-2 bg-pink-600 dark:bg-pink-500 text-white rounded-lg hover:bg-pink-700 dark:hover:bg-pink-400"
                       >
                         Clear Search
                       </button>
@@ -522,7 +524,7 @@ const AgentManagement = () => {
               </tr>
             ) : (
               agentList.map((agent, index) => (
-                <tr key={agent._id || index} className="border-b border-pink-200 hover:bg-pink-100 h-16">
+                <tr key={agent._id || index} className="border-b border-pink-200 dark:border-gray-700 hover:bg-pink-50 dark:hover:bg-gray-700 h-16">
                   <td className="p-3 align-middle">
                     {(() => {
                       const agentKey = agent._id || index;
@@ -538,7 +540,7 @@ const AgentManagement = () => {
                       if (!imgUrl || imgUrl.trim() === "" || imageError[agentKey]) {
                         return (
                           <div
-                            className="w-10 h-10 rounded-full bg-pink-600 flex items-center justify-center text-white font-semibold text-sm"
+                            className="w-10 h-10 rounded-full bg-pink-600 dark:bg-pink-500 flex items-center justify-center text-white font-semibold text-sm"
                             style={{ minWidth: "2.5rem" }}
                           >
                             {getInitials()}
@@ -555,30 +557,30 @@ const AgentManagement = () => {
                       );
                     })()}
                   </td>
-                  <td className="p-3 font-medium align-middle">{agent.name || "N/A"}</td>
-                  <td className="p-3 align-middle">{agent.email || "N/A"}</td>
+                  <td className="p-3 font-medium align-middle text-gray-800 dark:text-gray-100">{agent.name || "N/A"}</td>
+                  <td className="p-3 align-middle text-gray-700 dark:text-gray-200">{agent.email || "N/A"}</td>
                   <td className="p-3 align-middle">
-                    <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-sm">
+                    <span className="bg-purple-100 text-purple-800 dark:bg-purple-800 dark:text-purple-100 px-2 py-1 rounded-full text-sm">
                       {agent.role || "Agent"}
                     </span>
                   </td>
                   <td className="p-3 align-middle">
-                    <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-sm">
+                    <span className="bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100 px-2 py-1 rounded-full text-sm">
                       {agent.department || "N/A"}
                     </span>
                   </td>
                   <td className="p-3 align-middle">
                     <span className={`px-2 py-1 rounded-full text-sm ${
                       agent.status === "Active"
-                        ? "bg-green-100 text-green-800" 
+                        ? "bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100" 
                         : agent.status === "Banned"
-                        ? "bg-red-100 text-red-800"
-                        : "bg-gray-100 text-gray-800"
+                        ? "bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100"
+                        : "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200"
                     }`}>
                       {agent.status || "Inactive"}
                     </span>
                   </td>
-                  <td className="p-3 align-middle">
+                  <td className="p-3 align-middle text-gray-600 dark:text-gray-300">
                     {agent.createdAt ? new Date(agent.createdAt).toLocaleDateString() : "N/A"}
                   </td>
                   <td className="p-3 align-middle">
@@ -586,7 +588,7 @@ const AgentManagement = () => {
                       {/* View */}
                       <button
                         onClick={() => handleViewAgent(agent)}
-                        className="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 transition-colors"
+                        className="bg-blue-600 dark:bg-blue-500 text-white p-2 rounded-full hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
                         title="View Details"
                       >
                         <FaEye />
@@ -595,7 +597,7 @@ const AgentManagement = () => {
                       {/* Edit */}
                       <button
                         onClick={() => handleEditAgent(agent)}
-                        className="bg-green-500 text-white p-2 rounded-full hover:bg-green-600 transition-colors"
+                        className="bg-green-500 dark:bg-green-500 text-white p-2 rounded-full hover:bg-green-600 dark:hover:bg-green-600 transition-colors"
                         title="Edit Agent"
                       >
                         <FaEdit />
@@ -605,7 +607,7 @@ const AgentManagement = () => {
                       {agent.status === "Active" ? (
                         <button
                           onClick={() => handleToggleBan(agent)}
-                          className="bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors"
+                          className="bg-red-500 dark:bg-red-600 text-white p-2 rounded-full hover:bg-red-600 dark:hover:bg-red-500 transition-colors"
                           title="Ban Agent"
                         >
                           <FaBan />
@@ -613,7 +615,7 @@ const AgentManagement = () => {
                       ) : (
                         <button
                           onClick={() => handleToggleBan(agent)}
-                          className="bg-green-600 text-white p-2 rounded-full hover:bg-green-700 transition-colors"
+                          className="bg-green-600 dark:bg-green-500 text-white p-2 rounded-full hover:bg-green-700 dark:hover:bg-green-600 transition-colors"
                           title="Unban Agent"
                         >
                           <FaUnlock />
@@ -623,7 +625,7 @@ const AgentManagement = () => {
                       {/* Delete */}
                       <button
                         onClick={() => handleDeleteAgent(agent)}
-                        className="bg-pink-400 text-white p-2 rounded-full hover:bg-pink-500 transition-colors"
+                        className="bg-pink-400 dark:bg-pink-500 text-white p-2 rounded-full hover:bg-pink-500 dark:hover:bg-pink-400 transition-colors"
                         title="Delete Agent"
                       >
                         <FaTrash />
@@ -634,7 +636,7 @@ const AgentManagement = () => {
               )).concat(
                 // Add empty rows to maintain consistent table height
                 Array.from({ length: Math.max(0, itemsPerPage - agentList.length) }, (_, index) => (
-                  <tr key={`empty-${index}`} className="border-b border-pink-200 h-16">
+                  <tr key={`empty-${index}`} className="border-b border-pink-200 dark:border-gray-700 h-16">
                     <td className="p-3 align-middle">&nbsp;</td>
                     <td className="p-3 align-middle">&nbsp;</td>
                     <td className="p-3 align-middle">&nbsp;</td>
@@ -655,7 +657,7 @@ const AgentManagement = () => {
       <div className="mt-6 min-h-[60px] flex items-center">
         {totalPages > 1 ? (
           <div className="w-full flex justify-between items-center">
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-gray-600 dark:text-gray-300">
               Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
               {Math.min(currentPage * itemsPerPage, totalAgents)} of{" "}
               {totalAgents} agents
@@ -668,7 +670,7 @@ const AgentManagement = () => {
                 disabled={currentPage === 1}
                 className={`px-3 py-2 rounded-lg ${
                   currentPage > 1
-                    ? "bg-pink-600 text-white hover:bg-pink-700"
+                    ? "bg-pink-600 text-white hover:bg-pink-700 dark:bg-pink-500 dark:hover:bg-pink-400"
                     : "bg-gray-200 text-gray-400 cursor-not-allowed"
                 }`}
               >
@@ -688,10 +690,10 @@ const AgentManagement = () => {
 
                   if (!showPage) {
                     if (pageNumber === 2 && currentPage > 4) {
-                      return <span key={pageNumber} className="px-2 py-2 text-gray-400">...</span>;
+                      return <span key={pageNumber} className="px-2 py-2 text-gray-400 dark:text-gray-500">...</span>;
                     }
                     if (pageNumber === totalPages - 1 && currentPage < totalPages - 3) {
-                      return <span key={pageNumber} className="px-2 py-2 text-gray-400">...</span>;
+                      return <span key={pageNumber} className="px-2 py-2 text-gray-400 dark:text-gray-500">...</span>;
                     }
                     return null;
                   }
@@ -703,7 +705,7 @@ const AgentManagement = () => {
                       className={`px-3 py-2 rounded-lg ${
                         isCurrentPage
                           ? "bg-pink-600 text-white"
-                          : "bg-white text-pink-600 border border-pink-300 hover:bg-pink-50"
+                          : "bg-white dark:bg-gray-800 text-pink-600 dark:text-pink-400 border border-pink-300 dark:border-gray-700 hover:bg-pink-50 dark:hover:bg-gray-700"
                       }`}
                     >
                       {pageNumber}
@@ -718,7 +720,7 @@ const AgentManagement = () => {
                 disabled={currentPage === totalPages}
                 className={`px-3 py-2 rounded-lg ${
                   currentPage < totalPages
-                    ? "bg-pink-600 text-white hover:bg-pink-700"
+                    ? "bg-pink-600 text-white hover:bg-pink-700 dark:bg-pink-500 dark:hover:bg-pink-400"
                     : "bg-gray-200 text-gray-400 cursor-not-allowed"
                 }`}
               >
@@ -728,7 +730,7 @@ const AgentManagement = () => {
           </div>
         ) : (
           <div className="w-full flex justify-center">
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-gray-600 dark:text-gray-300">
               Showing all {totalAgents} agents
             </div>
           </div>

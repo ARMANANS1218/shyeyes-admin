@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FaFileExport, FaCreditCard, FaEdit } from "react-icons/fa";
 import Swal from "sweetalert2";
 
-const Payments = () => {
+const Transactions = () => {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("All");
 
@@ -34,6 +34,7 @@ const Payments = () => {
       (filter === "All" || p.status === filter)
   );
 
+  // Edit payment
   const handleEdit = (payment) => {
     Swal.fire({
       title: "Edit Payment",
@@ -82,14 +83,13 @@ const Payments = () => {
     });
   };
 
+  // Edit summary cards
   const handleCardEdit = (key, title, currentValue) => {
     Swal.fire({
       title: `Edit ${title}`,
       input: "number",
       inputValue: currentValue,
-      inputAttributes: {
-        min: 0,
-      },
+      inputAttributes: { min: 0 },
       showCancelButton: true,
       confirmButtonText: "Update",
       preConfirm: (value) => {
@@ -101,30 +101,25 @@ const Payments = () => {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        setCards((prev) => ({
-          ...prev,
-          [key]: result.value,
-        }));
+        setCards((prev) => ({ ...prev, [key]: result.value }));
         Swal.fire("Updated!", `${title} has been updated.`, "success");
       }
     });
   };
 
   return (
-    <div className="p-6 bg-pink-100 min-h-screen">
-      <h2 className="text-2xl md:text-3xl font-bold flex items-center gap-2 mb-6" style={{ color: "#ff3366" }}>
-        <FaCreditCard /> Payments Overview
+    <div className="p-6 bg-pink-100 dark:bg-gray-900 min-h-screen transition-colors">
+      <h2 className="text-2xl md:text-3xl font-bold flex items-center gap-2 mb-6 text-pink-600 dark:text-pink-400">
+        <FaCreditCard /> Transactions Overview
       </h2>
 
-      {/* Top Cards with Edit */}
+      {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {/* Revenue */}
         <div className="bg-gradient-to-r from-teal-400 to-teal-500 text-white p-4 rounded-xl shadow relative">
           <button
             className="absolute top-2 right-2 text-white hover:text-gray-200"
-            onClick={() =>
-              handleCardEdit("revenue", "Total Revenue", cards.revenue)
-            }
+            onClick={() => handleCardEdit("revenue", "Total Revenue", cards.revenue)}
           >
             <FaEdit />
           </button>
@@ -136,9 +131,7 @@ const Payments = () => {
         <div className="bg-gradient-to-r from-pink-400 to-purple-400 text-white p-4 rounded-xl shadow relative">
           <button
             className="absolute top-2 right-2 text-white hover:text-gray-200"
-            onClick={() =>
-              handleCardEdit("monthlyIncome", "Monthly Income", cards.monthlyIncome)
-            }
+            onClick={() => handleCardEdit("monthlyIncome", "Monthly Income", cards.monthlyIncome)}
           >
             <FaEdit />
           </button>
@@ -150,9 +143,7 @@ const Payments = () => {
         <div className="bg-gradient-to-r from-orange-300 to-pink-400 text-white p-4 rounded-xl shadow relative">
           <button
             className="absolute top-2 right-2 text-white hover:text-gray-200"
-            onClick={() =>
-              handleCardEdit("activePlans", "Active Plans", cards.activePlans)
-            }
+            onClick={() => handleCardEdit("activePlans", "Active Plans", cards.activePlans)}
           >
             <FaEdit />
           </button>
@@ -164,9 +155,7 @@ const Payments = () => {
         <div className="bg-gradient-to-r from-purple-300 to-blue-300 text-white p-4 rounded-xl shadow relative">
           <button
             className="absolute top-2 right-2 text-white hover:text-gray-200"
-            onClick={() =>
-              handleCardEdit("refunds", "Refunds", cards.refunds)
-            }
+            onClick={() => handleCardEdit("refunds", "Refunds", cards.refunds)}
           >
             <FaEdit />
           </button>
@@ -180,12 +169,12 @@ const Payments = () => {
         <input
           type="text"
           placeholder="Search by user..."
-          className="border rounded px-4 py-2 flex-1"
+          className="border rounded px-4 py-2 flex-1 dark:bg-gray-800 dark:border-gray-600 dark:text-white"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
         <select
-          className="border rounded px-4 py-2"
+          className="border rounded px-4 py-2 dark:bg-gray-800 dark:border-gray-600 dark:text-white"
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
         >
@@ -195,20 +184,20 @@ const Payments = () => {
           <option value="Pending">Pending</option>
           <option value="Refunded">Refunded</option>
         </select>
-        <button className="flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-lg shadow">
+        <button className="flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-lg shadow hover:bg-red-700">
           <FaFileExport /> Export
         </button>
       </div>
 
-      {/* Payments Table */}
-      <div className="bg-white rounded-xl shadow overflow-x-auto">
+      {/* Transactions Table */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow overflow-x-auto">
         <table className="w-full">
-      <thead
-  className="text-white"
-  style={{
-    backgroundImage: "linear-gradient(-225deg, #B6CEE8 0%, #F578DC 100%)"
-  }}
->
+          <thead
+            className="text-white"
+            style={{
+              backgroundImage: "linear-gradient(-225deg, #B6CEE8 0%, #F578DC 100%)",
+            }}
+          >
             <tr>
               <th className="text-left p-3">User</th>
               <th className="text-left p-3">Plan</th>
@@ -221,12 +210,12 @@ const Payments = () => {
           </thead>
           <tbody>
             {filteredPayments.map((p) => (
-              <tr key={p.id} className="border-b hover:bg-pink-50">
-                <td className="p-3">{p.user}</td>
-                <td className="p-3">{p.plan}</td>
-                <td className="p-3">{p.amount}</td>
-                <td className="p-3">{p.method}</td>
-                <td className="p-3">{p.date}</td>
+              <tr key={p.id} className="border-b dark:border-gray-700 hover:bg-pink-50 dark:hover:bg-gray-700">
+                <td className="p-3 dark:text-gray-200">{p.user}</td>
+                <td className="p-3 dark:text-gray-200">{p.plan}</td>
+                <td className="p-3 dark:text-gray-200">{p.amount}</td>
+                <td className="p-3 dark:text-gray-200">{p.method}</td>
+                <td className="p-3 dark:text-gray-200">{p.date}</td>
                 <td className="p-3">
                   <span
                     className={`${statusColors[p.status]} text-white px-3 py-1 rounded-full text-sm`}
@@ -236,7 +225,7 @@ const Payments = () => {
                 </td>
                 <td className="p-3">
                   <button
-                    className="text-pink-600 hover:text-pink-800"
+                    className="text-pink-600 hover:text-pink-800 dark:text-pink-400 dark:hover:text-pink-300"
                     onClick={() => handleEdit(p)}
                     title="Edit Payment"
                   >
@@ -252,4 +241,4 @@ const Payments = () => {
   );
 };
 
-export default Payments;
+export default Transactions;

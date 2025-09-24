@@ -116,25 +116,25 @@ const ChatMonitoring = () => {
   return (
     <div className="flex h-screen">
       {/* Chat Section */}
-      <div className="flex-1 flex flex-col bg-pink-50">
+      <div className="flex-1 flex flex-col bg-pink-50 dark:bg-gray-900 transition-colors">
         {selectedPair && (
-          <div className="p-4 border-b flex items-center justify-between">
+          <div className="p-4 border-b flex items-center justify-between border-gray-200 dark:border-gray-700">
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
-                <img src={selectedPair.female.img} className="w-10 h-10 rounded-full" />
+                <img src={selectedPair.female.img} className="w-10 h-10 rounded-full" alt={selectedPair.female.name} />
                 <div>
-                  <div className="font-bold">{selectedPair.female.name}</div>
-                  <div className="text-green-500">
+                  <div className="font-bold text-gray-900 dark:text-gray-100">{selectedPair.female.name}</div>
+                  <div className={`text-sm ${selectedPair.female.active ? "text-green-600" : "text-gray-400"}`}>
                     {selectedPair.female.active ? "Active now" : "Inactive"}
                   </div>
                 </div>
               </div>
-              <span className="mx-2">→</span>
+              <span className="mx-2 text-gray-400">→</span>
               <div className="flex items-center gap-2">
-                <img src={selectedPair.male.img} className="w-10 h-10 rounded-full" />
+                <img src={selectedPair.male.img} className="w-10 h-10 rounded-full" alt={selectedPair.male.name} />
                 <div>
-                  <div className="font-bold">{selectedPair.male.name}</div>
-                  <div className="text-gray-400">
+                  <div className="font-bold text-gray-900 dark:text-gray-100">{selectedPair.male.name}</div>
+                  <div className={`text-sm ${selectedPair.male.active ? "text-green-600" : "text-gray-400"}`}>
                     {selectedPair.male.active ? "Active now" : "Inactive"}
                   </div>
                 </div>
@@ -145,25 +145,25 @@ const ChatMonitoring = () => {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => handleEditPair(selectedPair)}
-                className="px-3 py-1 bg-purple-500 text-white rounded hover:bg-purple-600"
+                className="px-3 py-1 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors"
               >
                 Edit
               </button>
               <button
                 onClick={() => handleBlockUser(selectedPair)}
-                className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+                className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
               >
                 Block
               </button>
               <button
                 onClick={() => handleDeleteChat(selectedPair)}
-                className="px-3 py-1 bg-gray-500 text-white rounded hover:bg-gray-600"
+                className="px-3 py-1 bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors"
               >
                 Delete
               </button>
               <button
                 onClick={() => handleDownloadChat(selectedPair)}
-                className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
               >
                 Download
               </button>
@@ -178,14 +178,14 @@ const ChatMonitoring = () => {
             const senderImg = isRight ? selectedPair.male.img : selectedPair.female.img;
             return (
               <div key={i} className={`flex ${isRight ? "justify-end" : "justify-start"} items-end gap-2`}>
-                {!isRight && <img src={senderImg} className="w-8 h-8 rounded-full" />}
+                {!isRight && <img src={senderImg} className="w-8 h-8 rounded-full" alt="sender" />}
                 <div
-                  className={`p-2 rounded-lg ${isRight ? "bg-pink-400 text-white" : "bg-white text-gray-800"} max-w-xs`}
+                  className={`p-2 rounded-lg max-w-xs ${isRight ? "bg-pink-400 dark:bg-pink-600 text-white" : "bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100"}`}
                 >
                   {msg.text}
-                  <div className="text-xs text-gray-500 text-right">{msg.time}</div>
+                  <div className="text-xs text-gray-500 dark:text-gray-300 text-right">{msg.time}</div>
                 </div>
-                {isRight && <img src={senderImg} className="w-8 h-8 rounded-full" />}
+                {isRight && <img src={senderImg} className="w-8 h-8 rounded-full" alt="sender" />}
               </div>
             );
           })}
@@ -193,15 +193,15 @@ const ChatMonitoring = () => {
 
         {/* Chat Input */}
         {selectedPair && (
-          <div className="p-4 flex items-center gap-2 border-t">
+          <div className="p-4 flex items-center gap-2 border-t border-gray-200 dark:border-gray-700">
             <input
               type="text"
-              className="flex-1 border rounded-full px-4 py-2"
+              className="flex-1 border rounded-full px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors"
               placeholder="Type your message..."
               value={message}
               onChange={e => setMessage(e.target.value)}
             />
-            <button onClick={handleSendMessage} className="bg-pink-500 text-white px-4 py-2 rounded-full">
+            <button onClick={handleSendMessage} className="bg-pink-500 dark:bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-600 dark:hover:bg-pink-700 transition-colors">
               Send
             </button>
           </div>
@@ -209,11 +209,11 @@ const ChatMonitoring = () => {
       </div>
 
       {/* Users Sidebar */}
-      <aside className="w-80 border-l p-4 bg-white">
+      <aside className="w-80 border-l p-4 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 transition-colors">
         <input
           type="text"
           placeholder="Search by username..."
-          className="w-full border rounded px-2 py-1 mb-4"
+          className="w-full border rounded px-2 py-1 mb-4 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors"
           value={searchTerm}
           onChange={e => setSearchTerm(e.target.value)}
         />
@@ -221,16 +221,14 @@ const ChatMonitoring = () => {
           {filteredPairs.map(pair => (
             <div
               key={pair.id}
-              className={`p-2 rounded cursor-pointer flex items-center gap-2 ${
-                selectedPair?.id === pair.id ? "bg-pink-200" : "hover:bg-pink-100"
-              }`}
+              className={`p-2 rounded cursor-pointer flex items-center gap-2 ${selectedPair?.id === pair.id ? "bg-pink-200 dark:bg-pink-700" : "hover:bg-pink-100 dark:hover:bg-gray-700"} transition-colors`}
               onClick={() => setSelectedPair(pair)}
             >
-              <img src={pair.female.img} className="w-8 h-8 rounded-full" />
-              <span>{pair.female.name}</span>
-              <span className="mx-1">→</span>
-              <img src={pair.male.img} className="w-8 h-8 rounded-full" />
-              <span>{pair.male.name}</span>
+              <img src={pair.female.img} className="w-8 h-8 rounded-full" alt={pair.female.name} />
+              <span className="text-gray-800 dark:text-gray-100">{pair.female.name}</span>
+              <span className="mx-1 text-gray-400">→</span>
+              <img src={pair.male.img} className="w-8 h-8 rounded-full" alt={pair.male.name} />
+              <span className="text-gray-800 dark:text-gray-100">{pair.male.name}</span>
             </div>
           ))}
         </div>

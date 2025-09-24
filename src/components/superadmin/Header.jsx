@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { FaBell, FaSearch, FaChevronDown } from "react-icons/fa";
+import ThemeToggle from "../ThemeToggle";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../redux/slice/authSlice.js"
@@ -61,13 +62,13 @@ export default function Header() {
     : "User";
 
   return (
-    <header className="flex items-center justify-between bg-[#fdf3f5] p-4 rounded-lg shadow mb-6">
+  <header className="flex items-center justify-between bg-[#fdf3f5] dark:bg-gray-800 p-4 rounded-lg shadow mb-6">
       {/* Welcome Section */}
       <div>
-        <h2 className="text-xl font-bold text-pink-600 mt-2">
+        <h2 className="text-xl font-bold text-pink-600 dark:text-indigo-300 mt-2">
           Welcome, {displayRole}
         </h2>
-        <p className="text-sm text-gray-600 ml-2 -mt-1">
+        <p className="text-sm text-gray-600 dark:text-gray-300 ml-2 -mt-1">
           Here's what's happening in your account
         </p>
       </div>
@@ -84,16 +85,17 @@ export default function Header() {
 
       {/* Notification + Profile Section */}
       <div className="flex items-center space-x-4 relative" ref={dropdownRef}>
+        <ThemeToggle />
         {/* 🔔 Notification */}
         <div
           onClick={toggleNotification}
-          className="cursor-pointer relative p-2 hover:bg-pink-200 rounded-full"
+          className="cursor-pointer relative p-2 hover:bg-pink-200 dark:hover:bg-gray-700 rounded-full"
         >
           <FaBell size={20} />
           <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
 
           {notifOpen && (
-            <div className="absolute right-0 mt-2 w-56 bg-white border rounded shadow-lg p-2 z-20">
+            <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded shadow-lg p-2 z-20">
               <ul>
                 <li className="text-sm p-2 hover:bg-gray-100 cursor-pointer">
                   📩 You have a new message
@@ -113,24 +115,24 @@ export default function Header() {
         <div className="relative">
           <button
             onClick={toggleDropdown}
-            className="flex items-center space-x-2 bg-white px-3 py-2 rounded-full hover:bg-pink-100 transition text-sm"
+            className="flex items-center space-x-2 bg-white dark:bg-gray-700 px-3 py-2 rounded-full hover:bg-pink-100 dark:hover:bg-gray-600 transition text-sm"
           >
             <img
               src={profilePic}
               alt={displayRole}
               className="w-8 h-8 rounded-full object-cover"
             />
-            <span className="text-gray-700 font-medium">{displayRole}</span>
-            <FaChevronDown className="text-gray-600 text-xs" />
+            <span className="text-gray-700 dark:text-gray-200 font-medium">{displayRole}</span>
+            <FaChevronDown className="text-gray-600 dark:text-gray-300 text-xs" />
           </button>
 
           {/* Dropdown Menu */}
           {dropdownOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg z-20">
-              <ul className="text-sm text-gray-700">
+            <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded shadow-lg z-20">
+              <ul className="text-sm text-gray-700 dark:text-gray-200">
                 <li>
                   <button
-                    className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                    className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
                     onClick={() => alert("Edit Profile")}
                   >
                     ✏️ Edit Profile
@@ -138,7 +140,7 @@ export default function Header() {
                 </li>
                 <li>
                   <button
-                    className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                    className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
                     onClick={() => fileInputRef.current.click()}
                   >
                     🖼️ Change Profile
@@ -154,7 +156,7 @@ export default function Header() {
                 </li>
                 <li>
                   <button
-                    className="w-full text-left px-4 py-2 hover:bg-gray-100 text-red-500"
+                    className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-red-500"
                     onClick={handleLogout}
                   >
                     🚪 Logout
