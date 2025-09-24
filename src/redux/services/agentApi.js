@@ -37,6 +37,9 @@ export const agentApi = createApi({
         };
       },
       providesTags: ["Agents"],
+      // Add keep unused data for 5 minutes, refetch stale data after 1 minute
+      keepUnusedDataFor: 300, // 5 minutes
+      refetchOnMountOrArgChange: 60, // Refetch if data is older than 1 minute
     }),
 
     // Get single agent by ID

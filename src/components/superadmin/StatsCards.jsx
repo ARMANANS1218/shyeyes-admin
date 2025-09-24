@@ -4,9 +4,30 @@ import { useGetAllAdminsBySuperAdminQuery } from "../../redux/services/adminApi"
 
 // src/components/superadmin/StatsCards.jsx
 export default function StatsCards() {
-  const { data: allUsers, isLoading: usersLoading, error: usersError } = useGetAllUsersQuery();
-  const { data: agentsData, isLoading: agentsLoading, error: agentsError } = useGetAllAgentsQuery();
-  const { data: adminsData, isLoading: adminsLoading, error: adminsError } = useGetAllAdminsBySuperAdminQuery();
+  const { data: allUsers, isLoading: usersLoading } = useGetAllUsersQuery(
+    undefined,
+    {
+      pollingInterval: 30000, // Poll every 30 seconds
+      refetchOnFocus: true, // Refetch when window gains focus
+      refetchOnReconnect: true, // Refetch when connection is restored
+    }
+  );
+  const { data: agentsData, isLoading: agentsLoading } = useGetAllAgentsQuery(
+    { limit: 1000 }, // Set high limit to get all agents for stats
+    {
+      pollingInterval: 30000, // Poll every 30 seconds
+      refetchOnFocus: true, // Refetch when window gains focus
+      refetchOnReconnect: true, // Refetch when connection is restored
+    }
+  );
+  const { data: adminsData, isLoading: adminsLoading } = useGetAllAdminsBySuperAdminQuery(
+    { limit: 1000 }, // Set high limit to get all admins for stats
+    {
+      pollingInterval: 30000, // Poll every 30 seconds
+      refetchOnFocus: true, // Refetch when window gains focus
+      refetchOnReconnect: true, // Refetch when connection is restored
+    }
+  );
 
   // Extract data from API responses
   const userList = allUsers?.users || allUsers?.data || [];
@@ -18,8 +39,22 @@ export default function StatsCards() {
     : Array.isArray(adminsData?.data) ? adminsData.data
     : [];
 
+  // Extract total counts from pagination metadata when available
+  const totalUsersCount = allUsers?.total || allUsers?.pagination?.total || userList.length;
+  const totalAgentsCount = agentsData?.data?.pagination?.totalAgents || agentsData?.pagination?.totalAgents || agentsData?.total || agentList.length;
+  const totalAdminsCount = adminsData?.data?.pagination?.totalAdmins || adminsData?.pagination?.totalAdmins || adminsData?.total || adminList.length;
+
+  console.log('StatsCards Total Counts Debug:', {
+    totalUsersCount,
+    totalAgentsCount,  
+    totalAdminsCount,
+    userListLength: userList.length,
+    agentListLength: agentList.length,
+    adminListLength: adminList.length
+  });
+
   // Calculate user metrics from real API data
-  const totalUsers = userList.length;
+  const totalUsers = totalUsersCount;
   const activeUsers = userList.filter(user => 
     user.status === 'Active' || user.isActive === true
   ).length;
@@ -28,18 +63,30 @@ export default function StatsCards() {
   ).length;
   
   // Calculate agent metrics
-  const totalAgents = agentList.length;
+  const totalAgents = totalAgentsCount;
   const activeAgents = agentList.filter(agent => agent.status === 'Active').length;
   const bannedAgents = agentList.filter(agent => agent.status === 'Banned').length;
   
-  // Calculate admin metrics from real API data
-  const totalAdmins = Array.isArray(adminList) ? adminList.length : 0;
-  const activeAdmins = Array.isArray(adminList) ? adminList.filter(admin => 
-    admin.status === 'Active' || admin.isActive === true || !admin.isBanned
-  ).length : 0;
-  const bannedAdmins = Array.isArray(adminList) ? adminList.filter(admin => 
-    admin.status === 'Banned' || admin.isActive === false || admin.isBanned === true
-  ).length : 0;
+  // Calculate admin metrics from real API data with improved logic
+  const totalAdmins = totalAdminsCount;
+  const activeAdmins = Array.isArray(adminList) ? adminList.filter(admin => {
+    // An admin is active if not explicitly banned
+    const isBannedExplicitly = admin.status === 'Banned' || admin.isBanned === true || admin.isActive === false;
+    return !isBannedExplicitly && (admin.status === 'Active' || admin.isActive === true || admin.isBanned === false || admin.isBanned == null);
+  }).length : 0;
+  const bannedAdmins = Array.isArray(adminList) ? adminList.filter(admin => {
+    // An admin is banned if explicitly marked as banned
+    return admin.status === 'Banned' || admin.isBanned === true || admin.isActive === false;
+  }).length : 0;
+
+  // Debug logging for admin status (you can remove this later)
+  console.log('StatsCards Admin Debug:', {
+    totalAdmins,
+    activeAdmins,
+    bannedAdmins,
+    sum: activeAdmins + bannedAdmins,
+    shouldEqual: totalAdmins
+  });
 
   // Calculate gender ratio from user data
   const calculateGenderRatio = () => {

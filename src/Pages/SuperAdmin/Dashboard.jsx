@@ -23,6 +23,7 @@ ChartJS.register(
   Legend
 );
 import StatsCards from "../../components/superadmin/StatsCards.jsx";
+import AnalyticsDashboard from "../../components/superadmin/AnalyticsDashboard.jsx";
 
 function Dashboard() {
   useDocumentTitle("Dashboard"); // This will set the title as "Dashboard - SuperAdmin Dashboard | ShyEyes"
@@ -89,6 +90,9 @@ function Dashboard() {
     <div className="min-h-screen bg-gray-50 overflow-x-hidden">
       <Header />
       <StatsCards />
+      
+      {/* Comprehensive Analytics Dashboard */}
+      <AnalyticsDashboard />
 
       <div className="flex flex-col text-black">
         <div className="flex-1 p-6">
@@ -103,17 +107,23 @@ function Dashboard() {
 
           <div className="grid md:grid-cols-2 gap-6">
             {/* Login Activity */}
-            <div className="p-4 rounded shadow-lg max-w-full overflow-hidden">
+            <div className="bg-white p-4 rounded-lg shadow-lg max-w-full overflow-hidden">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-semibold">Login Activity</h3>
+                <h3 className="text-lg font-semibold flex items-center">
+                  <span className="w-3 h-3 bg-red-500 rounded-full mr-2"></span>
+                  Login Activity
+                </h3>
               </div>
               <Bar data={barData} options={options} />
             </div>
 
             {/* Payments Trend */}
-            <div className="p-4 rounded shadow-lg max-w-full overflow-hidden">
+            <div className="bg-white p-4 rounded-lg shadow-lg max-w-full overflow-hidden">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-semibold">Payments Trend</h3>
+                <h3 className="text-lg font-semibold flex items-center">
+                  <span className="w-3 h-3 bg-blue-500 rounded-full mr-2"></span>
+                  Payments Trend
+                </h3>
               </div>
               <Line data={lineData} options={options} />
             </div>
