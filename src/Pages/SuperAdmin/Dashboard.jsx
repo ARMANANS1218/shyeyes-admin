@@ -22,7 +22,7 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-import AdminCards from "../../components/superadmin/AdminCards.jsx";
+import StatsCards from "../../components/superadmin/StatsCards.jsx";
 
 function Dashboard() {
   useDocumentTitle("Dashboard"); // This will set the title as "Dashboard - SuperAdmin Dashboard | ShyEyes"
@@ -88,7 +88,7 @@ function Dashboard() {
   return (
     <div className="min-h-screen bg-gray-50 overflow-x-hidden">
       <Header />
-      <AdminCards />
+      <StatsCards />
 
       <div className="flex flex-col text-black">
         <div className="flex-1 p-6">

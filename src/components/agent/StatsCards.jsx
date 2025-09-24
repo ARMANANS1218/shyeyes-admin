@@ -1,14 +1,13 @@
+import { useGetAgentDashboardStatsQuery } from "../../redux/services/agentApi";
 import { useGetAllUsersQuery } from "../../redux/services/userApi";
-import { useGetAllAgentsQuery } from "../../redux/services/agentApi";
 
-// src/components/admin/StatsCards.jsx
+
 export default function StatsCards() {
+  const { data: statsData, isLoading: agentStatsLoading, error: agentStatsError } = useGetAgentDashboardStatsQuery();
   const { data: allUsers, isLoading: usersLoading, error: usersError } = useGetAllUsersQuery();
-  const { data: agentsData, isLoading: agentsLoading, error: agentsError } = useGetAllAgentsQuery();
-
-  // Extract data from API responses
+  
+  // Extract user data from API response
   const userList = allUsers?.users || allUsers?.data || [];
-  const agentList = agentsData?.data?.agents || agentsData?.agents || [];
 
   // Calculate user metrics from real API data
   const totalUsers = userList.length;
@@ -18,11 +17,6 @@ export default function StatsCards() {
   const bannedUsers = userList.filter(user => 
     user.status === 'Banned' || user.isActive === false
   ).length;
-  
-  // Calculate agent metrics
-  const totalAgents = agentList.length;
-  const activeAgents = agentList.filter(agent => agent.status === 'Active').length;
-  const bannedAgents = agentList.filter(agent => agent.status === 'Banned').length;
   
   // Calculate gender ratio from user data
   const calculateGenderRatio = () => {
@@ -45,14 +39,6 @@ export default function StatsCards() {
     return `${maleRatio}/${femaleRatio}`;
   };
 
-  // Calculate total payments (placeholder - would need payments API)
-  const calculateTotalPayments = () => {
-    // Placeholder calculation - in reality would need payments API
-    // For now, assuming each active user contributes some amount
-    const estimatedPayments = activeUsers * 25; // Example calculation
-    return estimatedPayments.toLocaleString();
-  };
-
   // Calculate today's login count
   const calculateTodayLogins = () => {
     const today = new Date().toDateString();
@@ -69,42 +55,74 @@ export default function StatsCards() {
   };
 
   // Loading state
-  if (usersLoading || agentsLoading) {
+  if (agentStatsLoading || usersLoading) {
     return (
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 p-4">
+      <div className="p-4 space-y-6">
         <div className="animate-pulse">
-          {[1, 2, 3, 4, 5].map((index) => (
-            <div key={index} className="card p-4 rounded-lg bg-gray-200 shadow-md">
-              <div className="h-4 bg-gray-300 rounded mb-2"></div>
-              <div className="h-8 bg-gray-300 rounded"></div>
-            </div>
-          ))}
+          <div className="h-8 bg-gray-300 rounded w-48 mb-4"></div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            {[1, 2, 3, 4, 5].map((index) => (
+              <div key={index} className="card p-4 rounded-lg bg-gray-200 shadow-md">
+                <div className="h-4 bg-gray-300 rounded mb-2"></div>
+                <div className="h-8 bg-gray-300 rounded"></div>
+              </div>
+            ))}
+          </div>
         </div>
-      </section>
+      </div>
     );
   }
+  
+  // Agent Performance Cards (existing functionality)
+  // const agentCards = [
+  //   {
+  //     title: "Assigned Users",
+  //     value: statsData?.data?.assignedUsers?.toString() || "0",
+  //     gradient: "bg-gradient-to-br from-slate-600 via-slate-700 to-slate-800",
+  //   },
+  //   {
+  //     title: "Active Chats", 
+  //     value: statsData?.data?.activeChats?.toString() || "0",
+  //     gradient: "bg-gradient-to-t from-slate-600 via-slate-700 to-slate-800",
+  //   },
+  //   {
+  //     title: "Completed Sessions",
+  //     value: statsData?.data?.completedSessions?.toString() || "0",
+  //     gradient: "bg-gradient-to-r from-slate-600 via-slate-700 to-slate-800",
+  //   },
+  //   {
+  //     title: "Response Rate",
+  //     value: `${statsData?.data?.responseRate || 0}%`,
+  //     gradient: "bg-gradient-to-r from-slate-600 via-slate-700 to-slate-800",
+  //   },
+  //   {
+  //     title: "Today's Sessions",
+  //     value: statsData?.data?.todaySessions?.toString() || "0",
+  //     gradient: "bg-gradient-to-br from-slate-600 via-slate-700 to-slate-800",
+  //   },
+  // ];
 
-  // User Stats Cards
+  // User Stats Cards (new functionality)
   const userCards = [
     {
       title: "Total Users",
       value: totalUsers.toString(),
-      gradient: "bg-gradient-to-br from-pink-500 via-pink-600 to-pink-800",
+      gradient: "bg-gradient-to-r from-pink-500 via-pink-600 to-pink-800",
     },
     {
       title: "Active Users",
       value: activeUsers.toString(),
-      gradient: "bg-gradient-to-r from-pink-500 via-pink-400 to-pink-600",
+      gradient: "bg-gradient-to-t from-slate-600 via-slate-700 to-slate-800",
     },
     {
-      title: "Total Payments",
-      value: calculateTotalPayments(),
+      title: "Banned Users",
+      value: bannedUsers.toString(),
       gradient: "bg-gradient-to-r from-pink-500 via-pink-600 to-pink-800",
     },
     {
       title: "Gender Ratio",
       value: calculateGenderRatio(),
-      gradient: "bg-gradient-to-r from-pink-500 via-pink-400 to-pink-600",
+      gradient: "bg-gradient-to-r from-slate-600 via-slate-700 to-slate-800",
     },
     {
       title: "Today Login",
@@ -113,35 +131,16 @@ export default function StatsCards() {
     },
   ];
 
-  // Agent Stats Cards
-  const agentCards = [
-    {
-      title: "Total Agents",
-      value: totalAgents.toString(),
-      gradient: "bg-gradient-to-r from-pink-500 via-pink-600 to-pink-800",
-    },
-    {
-      title: "Active Agents",
-      value: activeAgents.toString(),
-      gradient: "bg-gradient-to-r from-pink-500 via-pink-400 to-pink-600",
-    },
-    {
-      title: "Banned Agents",
-      value: bannedAgents.toString(),
-      gradient: "bg-gradient-to-r from-pink-500 via-pink-600 to-pink-800",
-    },
-  ];
-
   return (
     <div className="p-4 space-y-8">
-      {/* User Stats Section */}
-      <div>
+      {/* Agent Performance Section */}
+      {/* <div>
         <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center">
           <span className="w-1 h-8 bg-pink-500 mr-3 rounded"></span>
-          User Stats
+          Agent Performance
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-          {userCards.map((card, index) => (
+          {agentCards.map((card, index) => (
             <div
               key={index}
               className={`card p-4 rounded-lg text-white shadow-md hover:shadow-lg transition-shadow ${card.gradient}`}
@@ -151,16 +150,16 @@ export default function StatsCards() {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
 
-      {/* Agent Stats Section */}
+      {/* User Stats Section */}
       <div>
         <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center">
           <span className="w-1 h-8 bg-blue-500 mr-3 rounded"></span>
-          Agent Stats
+          User Stats
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {agentCards.map((card, index) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          {userCards.map((card, index) => (
             <div
               key={index}
               className={`card p-4 rounded-lg text-white shadow-md hover:shadow-lg transition-shadow ${card.gradient}`}

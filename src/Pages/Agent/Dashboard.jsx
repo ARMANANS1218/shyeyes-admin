@@ -12,7 +12,7 @@ import {
   Legend,
 } from "chart.js";
 import Header from "../../components/agent/Header";
-import AgentCards from "../../components/agent/AgentCards";
+import StatsCards from "../../components/agent/StatsCards";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 ChartJS.register(
@@ -73,7 +73,7 @@ function Dashboard() {
   return (
     <div className="min-h-screen bg-gray-50 overflow-x-hidden">
       <Header />
-      <AgentCards />
+      <StatsCards />
 
       <div className="flex flex-col text-black">
         <div className="flex-1 p-6">
