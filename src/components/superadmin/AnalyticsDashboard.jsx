@@ -413,7 +413,10 @@ const AnalyticsDashboard = () => {
             </span></p>
           </div>
         </div>
+      </div>
 
+      {/* Registration Trends - Half Width */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Registration Trends */}
         <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
           <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
@@ -445,6 +448,20 @@ const AnalyticsDashboard = () => {
             <p className="text-sm text-gray-600">Avg/Day: <span className="font-semibold text-indigo-600">
               {Math.round(trendData.data.reduce((a, b) => a + b, 0) / 7)}
             </span></p>
+          </div>
+        </div>
+        
+        {/* Placeholder for future chart or empty space */}
+        <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+          <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+            <span className="w-3 h-3 bg-orange-500 rounded-full mr-2"></span>
+            Payment Trends (Coming Soon)
+          </h3>
+          <div className="h-64 flex items-center justify-center bg-gray-50 rounded-lg">
+            <p className="text-gray-500">Payment analytics will be available here</p>
+          </div>
+          <div className="mt-4 text-center">
+            <p className="text-sm text-gray-600">Integration: <span className="font-semibold text-orange-600">Pending</span></p>
           </div>
         </div>
       </div>

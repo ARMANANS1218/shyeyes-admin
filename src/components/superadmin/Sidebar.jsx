@@ -2,6 +2,9 @@ import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/slice/authSlice.js";
+import ShyEyesLogo from "../../assets/logo/logo.png"
+
+
 import {
   FaHome,
   FaUsers,
@@ -65,7 +68,7 @@ export default function Sidebar() {
         {/* Logo */}
         <div className="bg-white rounded-lg p-4 mb-8 mx-4">
           <img
-            src="/src/assets/logo/logo.png"
+            src={ShyEyesLogo}
             alt="ShyEyes Logo"
             className="w-full"
           />

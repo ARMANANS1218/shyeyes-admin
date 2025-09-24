@@ -20,6 +20,7 @@ import {
   MdRealEstateAgent,
 } from "react-icons/md";
 import { Link } from "react-router-dom";
+import ShyEyesLogo from "../../assets/logo/logo.png"
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -64,7 +65,7 @@ export default function Sidebar() {
         {/* Logo */}
         <div className="bg-white rounded-lg p-4 mb-8 mx-4">
           <img
-            src="/src/assets/logo/logo.png"
+            src={ShyEyesLogo}
             alt="ShyEyes Logo"
             className="w-full"
           />

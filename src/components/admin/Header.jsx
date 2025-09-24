@@ -73,14 +73,14 @@ export default function Header() {
       </div>
 
       {/* Search Bar */}
-      <div className="flex items-center bg-white rounded-full shadow px-3 py-2 w-1/3">
+      {/* <div className="flex items-center bg-white rounded-full shadow px-3 py-2 w-1/3">
         <FaSearch className="text-gray-400 mr-2" />
         <input
           type="text"
           placeholder="Search..."
           className="w-full outline-none text-sm text-gray-700"
         />
-      </div>
+      </div> */}
 
       {/* Notification + Profile Section */}
       <div className="flex items-center space-x-4 relative" ref={dropdownRef}>
