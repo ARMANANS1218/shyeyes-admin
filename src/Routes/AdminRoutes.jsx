@@ -7,7 +7,7 @@ import Dashboard from "../Pages/Admin/Dashboard";
 import ChatMonitor from "../Pages/Admin/ChatMonitor";
 import PricingPlan from "../Pages/Admin/PricingPlan";
 import Report from "../Pages/Admin/Report";
-import Payments from "../Pages/Admin/Transections";
+import Payments from "../Pages/Admin/Transactions";
 import UserManagement from "../Pages/Admin/UserManagement";
 import AgentManagement from "../Pages/Admin/AgentManagement";
 
@@ -17,7 +17,7 @@ export default function AdminRoutes() {
   return (
     <div className="flex">
       <Sidebar />
-      <div className="flex-1 p-4">
+      <div className="flex-1  ">
         <Routes>
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="chatmonitor" element={<ChatMonitor />} />

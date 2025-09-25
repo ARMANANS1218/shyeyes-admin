@@ -62,48 +62,39 @@ export default function Header() {
     : "User";
 
   return (
-    <header className="flex items-center justify-between bg-[#fdf3f5] dark:bg-gray-800 p-4 rounded-lg shadow mb-6">
+    <header className="flex items-center justify-between bg-[#fdf3f5] dark:bg-gray-900 p-4 rounded-lg shadow mb-6 transition-colors">
       {/* Welcome Section */}
       <div>
-  <h2 className="text-xl font-bold text-pink-600 dark:text-indigo-300 mt-2">
+        <h2 className="text-xl font-bold text-pink-600 dark:text-indigo-300 mt-2">
           Welcome, {displayRole}
         </h2>
-  <p className="text-sm text-gray-600 dark:text-gray-300 ml-2 -mt-1">
+        <p className="text-sm text-gray-600 dark:text-gray-300 ml-2 -mt-1">
           Here's what's happening in your account
         </p>
       </div>
 
-      {/* Search Bar */}
-      {/* <div className="flex items-center bg-white rounded-full shadow px-3 py-2 w-1/3">
-        <FaSearch className="text-gray-400 mr-2" />
-        <input
-          type="text"
-          placeholder="Search..."
-          className="w-full outline-none text-sm text-gray-700"
-        />
-      </div> */}
-
       {/* Notification + Profile Section */}
       <div className="flex items-center space-x-4 relative" ref={dropdownRef}>
         <ThemeToggle />
+
         {/* 🔔 Notification */}
         <div
           onClick={toggleNotification}
-          className="cursor-pointer relative p-2 hover:bg-pink-200 rounded-full"
+          className="cursor-pointer relative p-2 rounded-full hover:bg-pink-200/60 dark:hover:bg-pink-700/40 transition-colors"
         >
-          <FaBell size={20} />
-          <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+          <FaBell size={20} className="text-gray-800 dark:text-gray-200" />
+          <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full ring-1 ring-white dark:ring-gray-900"></span>
 
           {notifOpen && (
-            <div className="absolute right-0 mt-2 w-56 bg-white border rounded shadow-lg p-2 z-20">
+            <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow-lg p-2 z-20">
               <ul>
-                <li className="text-sm p-2 hover:bg-gray-100 cursor-pointer">
+                <li className="text-sm p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-gray-700 dark:text-gray-200">
                   📩 You have a new message
                 </li>
-                <li className="text-sm p-2 hover:bg-gray-100 cursor-pointer">
+                <li className="text-sm p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-gray-700 dark:text-gray-200">
                   👤 New user registered
                 </li>
-                <li className="text-sm p-2 hover:bg-gray-100 cursor-pointer">
+                <li className="text-sm p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-gray-700 dark:text-gray-200">
                   💰 Payment received
                 </li>
               </ul>
@@ -115,24 +106,24 @@ export default function Header() {
         <div className="relative">
           <button
             onClick={toggleDropdown}
-            className="flex items-center space-x-2 bg-white px-3 py-2 rounded-full hover:bg-pink-100 transition text-sm"
+            className="flex items-center space-x-2 bg-white dark:bg-gray-800 px-3 py-2 rounded-full hover:bg-pink-100 dark:hover:bg-gray-700 transition text-sm"
           >
             <img
               src={profilePic}
               alt={displayRole}
-              className="w-8 h-8 rounded-full object-cover"
+              className="w-8 h-8 rounded-full object-cover ring-1 ring-gray-200 dark:ring-gray-700"
             />
-            <span className="text-gray-700 font-medium">{displayRole}</span>
-            <FaChevronDown className="text-gray-600 text-xs" />
+            <span className="text-gray-700 dark:text-gray-200 font-medium">{displayRole}</span>
+            <FaChevronDown className="text-gray-600 dark:text-gray-300 text-xs" />
           </button>
 
           {/* Dropdown Menu */}
           {dropdownOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg z-20">
-              <ul className="text-sm text-gray-700">
+            <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow-lg z-20">
+              <ul className="text-sm text-gray-700 dark:text-gray-200">
                 <li>
                   <button
-                    className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                    className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
                     onClick={() => alert("Edit Profile")}
                   >
                     ✏️ Edit Profile
@@ -140,7 +131,7 @@ export default function Header() {
                 </li>
                 <li>
                   <button
-                    className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                    className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
                     onClick={() => fileInputRef.current.click()}
                   >
                     🖼️ Change Profile
@@ -156,7 +147,7 @@ export default function Header() {
                 </li>
                 <li>
                   <button
-                    className="w-full text-left px-4 py-2 hover:bg-gray-100 text-red-500"
+                    className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-red-500"
                     onClick={handleLogout}
                   >
                     🚪 Logout

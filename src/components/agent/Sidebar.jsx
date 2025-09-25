@@ -1,12 +1,21 @@
 import { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/slice/authSlice.js";
-import { FaHome, FaUsers, FaComments, FaChartLine, FaCreditCard, FaSignOutAlt, FaBars, FaTimes } from "react-icons/fa";
-import { MdPeople, MdForum, MdOutlinePriceChange } from "react-icons/md";
-import { Link } from "react-router-dom";
-import ShyEyesLogo from "../../assets/logo/logo.png"
-
+import {
+  FaHome,
+  FaChartLine,
+  FaCreditCard,
+  FaSignOutAlt,
+  FaBars,
+  FaTimes,
+} from "react-icons/fa";
+import {
+  MdPeople,
+  MdForum,
+  MdOutlinePriceChange,
+} from "react-icons/md";
+import ShyEyesLogo from "../../assets/logo/logo.png";
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,22 +33,41 @@ export default function Sidebar() {
   return (
     <>
       {/* Hamburger Button for small screens */}
-      <div className=" fixed  top-4 left-4 z-50 lg:hidden">
-        <button onClick={toggleSidebar} className="text-white text-2xl bg-pink-500 p-2 rounded-md shadow-lg hover:bg-pink-600 transition-colors">
+      <div className="fixed top-4 left-4 z-50 lg:hidden">
+        <button
+          onClick={toggleSidebar}
+          aria-label={isOpen ? "Close menu" : "Open menu"}
+          className="text-gray-900 dark:text-gray-100 text-2xl bg-gray-200 dark:bg-gray-700 p-2 rounded-md shadow-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+        >
           {isOpen ? <FaTimes /> : <FaBars />}
         </button>
       </div>
 
       {/* Sidebar Overlay on small screens */}
-      <div className={`fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300 ${isOpen ? "block" : "hidden"} lg:hidden`} onClick={toggleSidebar}></div>
+      <div
+        className={`fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300 ${
+          isOpen ? "block" : "hidden"
+        } lg:hidden`}
+        onClick={toggleSidebar}
+      ></div>
 
       {/* Sidebar Container */}
-      <div className={`fixed  top-0 left-0   bg-gradient-to-br from-pink-400 to-pink-600 text-white w-64 p-5 shadow-lg transform transition-transform duration-300 z-50
-        ${isOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0 lg:static lg:block rounded-tr-2xl rounded-br-2xl`}>
-
+      <div
+        className={`fixed top-0 left-0 min-h-screen w-64 p-5 shadow-lg transform transition-transform duration-300 z-50
+          ${isOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0 lg:static lg:block
+          rounded-tr-2xl rounded-br-2xl text-gray-900 dark:text-gray-100
+          bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700
+        `}
+      >
         {/* Logo */}
-        <div className="bg-white rounded-lg p-4 mb-8 mx-4">
-          <img src={ShyEyesLogo} alt="ShyEyes Logo" className="w-full" />
+        <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 mb-8 mx-4 border border-gray-200 dark:border-gray-600">
+          <Link to="/agent/dashboard" onClick={() => setIsOpen(false)}>
+            <img
+              src={ShyEyesLogo}
+              alt="ShyEyes Logo"
+              className="w-full object-contain dark:brightness-90"
+            />
+          </Link>
         </div>
 
         {/* Menu */}
@@ -49,8 +77,9 @@ export default function Sidebar() {
             <NavLink
               to="/agent/dashboard"
               className={({ isActive }) =>
-                isActive ? "flex items-center  gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl font-semibold hover:bg-pink-600 transition-colors"
-                  : "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl hover:bg-pink-400 transition-colors"
+                isActive
+                  ? "flex items-center gap-3 bg-blue-600 dark:bg-blue-500 text-white px-4 py-3 rounded-lg font-semibold hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+                  : "flex items-center gap-3 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 px-4 py-3 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
               }
               onClick={() => setIsOpen(false)}
             >
@@ -64,12 +93,13 @@ export default function Sidebar() {
             <NavLink
               to="/agent/usermanagement"
               className={({ isActive }) =>
-                isActive ? "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl font-semibold hover:bg-pink-600 transition-colors"
-                  : "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl hover:bg-pink-400 transition-colors"
+                isActive
+                  ? "flex items-center gap-3 bg-blue-600 dark:bg-blue-500 text-white px-4 py-3 rounded-lg font-semibold hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+                  : "flex items-center gap-3 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 px-4 py-3 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
               }
               onClick={() => setIsOpen(false)}
             >
-              <MdPeople className="text-cyan-400" />
+              <MdPeople className="text-cyan-500" />
               User Management
             </NavLink>
           </li>
@@ -79,12 +109,13 @@ export default function Sidebar() {
             <NavLink
               to="/agent/chatmonitor"
               className={({ isActive }) =>
-                isActive ? "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl font-semibold hover:bg-pink-600 transition-colors"
-                  : "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl hover:bg-pink-400 transition-colors"
+                isActive
+                  ? "flex items-center gap-3 bg-blue-600 dark:bg-blue-500 text-white px-4 py-3 rounded-lg font-semibold hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+                  : "flex items-center gap-3 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 px-4 py-3 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
               }
               onClick={() => setIsOpen(false)}
             >
-              <MdForum className="text-purple-400" />
+              <MdForum className="text-purple-500" />
               Chats Monitoring
             </NavLink>
           </li>
@@ -94,12 +125,13 @@ export default function Sidebar() {
             <NavLink
               to="/agent/report"
               className={({ isActive }) =>
-                isActive ? "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl font-semibold hover:bg-pink-600 transition-colors"
-                  : "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl hover:bg-pink-400 transition-colors"
+                isActive
+                  ? "flex items-center gap-3 bg-blue-600 dark:bg-blue-500 text-white px-4 py-3 rounded-lg font-semibold hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+                  : "flex items-center gap-3 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 px-4 py-3 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
               }
               onClick={() => setIsOpen(false)}
             >
-              <FaChartLine className="text-green-400" />
+              <FaChartLine className="text-green-500" />
               Reports
             </NavLink>
           </li>
@@ -109,13 +141,14 @@ export default function Sidebar() {
             <NavLink
               to="/agent/payment"
               className={({ isActive }) =>
-                isActive ? "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl font-semibold hover:bg-pink-600 transition-colors"
-                  : "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl hover:bg-pink-400 transition-colors"
+                isActive
+                  ? "flex items-center gap-3 bg-blue-600 dark:bg-blue-500 text-white px-4 py-3 rounded-lg font-semibold hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+                  : "flex items-center gap-3 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 px-4 py-3 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
               }
               onClick={() => setIsOpen(false)}
             >
-              <FaCreditCard className="text-yellow-400" />
-              Transections
+              <FaCreditCard className="text-yellow-500" />
+              Transactions
             </NavLink>
           </li>
 
@@ -124,12 +157,13 @@ export default function Sidebar() {
             <NavLink
               to="/agent/pricingplan"
               className={({ isActive }) =>
-                isActive ? "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl font-semibold hover:bg-pink-600 transition-colors"
-                  : "flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl hover:bg-pink-400 transition-colors"
+                isActive
+                  ? "flex items-center gap-3 bg-blue-600 dark:bg-blue-500 text-white px-4 py-3 rounded-lg font-semibold hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+                  : "flex items-center gap-3 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 px-4 py-3 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
               }
               onClick={() => setIsOpen(false)}
             >
-              <MdOutlinePriceChange className="text-blue-400 text-xl" />
+              <MdOutlinePriceChange className="text-blue-500 text-xl" />
               Pricing Plan
             </NavLink>
           </li>
@@ -141,7 +175,7 @@ export default function Sidebar() {
                 handleLogout();
                 setIsOpen(false);
               }}
-              className="flex items-center gap-3 bg-[#eb6db4cf] px-4 py-3 rounded-2xl hover:bg-pink-400 transition-colors w-full text-left"
+              className="flex items-center gap-3 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 px-4 py-3 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 hover:text-red-600 dark:hover:text-red-400 transition-colors w-full text-left"
             >
               <FaSignOutAlt />
               Logout

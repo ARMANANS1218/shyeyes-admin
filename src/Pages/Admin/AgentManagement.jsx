@@ -64,10 +64,10 @@ const AgentManagement = () => {
   // Loading state
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-pink-200 p-6 flex items-center justify-center">
+      <div className="min-h-screen bg-pink-50 dark:bg-gray-900 p-6 flex items-center justify-center transition-colors">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600 mx-auto mb-4"></div>
-          <p className="text-pink-600 font-semibold">Loading agents...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600 dark:border-pink-400 mx-auto mb-4"></div>
+          <p className="text-pink-600 dark:text-pink-300 font-semibold">Loading agents...</p>
         </div>
       </div>
     );
@@ -76,14 +76,14 @@ const AgentManagement = () => {
   // Error state
   if (error) {
     return (
-      <div className="min-h-screen bg-pink-200 p-6 flex items-center justify-center">
+      <div className="min-h-screen bg-pink-50 dark:bg-gray-900 p-6 flex items-center justify-center transition-colors">
         <div className="text-center">
-          <p className="text-red-600 font-semibold mb-4">
+          <p className="text-red-600 dark:text-red-400 font-semibold mb-4">
             Failed to load agents: {error?.data?.message || error?.message || 'Unknown error'}
           </p>
           <button
             onClick={() => refetch()}
-            className="bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700"
+            className="bg-pink-600 dark:bg-pink-500 text-white px-4 py-2 rounded hover:bg-pink-700 dark:hover:bg-pink-600 transition-colors"
           >
             Retry
           </button>
@@ -108,8 +108,8 @@ const AgentManagement = () => {
           <p><b>Role:</b> ${agent.role}</p>
           <p><b>Department:</b> ${agent.department || 'N/A'}</p>
           <p><b>Status:</b> <span style="color:${agent.status === 'Active' ? 'green' : 'red'}">${agent.status}</span></p>
-          <p><b>Created:</b> ${new Date(agent.createdAt).toLocaleDateString()}</p>
-          <p><b>Updated:</b> ${new Date(agent.updatedAt).toLocaleDateString()}</p>
+          <p><b>Created:</b> ${agent.createdAt ? new Date(agent.createdAt).toLocaleDateString() : 'N/A'}</p>
+          <p><b>Updated:</b> ${agent.updatedAt ? new Date(agent.updatedAt).toLocaleDateString() : 'N/A'}</p>
         </div>
       `,
       confirmButtonText: "Close",
@@ -295,12 +295,12 @@ const AgentManagement = () => {
   };
 
   return (
-    <div className="min-h-screen bg-pink-200 p-6">
+    <div className="min-h-screen bg-pink-50 dark:bg-gray-900 p-6 transition-colors">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-3xl font-bold text-pink-600 flex items-end justify-center gap-2">
+        <h2 className="text-3xl font-bold text-pink-600 dark:text-pink-300 flex items-end justify-center gap-2">
           👥 Manage Agents
-          <span className="text-lg font-bold text-gray-600">
+          <span className="text-lg font-bold text-gray-600 dark:text-gray-300">
             ({totalAgents} total agents)
           </span>
         </h2>
@@ -308,7 +308,7 @@ const AgentManagement = () => {
           {/* Create Agent Button */}
           <button
             onClick={handleCreateAgent}
-            className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
+            className="bg-green-600 dark:bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-700 dark:hover:bg-green-600 transition-colors flex items-center gap-2"
           >
             <FaPlus /> Create Agent
           </button>
@@ -316,7 +316,7 @@ const AgentManagement = () => {
           {/* Refresh Button */}
           <button
             onClick={() => refetch()}
-            className="bg-pink-600 text-white px-4 py-2 rounded-lg hover:bg-pink-700 transition-colors"
+            className="bg-pink-600 dark:bg-pink-500 text-white px-4 py-2 rounded-lg hover:bg-pink-700 dark:hover:bg-pink-600 transition-colors"
           >
             🔄 Refresh
           </button>
@@ -331,14 +331,14 @@ const AgentManagement = () => {
           placeholder="Search agents..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500 flex-1"
+          className="p-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-pink-500 flex-1"
         />
 
         {/* Status Filter */}
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
+          className="p-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-pink-500"
         >
           <option value="All">All Status</option>
           <option value="Active">Active</option>
@@ -350,7 +350,7 @@ const AgentManagement = () => {
         <select
           value={departmentFilter}
           onChange={(e) => setDepartmentFilter(e.target.value)}
-          className="p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
+          className="p-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-pink-500"
         >
           <option value="All">All Departments</option>
           {DEPARTMENT_OPTIONS.map(dept => (
@@ -361,9 +361,9 @@ const AgentManagement = () => {
 
       {/* Agent Table */}
       <div className="overflow-x-auto">
-        <table className="w-full bg-pink-100 rounded-xl shadow-md">
+        <table className="w-full bg-white dark:bg-gray-800 rounded-xl shadow-md">
           <thead>
-            <tr className="text-left bg-pink-300 text-black">
+            <tr className="text-left bg-pink-300 dark:bg-pink-800 text-black dark:text-white">
               <th className="p-3">Profile</th>
               <th className="p-3">Name</th>
               <th className="p-3">Email</th>
@@ -378,7 +378,7 @@ const AgentManagement = () => {
               agentList.map((agent, index) => (
                 <tr
                   key={agent._id || index}
-                  className="border-b border-pink-300 hover:bg-pink-50"
+                  className="border-b border-gray-200 dark:border-gray-700 hover:bg-pink-50 dark:hover:bg-gray-700"
                 >
                   <td className="p-3">
                     {(() => {
@@ -413,17 +413,17 @@ const AgentManagement = () => {
                     })()}
                   </td>
 
-                  <td className="p-3">{agent.name || "N/A"}</td>
-                  <td className="p-3">{agent.email || "N/A"}</td>
-                  <td className="p-3">{agent.role || "N/A"}</td>
-                  <td className="p-3">{agent.department || "N/A"}</td>
+                  <td className="p-3 text-gray-900 dark:text-gray-100">{agent.name || "N/A"}</td>
+                  <td className="p-3 text-gray-700 dark:text-gray-300">{agent.email || "N/A"}</td>
+                  <td className="p-3 text-gray-700 dark:text-gray-300">{agent.role || "N/A"}</td>
+                  <td className="p-3 text-gray-700 dark:text-gray-300">{agent.department || "N/A"}</td>
                   <td
                     className={`p-3 font-bold ${
                       agent.status === "Active"
-                        ? "text-green-600"
+                        ? "text-green-600 dark:text-green-400"
                         : agent.status === "Banned" 
-                        ? "text-red-600"
-                        : "text-gray-600"
+                        ? "text-red-600 dark:text-red-400"
+                        : "text-gray-600 dark:text-gray-300"
                     }`}
                   >
                     {agent.status || "Unknown"}
@@ -432,7 +432,7 @@ const AgentManagement = () => {
                     {/* View */}
                     <button
                       onClick={() => handleViewAgent(agent)}
-                      className="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 transition-colors"
+                      className="bg-blue-600 dark:bg-blue-500 text-white p-2 rounded-full hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
                       title="View Details"
                     >
                       <FaEye />
@@ -441,7 +441,7 @@ const AgentManagement = () => {
                     {/* Edit */}
                     <button
                       onClick={() => handleEditAgent(agent)}
-                      className="bg-green-500 text-white p-2 rounded-full hover:bg-green-600 transition-colors"
+                      className="bg-green-500 dark:bg-green-400 text-white p-2 rounded-full hover:bg-green-600 dark:hover:bg-green-500 transition-colors"
                       title="Edit Agent"
                     >
                       <FaEdit />
@@ -451,7 +451,7 @@ const AgentManagement = () => {
                     {agent.status === "Banned" ? (
                       <button
                         onClick={() => handleToggleBan(agent)}
-                        className="bg-green-600 text-white p-2 rounded-full hover:bg-green-700 transition-colors"
+                        className="bg-green-600 dark:bg-green-500 text-white p-2 rounded-full hover:bg-green-700 dark:hover:bg-green-600 transition-colors"
                         title="Unban Agent"
                       >
                         <FaUnlock />
@@ -459,7 +459,7 @@ const AgentManagement = () => {
                     ) : (
                       <button
                         onClick={() => handleToggleBan(agent)}
-                        className="bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors"
+                        className="bg-red-500 dark:bg-red-600 text-white p-2 rounded-full hover:bg-red-600 dark:hover:bg-red-500 transition-colors"
                         title="Ban Agent"
                       >
                         <FaBan />
@@ -469,7 +469,7 @@ const AgentManagement = () => {
                     {/* Delete */}
                     <button
                       onClick={() => handleDeleteAgent(agent)}
-                      className="bg-pink-400 text-white p-2 rounded-full hover:bg-pink-500 transition-colors"
+                      className="bg-pink-400 dark:bg-pink-600 text-white p-2 rounded-full hover:bg-pink-500 dark:hover:bg-pink-500 transition-colors"
                       title="Delete Agent"
                     >
                       <FaTrash />
@@ -479,7 +479,7 @@ const AgentManagement = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="7" className="text-center p-4 text-gray-600">
+                <td colSpan="7" className="text-center p-4 text-gray-600 dark:text-gray-300">
                   No agents found.
                 </td>
               </tr>
@@ -494,19 +494,19 @@ const AgentManagement = () => {
           <button
             onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
-            className="px-3 py-1 bg-pink-600 text-white rounded disabled:bg-gray-400 disabled:cursor-not-allowed hover:bg-pink-700 transition-colors"
+            className="px-3 py-1 bg-pink-600 dark:bg-pink-500 text-white rounded disabled:bg-gray-400 disabled:cursor-not-allowed hover:bg-pink-700 dark:hover:bg-pink-600 transition-colors"
           >
             Previous
           </button>
           
-          <span className="px-4 py-2 text-pink-600 font-semibold">
+          <span className="px-4 py-2 text-pink-600 dark:text-pink-300 font-semibold">
             Page {currentPage} of {totalPages}
           </span>
           
           <button
             onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
             disabled={currentPage === totalPages}
-            className="px-3 py-1 bg-pink-600 text-white rounded disabled:bg-gray-400 disabled:cursor-not-allowed hover:bg-pink-700 transition-colors"
+            className="px-3 py-1 bg-pink-600 dark:bg-pink-500 text-white rounded disabled:bg-gray-400 disabled:cursor-not-allowed hover:bg-pink-700 dark:hover:bg-pink-600 transition-colors"
           >
             Next
           </button>

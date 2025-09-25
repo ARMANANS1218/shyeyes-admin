@@ -9,7 +9,7 @@ import UserManagement from "../Pages/Agent/UserManagement";
 // Import Admin pages for missing agent functionality
 import PricingPlan from "../Pages/Admin/PricingPlan";
 import Report from "../Pages/Admin/Report";
-import Payments from "../Pages/Admin/Transections";
+import Payments from "../Pages/Admin/Transactions";
 
 export default function AgentRoutes() {
   useDocumentTitle(); // This will set the title as "Agent Dashboard | ShyEyes"
@@ -17,7 +17,7 @@ export default function AgentRoutes() {
   return (
     <div className="flex">
       <Sidebar />
-      <div className="flex-1 p-4">
+      <div className="flex-1  ">
         <Routes>
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="chatmonitor" element={<ChatMonitor />} />

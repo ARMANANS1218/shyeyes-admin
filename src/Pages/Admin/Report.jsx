@@ -10,8 +10,7 @@ const UserReports = () => {
       reason: "Harassment in chat",
       date: "2025-08-03 16:45",
       status: "Pending",
-      profile:
-        "https://randomuser.me/api/portraits/women/65.jpg",
+      profile: "https://randomuser.me/api/portraits/women/65.jpg",
     },
     {
       id: 2,
@@ -20,8 +19,7 @@ const UserReports = () => {
       reason: "Spamming in group",
       date: "2025-08-04 14:20",
       status: "Pending",
-      profile:
-        "https://randomuser.me/api/portraits/men/70.jpg",
+      profile: "https://randomuser.me/api/portraits/men/70.jpg",
     },
     {
       id: 3,
@@ -30,10 +28,8 @@ const UserReports = () => {
       reason: "Offensive language",
       date: "2025-08-05 12:10",
       status: "Pending",
-      profile:
-        "https://randomuser.me/api/portraits/women/50.jpg",
+      profile: "https://randomuser.me/api/portraits/women/50.jpg",
     },
-
     {
       id: 4,
       reportedUser: "Mark Thompson",
@@ -41,8 +37,7 @@ const UserReports = () => {
       reason: "Harassment in chat",
       date: "2025-08-03 16:45",
       status: "Pending",
-      profile:
-        "https://randomuser.me/api/portraits/women/65.jpg",
+      profile: "https://randomuser.me/api/portraits/women/65.jpg",
     },
   ]);
 
@@ -109,46 +104,42 @@ const UserReports = () => {
         : new Date(a.date) - new Date(b.date)
     );
 
+  // Helper: status pill classes (light + dark)
+  const statusClasses = (status) => {
+    switch (status) {
+      case "Pending":
+        return "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300";
+      case "Blocked":
+        return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300";
+      case "Resolved":
+        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300";
+      default:
+        return "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200";
+    }
+  };
+
   return (
-    <div style={{ padding: "20px", backgroundColor: "#ffe6f0", minHeight: "100vh" }}>
-
-      <h2
-  style={{
-    color: "#ff3366",
-    fontWeight: "bold",
-    display: "flex",
-    alignItems: "center",
-    gap: "8px",
-    fontSize: "30px", // 👈 size badha diya
-  }}
->
-  🚨 User Reports
-</h2>
-
+    <div className="p-6 min-h-screen bg-pink-50 dark:bg-gray-900 transition-colors">
+      <div className="mb-4">
+        <h2 className="text-2xl md:text-3xl font-bold text-pink-600 dark:text-pink-300 flex items-center gap-2">
+          🚨 User Reports
+        </h2>
+      </div>
 
       {/* Search and Filter */}
-      <div style={{ display: "flex", justifyContent: "space-between", margin: "15px 0", }}>
+      <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-4">
         <input
           type="text"
           placeholder="Search by name..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          style={{
-            padding: "8px 12px",
-            borderRadius: "6px",
-            border: "1px solid #ccc",
-            width: "250px",
-          }}
+          className="w-full md:w-64 px-3 py-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-pink-500"
         />
 
         <select
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
-          style={{
-            padding: "8px",
-            borderRadius: "6px",
-            border: "1px solid #ccc",
-          }}
+          className="px-3 py-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-pink-500"
         >
           <option value="date-desc">Filter by Date (Newest)</option>
           <option value="date-asc">Filter by Date (Oldest)</option>
@@ -156,107 +147,64 @@ const UserReports = () => {
       </div>
 
       {/* Reports List */}
-      <div
-        style={{
-          background: "#fff",
-          borderRadius: "10px",
-          padding: "15px",
-          boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
-        }}
-      >
+      <div className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm">
         {filteredReports.map((report) => (
           <div
             key={report.id}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              borderBottom: "1px solid #eee",
-              padding: "12px 0",
-              backgroundColor: "#fafafa",
-            }}
+            className="flex items-center gap-4 py-3 border-b last:border-b-0 border-gray-100 dark:border-gray-700"
           >
             <img
               src={report.profile}
               alt={report.reportedUser}
-              style={{ width: "50px", height: "50px", borderRadius: "50%", marginRight: "15px" }}
+              className="w-12 h-12 rounded-full object-cover"
             />
 
-            <div style={{ flex: 1 }}>
-              <p style={{ margin: 0, fontWeight: "bold" }}>
-                Reported: {report.reportedUser} by {report.reportedBy}
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">
+                Reported: {report.reportedUser} <span className="text-gray-500 dark:text-gray-400">by {report.reportedBy}</span>
               </p>
-              <p style={{ margin: 0, color: "#666" }}>Reason: {report.reason}</p>
-              <small style={{ color: "#888" }}>{report.date}</small>
+              <p className="text-sm text-gray-600 dark:text-gray-300 truncate">Reason: {report.reason}</p>
+              <small className="text-xs text-gray-500 dark:text-gray-400">{report.date}</small>
             </div>
 
             {/* Status */}
             <span
-              style={{
-                background:
-                  report.status === "Pending"
-                    ? "#ffe0b2"
-                    : report.status === "Blocked"
-                    ? "#ffcdd2"
-                    : "#c8e6c9",
-                color:
-                  report.status === "Pending"
-                    ? "#e65100"
-                    : report.status === "Blocked"
-                    ? "#c62828"
-                    : "#2e7d32",
-                padding: "5px 12px",
-                borderRadius: "20px",
-                fontSize: "12px",
-                marginRight: "10px",
-              }}
+              className={`px-3 py-1 rounded-full text-xs font-medium ${statusClasses(report.status)}`}
             >
               {report.status}
             </span>
 
             {/* Buttons */}
-            <button
-              onClick={() => handleAction("View", report)}
-              style={{
-                background: "#42a5f5",
-                color: "#fff",
-                border: "none",
-                padding: "6px 12px",
-                borderRadius: "5px",
-                marginRight: "8px",
-                cursor: "pointer",
-              }}
-            >
-              View
-            </button>
-            <button
-              onClick={() => handleAction("Block", report)}
-              style={{
-                background: "#ff9800",
-                color: "#fff",
-                border: "none",
-                padding: "6px 12px",
-                borderRadius: "5px",
-                marginRight: "8px",
-                cursor: "pointer",
-              }}
-            >
-              Block
-            </button>
-            <button
-              onClick={() => handleAction("Delete", report)}
-              style={{
-                background: "#e53935",
-                color: "#fff",
-                border: "none",
-                padding: "6px 12px",
-                borderRadius: "5px",
-                cursor: "pointer",
-              }}
-            >
-              Delete
-            </button>
+            <div className="flex items-center gap-2 ml-2">
+              <button
+                onClick={() => handleAction("View", report)}
+                className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm transition-colors"
+              >
+                View
+              </button>
+
+              <button
+                onClick={() => handleAction("Block", report)}
+                className="px-3 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded-md text-sm transition-colors"
+              >
+                Block
+              </button>
+
+              <button
+                onClick={() => handleAction("Delete", report)}
+                className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm transition-colors"
+              >
+                Delete
+              </button>
+            </div>
           </div>
         ))}
+
+        {filteredReports.length === 0 && (
+          <div className="py-8 text-center text-gray-600 dark:text-gray-300">
+            No reports found.
+          </div>
+        )}
       </div>
     </div>
   );

@@ -184,7 +184,7 @@ export default function Sidebar() {
               onClick={() => setIsOpen(false)}
             >
               <FaCreditCard className="text-yellow-500" />
-              Transections
+              Transactions
             </NavLink>
           </li>
 

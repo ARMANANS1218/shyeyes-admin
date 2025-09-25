@@ -72,11 +72,11 @@ export default function StatsCards() {
   if (usersLoading || agentsLoading) {
     return (
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 p-4">
-        <div className="animate-pulse">
+        <div className="space-y-4">
           {[1, 2, 3, 4, 5].map((index) => (
-            <div key={index} className="card p-4 rounded-lg bg-gray-200 shadow-md">
-              <div className="h-4 bg-gray-300 rounded mb-2"></div>
-              <div className="h-8 bg-gray-300 rounded"></div>
+            <div key={index} className="p-4 rounded-lg bg-gray-200 dark:bg-gray-700/50 shadow-md animate-pulse">
+              <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded mb-2"></div>
+              <div className="h-8 bg-gray-300 dark:bg-gray-600 rounded"></div>
             </div>
           ))}
         </div>
@@ -89,32 +89,33 @@ export default function StatsCards() {
     {
       title: "Total Users",
       value: totalUsers.toString(),
-      gradient: "bg-gradient-to-br from-pink-500 via-pink-600 to-pink-800",
+      // uses light gradient; dark: variants will override to deeper tones
+      gradient: "bg-gradient-to-br from-pink-500 via-pink-600 to-pink-800 dark:from-pink-800 dark:via-pink-900 dark:to-pink-950",
     },
     {
       title: "Active Users",
       value: activeUsers.toString(),
-      gradient: "bg-gradient-to-r from-pink-500 via-pink-400 to-pink-600",
+      gradient: "bg-gradient-to-r from-pink-500 via-pink-400 to-pink-600 dark:from-pink-700 dark:via-pink-800 dark:to-pink-900",
     },
     {
       title: "Banned Users",
       value: bannedUsers.toString(),
-      gradient: "bg-gradient-to-r from-pink-500 via-pink-600 to-pink-800",
+      gradient: "bg-gradient-to-r from-pink-500 via-pink-600 to-pink-800 dark:from-rose-800 dark:via-rose-900 dark:to-rose-950",
     },
     {
       title: "Total Payments",
       value: calculateTotalPayments(),
-      gradient: "bg-gradient-to-r from-pink-500 via-pink-600 to-pink-800",
+      gradient: "bg-gradient-to-r from-pink-500 via-pink-600 to-pink-800 dark:from-purple-800 dark:via-purple-900 dark:to-purple-950",
     },
     {
       title: "Gender Ratio",
       value: calculateGenderRatio(),
-      gradient: "bg-gradient-to-r from-pink-500 via-pink-400 to-pink-600",
+      gradient: "bg-gradient-to-r from-pink-500 via-pink-400 to-pink-600 dark:from-pink-700 dark:via-pink-800 dark:to-pink-900",
     },
     {
       title: "Today Login",
       value: calculateTodayLogins(),
-      gradient: "bg-gradient-to-r from-pink-500 via-pink-600 to-pink-800",
+      gradient: "bg-gradient-to-r from-pink-500 via-pink-600 to-pink-800 dark:from-pink-800 dark:via-pink-900 dark:to-pink-950",
     },
   ];
 
@@ -123,17 +124,17 @@ export default function StatsCards() {
     {
       title: "Total Agents",
       value: totalAgents.toString(),
-      gradient: "bg-gradient-to-r from-pink-500 via-pink-600 to-pink-800",
+      gradient: "bg-gradient-to-r from-blue-500 via-blue-600 to-indigo-700 dark:from-blue-800 dark:via-indigo-900 dark:to-indigo-950",
     },
     {
       title: "Active Agents",
       value: activeAgents.toString(),
-      gradient: "bg-gradient-to-r from-pink-500 via-pink-400 to-pink-600",
+      gradient: "bg-gradient-to-r from-blue-500 via-blue-400 to-blue-600 dark:from-blue-700 dark:via-blue-800 dark:to-blue-900",
     },
     {
       title: "Banned Agents",
       value: bannedAgents.toString(),
-      gradient: "bg-gradient-to-r from-pink-500 via-pink-600 to-pink-800",
+      gradient: "bg-gradient-to-r from-blue-500 via-blue-600 to-indigo-700 dark:from-rose-800 dark:via-rose-900 dark:to-rose-950",
     },
   ];
 
@@ -141,15 +142,15 @@ export default function StatsCards() {
     <div className="p-4 space-y-8 bg-transparent text-gray-900 dark:text-gray-100">
       {/* User Stats Section */}
       <div>
-  <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4 flex items-center">
-          <span className="w-1 h-8 bg-pink-500 mr-3 rounded"></span>
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4 flex items-center">
+          <span className="w-1 h-8 bg-pink-500 dark:bg-pink-400 mr-3 rounded"></span>
           User Stats
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
           {userCards.map((card, index) => (
             <div
               key={index}
-              className={`card p-4 rounded-lg text-white shadow-md hover:shadow-lg transition-shadow ${card.gradient}`}
+              className={`${card.gradient} card p-4 rounded-lg text-white shadow-md hover:shadow-lg transition-shadow`}
             >
               <h4 className="text-lg font-semibold">{card.title}</h4>
               <p className="text-2xl font-bold mt-2">{card.value}</p>
@@ -160,15 +161,15 @@ export default function StatsCards() {
 
       {/* Agent Stats Section */}
       <div>
-  <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4 flex items-center">
-          <span className="w-1 h-8 bg-blue-500 mr-3 rounded"></span>
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4 flex items-center">
+          <span className="w-1 h-8 bg-blue-500 dark:bg-blue-400 mr-3 rounded"></span>
           Agent Stats
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {agentCards.map((card, index) => (
             <div
               key={index}
-              className={`card p-4 rounded-lg text-white shadow-md hover:shadow-lg transition-shadow ${card.gradient}`}
+              className={`${card.gradient} card p-4 rounded-lg text-white shadow-md hover:shadow-lg transition-shadow`}
             >
               <h4 className="text-lg font-semibold">{card.title}</h4>
               <p className="text-2xl font-bold mt-2">{card.value}</p>

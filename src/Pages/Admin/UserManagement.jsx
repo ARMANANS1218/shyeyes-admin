@@ -38,10 +38,10 @@ const UserManagement = () => {
   // Loading state
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-pink-200 p-6 flex items-center justify-center">
+      <div className="min-h-screen bg-pink-50 dark:bg-gray-900 p-6 flex items-center justify-center transition-colors">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600 mx-auto mb-4"></div>
-          <p className="text-pink-600 font-semibold">Loading users...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600 dark:border-pink-400 mx-auto mb-4"></div>
+          <p className="text-pink-600 dark:text-pink-300 font-semibold">Loading users...</p>
         </div>
       </div>
     );
@@ -50,14 +50,14 @@ const UserManagement = () => {
   // Error state
   if (error) {
     return (
-      <div className="min-h-screen bg-pink-200 p-6 flex items-center justify-center">
+      <div className="min-h-screen bg-pink-50 dark:bg-gray-900 p-6 flex items-center justify-center transition-colors">
         <div className="text-center">
-          <p className="text-red-600 font-semibold mb-4">
+          <p className="text-red-600 dark:text-red-400 font-semibold mb-4">
             Failed to load users
           </p>
           <button
             onClick={() => refetch()}
-            className="bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700"
+            className="bg-pink-600 dark:bg-pink-500 text-white px-4 py-2 rounded hover:bg-pink-700 dark:hover:bg-pink-600 transition-colors"
           >
             Retry
           </button>
@@ -67,7 +67,6 @@ const UserManagement = () => {
   }
 
   // SweetAlert Trigger
-
   const handleAction = async (action, user) => {
     if (action === "View") {
       const imgUrl =
@@ -243,12 +242,12 @@ const UserManagement = () => {
   });
 
   return (
-    <div className="min-h-screen bg-pink-200 p-6">
+    <div className="min-h-screen bg-pink-50 dark:bg-gray-900 p-6 transition-colors">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-3xl font-bold text-pink-600 flex items-end justify-center gap-2">
+        <h2 className="text-3xl font-bold text-pink-600 dark:text-pink-300 flex items-end justify-center gap-2">
           👥 Manage Users
-          <span className="text-lg  font-bold   text-gray-600">
+          <span className="text-lg font-bold text-gray-600 dark:text-gray-300">
             ({userList.length} total users)
           </span>
         </h2>
@@ -256,7 +255,7 @@ const UserManagement = () => {
           {/* Refresh Button */}
           <button
             onClick={() => refetch()}
-            className="bg-pink-600 text-white px-4 py-2 rounded-lg hover:bg-pink-700 transition-colors"
+            className="bg-pink-600 dark:bg-pink-500 text-white px-4 py-2 rounded-lg hover:bg-pink-700 dark:hover:bg-pink-600 transition-colors"
           >
             🔄 Refresh
           </button>
@@ -267,14 +266,14 @@ const UserManagement = () => {
             placeholder="Search users..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
+            className="p-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-pink-500"
           />
 
           {/* Filter */}
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
+            className="p-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-pink-500"
           >
             <option value="All">All Status</option>
             <option value="Active">Active</option>
@@ -285,9 +284,9 @@ const UserManagement = () => {
 
       {/* User Table */}
       <div className="overflow-x-auto">
-        <table className="w-full bg-pink-100 rounded-xl shadow-md mt-5">
+        <table className="w-full bg-white dark:bg-gray-800 rounded-xl shadow-md mt-5">
           <thead>
-            <tr className="text-left bg-pink-300 text-black">
+            <tr className="text-left bg-pink-300 dark:bg-pink-800 text-black dark:text-white">
               <th className="p-3">Profile</th>
               <th className="p-3">Name</th>
               <th className="p-3">Email</th>
@@ -302,7 +301,7 @@ const UserManagement = () => {
               filteredUsers.map((user, index) => (
                 <tr
                   key={user.id || user._id || index}
-                  className="border-b border-pink-300 hover:bg-pink-50"
+                  className="border-b border-gray-200 dark:border-gray-700 hover:bg-pink-50 dark:hover:bg-gray-700"
                 >
                   <td className="p-3">
                     {(() => {
@@ -364,19 +363,20 @@ const UserManagement = () => {
                     })()}
                   </td>
 
-                  <td className="p-3">
-                    {user.Name.firstName || "N/A"} {user.Name.lastName || "N/A"}
+                  <td className="p-3 text-gray-900 dark:text-gray-100">
+                    {user.Name?.firstName || user.firstName || "N/A"}{" "}
+                    {user.Name?.lastName || user.lastName || "N/A"}
                   </td>
-                  <td className="p-3">{user.email || "N/A"}</td>
-                  <td className="p-3">{user.gender || "N/A"}</td>
-                  <td className="p-3">
+                  <td className="p-3 text-gray-700 dark:text-gray-300">{user.email || "N/A"}</td>
+                  <td className="p-3 text-gray-700 dark:text-gray-300">{user.gender || "N/A"}</td>
+                  <td className="p-3 text-gray-700 dark:text-gray-300">
                     {formatLocation(user.location || user.address)}
                   </td>
                   <td
                     className={`p-3 font-bold ${
                       user.status === "Active" || user.isActive
-                        ? "text-green-600"
-                        : "text-red-600"
+                        ? "text-green-600 dark:text-green-400"
+                        : "text-red-600 dark:text-red-400"
                     }`}
                   >
                     {user.status ||
@@ -387,7 +387,7 @@ const UserManagement = () => {
                     {/* View */}
                     <button
                       onClick={() => handleAction("View", user)}
-                      className="bg-blue-600 text-white p-2 rounded-full"
+                      className="bg-blue-600 dark:bg-blue-500 text-white p-2 rounded-full hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
                     >
                       <FaEye />
                     </button>
@@ -395,7 +395,7 @@ const UserManagement = () => {
                     {/* Edit */}
                     <button
                       onClick={() => handleAction("Edit", user)}
-                      className="bg-green-500 text-white p-2 rounded-full"
+                      className="bg-green-500 dark:bg-green-400 text-white p-2 rounded-full hover:bg-green-600 dark:hover:bg-green-500 transition-colors"
                     >
                       <FaEdit />
                     </button>
@@ -404,14 +404,14 @@ const UserManagement = () => {
                     {user.status === "Active" || user.isActive ? (
                       <button
                         onClick={() => handleAction("Block", user)}
-                        className="bg-red-500 text-white p-2 rounded-full"
+                        className="bg-red-500 dark:bg-red-600 text-white p-2 rounded-full hover:bg-red-600 dark:hover:bg-red-500 transition-colors"
                       >
                         <FaBan />
                       </button>
                     ) : (
                       <button
                         onClick={() => handleAction("Unblock", user)}
-                        className="bg-green-600 text-white p-2 rounded-full"
+                        className="bg-green-600 dark:bg-green-500 text-white p-2 rounded-full hover:bg-green-700 dark:hover:bg-green-600 transition-colors"
                       >
                         <FaUnlock />
                       </button>
@@ -420,7 +420,7 @@ const UserManagement = () => {
                     {/* Delete */}
                     <button
                       onClick={() => handleAction("Delete", user)}
-                      className="bg-pink-400 text-white p-2 rounded-full"
+                      className="bg-pink-400 dark:bg-pink-600 text-white p-2 rounded-full hover:bg-pink-500 dark:hover:bg-pink-500 transition-colors"
                     >
                       <FaTrash />
                     </button>
@@ -429,7 +429,7 @@ const UserManagement = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="7" className="text-center p-4 text-gray-600">
+                <td colSpan="7" className="text-center p-4 text-gray-600 dark:text-gray-300">
                   No users found.
                 </td>
               </tr>
