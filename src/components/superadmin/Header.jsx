@@ -1,13 +1,14 @@
 import { useState, useEffect, useRef } from "react";
-import { FaBell, FaSearch, FaChevronDown } from "react-icons/fa";
+import { FaBell, FaSearch, FaChevronDown, FaExpand, FaCompress } from "react-icons/fa";
 import ThemeToggle from "../ThemeToggle";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { logout } from "../../redux/slice/authSlice.js"
+import { logout } from "../../redux/slice/authSlice.js";
 
 export default function Header() {
   const [notifOpen, setNotifOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -56,36 +57,75 @@ export default function Header() {
     navigate("/");
   };
 
-  // Capitalize role  display
+  // Fullscreen handlers
+  const requestFullscreen = async () => {
+    try {
+      if (!document.fullscreenElement) {
+        await document.documentElement.requestFullscreen();
+      } else {
+        await document.exitFullscreen();
+      }
+      // state will be synced by the fullscreenchange listener
+    } catch (err) {
+      // optional: show user-friendly message or ignore
+      console.warn("Fullscreen toggle failed:", err);
+    }
+  };
+
+  useEffect(() => {
+    const onFsChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener("fullscreenchange", onFsChange);
+    // set initial state
+    setIsFullscreen(!!document.fullscreenElement);
+
+    return () => document.removeEventListener("fullscreenchange", onFsChange);
+  }, []);
+
+  // Capitalize role display
   const displayRole = role
     ? role.charAt(0).toUpperCase() + role.slice(1)
     : "User";
 
   return (
-  <header className="flex items-center justify-between bg-[#fdf3f5] dark:bg-gray-800 p-4 rounded-lg shadow mb-6">
+    <header className="flex items-center justify-between bg-[#fdf3f5] dark:bg-gray-800 p-4 rounded-lg shadow mb-6">
       {/* Welcome Section */}
       <div>
         <h2 className="text-xl font-bold text-pink-600 dark:text-indigo-300 mt-2">
           Welcome, {displayRole}
         </h2>
-        <p className="text-sm text-gray-600 dark:text-gray-300 ml-2 -mt-1">
-          Here's what's happening in your account
-        </p>
+      
       </div>
 
-      {/* Search Bar */}
-      {/* <div className="flex items-center bg-white rounded-full shadow px-3 py-2 w-1/3">
-        <FaSearch className="text-gray-400 mr-2" />
-        <input
-          type="text"
-          placeholder="Search..."
-          className="w-full outline-none text-sm text-gray-700"
-        />
+      {/* (Optional) center area (search or other) */}
+      {/* <div className="flex-1 px-4">
+        <div className="flex items-center bg-white rounded-full shadow px-3 py-2 max-w-md mx-auto">
+          <FaSearch className="text-gray-400 mr-2" />
+          <input
+            type="text"
+            placeholder="Search..."
+            className="w-full outline-none text-sm text-gray-700"
+          />
+        </div>
       </div> */}
 
       {/* Notification + Profile Section */}
-      <div className="flex items-center space-x-4 relative" ref={dropdownRef}>
+      <div className="flex items-center space-x-3 relative" ref={dropdownRef}>
+        {/* Theme toggle (icon-only) */}
         <ThemeToggle />
+
+        {/* Fullscreen toggle */}
+        <button
+          onClick={requestFullscreen}
+          aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+          title={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+          className="p-2 rounded-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition text-gray-700 dark:text-gray-200"
+        >
+          {isFullscreen ? <FaCompress size={16} /> : <FaExpand size={16} />}
+        </button>
+
         {/* 🔔 Notification */}
         <div
           onClick={toggleNotification}
