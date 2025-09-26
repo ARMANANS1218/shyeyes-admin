@@ -1,13 +1,20 @@
 import ThemeToggle from "../ThemeToggle";
 import { useState, useEffect, useRef } from "react";
-import { FaBell, FaSearch, FaChevronDown } from "react-icons/fa";
+import {
+  FaBell,
+  FaSearch,
+  FaChevronDown,
+  FaExpand,
+  FaCompress,
+} from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { logout } from "../../redux/slice/authSlice.js"
+import { logout } from "../../redux/slice/authSlice.js";
 
 export default function Header() {
   const [notifOpen, setNotifOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -56,6 +63,33 @@ export default function Header() {
     navigate("/");
   };
 
+  // Fullscreen handlers
+  const requestFullscreen = async () => {
+    try {
+      if (!document.fullscreenElement) {
+        await document.documentElement.requestFullscreen();
+      } else {
+        await document.exitFullscreen();
+      }
+      // state will be synced by the fullscreenchange listener
+    } catch (err) {
+      // optional: show user-friendly message or ignore
+      console.warn("Fullscreen toggle failed:", err);
+    }
+  };
+
+  useEffect(() => {
+    const onFsChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener("fullscreenchange", onFsChange);
+    // set initial state
+    setIsFullscreen(!!document.fullscreenElement);
+
+    return () => document.removeEventListener("fullscreenchange", onFsChange);
+  }, []);
+
   // Capitalize role for display
   const displayRole = role
     ? role.charAt(0).toUpperCase() + role.slice(1)
@@ -65,12 +99,12 @@ export default function Header() {
     <header className="flex items-center justify-between bg-[#fdf3f5] dark:bg-gray-800 p-4 rounded-lg shadow mb-6">
       {/* Welcome Section */}
       <div>
-  <h2 className="text-xl font-bold text-pink-600 dark:text-indigo-300 mt-2">
+        <h2 className="text-xl font-bold text-pink-600 dark:text-indigo-300 mt-2">
           Welcome, {displayRole}
         </h2>
-  <p className="text-sm text-gray-600 dark:text-gray-300 ml-2 -mt-1">
+        {/* <p className="text-sm text-gray-600 dark:text-gray-300 ml-2 -mt-1">
           Here's what's happening in your account
-        </p>
+        </p> */}
       </div>
 
       {/* Search Bar */}
@@ -86,6 +120,17 @@ export default function Header() {
       {/* Notification + Profile Section */}
       <div className="flex items-center space-x-4 relative" ref={dropdownRef}>
         <ThemeToggle />
+
+        {/* Fullscreen toggle */}
+        <button
+          onClick={requestFullscreen}
+          aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+          title={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+          className="p-2 rounded-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition text-gray-700 dark:text-gray-200"
+        >
+          {isFullscreen ? <FaCompress size={16} /> : <FaExpand size={16} />}
+        </button>
+
         {/* 🔔 Notification */}
         <div
           onClick={toggleNotification}

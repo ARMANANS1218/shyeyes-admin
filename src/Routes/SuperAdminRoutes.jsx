@@ -12,6 +12,7 @@ import Reports from "../Pages/SuperAdmin/Reports";
 // import Transection from "../Pages/SuperAdmin/Transection";
 import UserManagement from "../Pages/SuperAdmin/Usermanagement";
 import Transactions from "../Pages/SuperAdmin/Transactions";
+// import EditSuperAdminProfile from "../Pages/SuperAdmin/EditSuperAdminProfile";
 
 export default function SuperAdminRoutes() {
   useDocumentTitle(); // This will set the title as "SuperAdmin Dashboard | ShyEyes"
@@ -29,6 +30,7 @@ export default function SuperAdminRoutes() {
           <Route path="pricingplan" element={<PricingPlan />} />
           <Route path="report" element={<Reports />} />
           <Route path="payment" element={<Transactions />} />
+          {/* <Route path="profile/edit" element={<EditSuperAdminProfile />} /> */}
           {/* Default route */}
           <Route path="" element={<Dashboard />} />
         </Routes>

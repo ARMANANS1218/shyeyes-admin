@@ -4,6 +4,7 @@ import { userApi } from "./services/userApi";
 import { adminApi } from "./services/adminApi";
 import { agentApi } from "./services/agentApi";
 import authReducer from "./slice/authSlice";
+import { roleAuthApi } from "./services/roleAuthApi";
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
     [userApi.reducerPath]: userApi.reducer,
     [adminApi.reducerPath]: adminApi.reducer,
     [agentApi.reducerPath]: agentApi.reducer,
+    [roleAuthApi.reducerPath]: roleAuthApi.reducer,
     auth: authReducer,
   },
   middleware: (getDefaultMiddleware) =>
@@ -18,6 +20,7 @@ export const store = configureStore({
       authApi.middleware,
       userApi.middleware,
       adminApi.middleware,
-      agentApi.middleware
+      agentApi.middleware,
+      roleAuthApi.middleware
     ),
 });
